@@ -291,6 +291,11 @@ picocolors@^1.0.1:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.1.tgz#a8ad579b571952f0e5d25892de5445bcfe25aaa1"
   integrity sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==
 
+pixi-particles@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/pixi-particles/-/pixi-particles-4.3.1.tgz#8457b52f51d9ab9ef266cdcb86a762ec882113d8"
+  integrity sha512-XSqDFgYwm/7FRCgP5I2Fc57d98qvb1ql/x4uTjdP4uXDUGgjdO8OW/2A0HVWS1CkOht/1x6dQzsM1oCJAUlaow==
+
 pixi.js@^8.2.4:
   version "8.2.4"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-8.2.4.tgz#52176e13fbe8001006ffc361cbce57af2d60d4e1"

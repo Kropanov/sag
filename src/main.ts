@@ -5,6 +5,9 @@ import { Application, Assets, Sprite } from 'pixi.js';
   // Create a PixiJS application.
   const app = new Application();
 
+  // @ts-ignore
+  globalThis.__PIXI_APP__ = app;
+
   // Intialize the application.
   await app.init({ background: '#1099bb', resizeTo: window });
 
