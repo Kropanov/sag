@@ -8,11 +8,12 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "typescript": "^5.2.2",
-    "vite": "^5.3.1"
-  },
   "dependencies": {
     "pixi.js": "^8.2.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
   }
 }
