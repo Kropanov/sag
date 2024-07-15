@@ -5,26 +5,33 @@ import { Manager } from '../Manager/Manager';
 export class GameScene extends Container implements IScene {
   private bunny: Sprite;
   private bunnyVelocity: number;
+  private manager: Manager;
 
   constructor() {
     super();
 
+    this.manager = Manager.getInstance();
     this.bunny = Sprite.from('bunny');
 
     this.bunny.anchor.set(0.5);
-    this.bunny.x = Manager.width / 2;
-    this.bunny.y = Manager.height / 2;
+    this.bunny.x = this.manager.getWidth() / 2;
+    this.bunny.y = this.manager.getHeight() / 2;
     this.addChild(this.bunny);
 
     this.bunnyVelocity = 5;
+  }
+  resize(screenWidth: number, screenHeight: number): void {
+    throw new Error('Method not implemented.');
   }
 
   public update(framesPassed: number): void {
     // Lets move bunny!
     this.bunny.x += this.bunnyVelocity * framesPassed;
 
-    if (this.bunny.x > Manager.width) {
-      this.bunny.x = Manager.width;
+    this.manager = Manager.getInstance();
+
+    if (this.bunny.x > this.manager.getWidth()) {
+      this.bunny.x = this.manager.getWidth();
       this.bunnyVelocity = -this.bunnyVelocity;
     }
 

@@ -1,37 +1,42 @@
-import { Container, Sprite, Ticker } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
+import { IScene } from '../interfaces';
+import { Manager } from './Scenes/Manager/Manager';
 
-export class Scene extends Container {
-  private readonly screenWidth: number;
-  private readonly screenHeight: number;
+export class Scene extends Container implements IScene {
+  private bunny: Sprite;
+  private bunnyVelocity: number;
+  private manager: Manager;
 
-  private clampy: Sprite;
-  private clampyVelocity: number = 5;
-  constructor(screenWidth: number, screenHeight: number) {
+  constructor() {
     super();
 
-    this.screenWidth = screenWidth;
-    this.screenHeight = screenHeight;
+    this.manager = Manager.getInstance();
 
-    this.clampy = Sprite.from('bunny.png');
-    console.log(this.clampy);
-    this.clampy.anchor.set(0.5);
-    this.clampy.x = 0; // we start it at 0
-    this.clampy.y = this.screenHeight / 2;
-    this.addChild(this.clampy);
+    this.bunny = Sprite.from('bunny.png');
+    console.log(this.bunny);
+    this.bunny.anchor.set(0.5);
+    this.bunny.x = 0;
+    this.bunny.y = this.manager.getHeight() / 2;
+    this.addChild(this.bunny);
 
-    // See the `, this` thingy there? That is another way of binding the context!
-    // @ts-ignore
-    Ticker.shared.add(this.update, this);
-
-    // If you want, you can do it the bind way
-    // Ticker.shared.add(this.update.bind(this));
+    this.bunnyVelocity = 2;
+  }
+  resize(screenWidth: number, screenHeight: number): void {
+    throw new Error('Method not implemented.');
   }
 
-  private update(deltaTime: number): void {
-    this.clampy.x = this.clampy.x + this.clampyVelocity * deltaTime;
+  public update(framesPassed: number): void {
+    this.bunny.x += this.bunnyVelocity * framesPassed;
 
-    if (this.clampy.x > this.screenWidth) {
-      this.clampy.x = 0;
+    const width = this.manager.getWidth();
+    if (this.bunny.x > width) {
+      this.bunny.x = width;
+      this.bunnyVelocity = -this.bunnyVelocity;
+    }
+
+    if (this.bunny.x < 0) {
+      this.bunny.x = 0;
+      this.bunnyVelocity = -this.bunnyVelocity;
     }
   }
 }

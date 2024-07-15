@@ -1,70 +1,67 @@
 import { Application, Ticker } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 
-// TODO: create Singleton
+// Manager for rendering scene with loop updating
 export class Manager {
-  private constructor() {
-    /*this class is purely static. No constructor to see here*/
+  private static _instance: Manager;
+
+  private app!: Application;
+  private currentScene!: IScene;
+
+  private width: number = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  private height: number = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+  public counter: number = 0;
+
+  private constructor() {}
+
+  public static getInstance(): Manager {
+    if (!Manager._instance) {
+      Manager._instance = new Manager();
+    }
+    return Manager._instance;
   }
 
-  // Safely store variables for our game
-  private static app: Application;
-  private static currentScene: IScene;
-
-  // Width and Height are read-only after creation (for now)
-  private static _width: number;
-  private static _height: number;
-
-  // With getters but not setters, these variables become read-only
-  public static get width(): number {
-    return Manager._width;
-  }
-  public static get height(): number {
-    return Manager._height;
+  public getWidth(): number {
+    return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   }
 
-  // Use this function ONCE to start the entire machinery
-  public static async initialize(width: number, height: number, background: string): Promise<void> {
-    // store our width and height
-    Manager._width = width;
-    Manager._height = height;
+  public getHeight(): number {
+    return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  }
 
-    // Create our pixi app
-    Manager.app = new Application();
+  public async initialize(background: string): Promise<void> {
+    this.app = new Application();
 
     // @ts-ignore
-    globalThis.__PIXI_APP__ = Manager.app;
+    globalThis.__PIXI_APP__ = this.app;
 
-    // background - '#1099bb'
-    await Manager.app.init({ background: background, resizeTo: window });
+    await this.app.init({ background: background, resizeTo: window });
+    document.body.appendChild(this.app.canvas);
+    this.app.ticker.add(this.update.bind(this));
 
-    document.body.appendChild(Manager.app.canvas);
-
-    // Add the ticker
-    Manager.app.ticker.add(Manager.update);
+    window.addEventListener('resize', this.resize);
   }
 
-  // Call this function when you want to go to a new scene
-  public static changeScene(newScene: IScene): void {
-    // Remove and destroy old scene... if we had one..
-    if (Manager.currentScene) {
-      Manager.app.stage.removeChild(Manager.currentScene);
-      Manager.currentScene.destroy();
+  public resize(): void {
+    if (this.currentScene) {
+      this.currentScene.resize(this.getWidth(), this.getHeight());
     }
-
-    // Add the new one
-    Manager.currentScene = newScene;
-    Manager.app.stage.addChild(Manager.currentScene);
   }
 
-  // This update will be called by a pixi ticker and tell the scene that a tick happened
-  private static update(ticker: Ticker): void {
-    // Let the current scene know that we updated it...
-    // Just for funzies, sanity check that it exists first.
-    if (Manager.currentScene) {
-      Manager.currentScene.update(ticker.deltaMS);
+  public changeScene(newScene: IScene): void {
+    if (this.currentScene) {
+      this.app.stage.removeChild(this.currentScene);
+      this.currentScene.destroy();
     }
 
-    // as I said before, I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
+    this.currentScene = newScene;
+    this.app.stage.addChild(this.currentScene);
+  }
+
+  private update(ticker: Ticker): void {
+    if (this.currentScene) {
+      this.currentScene.update(ticker.deltaTime);
+    }
   }
 }
