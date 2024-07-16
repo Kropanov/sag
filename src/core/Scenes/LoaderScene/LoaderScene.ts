@@ -1,6 +1,6 @@
 import { Container, Graphics, Assets } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
-import { Manager } from '../Manager/Manager';
+import { Manager } from '../../Manager';
 import { IScene } from '../../../interfaces';
 import { GameScene } from '../GameScene/GameScene';
 
@@ -37,9 +37,6 @@ export class LoaderScene extends Container implements IScene {
       this.gameLoaded();
     });
   }
-  resize(screenWidth: number, screenHeight: number): void {
-    throw new Error('Method not implemented.');
-  }
 
   private async initializeLoader(): Promise<void> {
     await Assets.init({ manifest: manifest });
@@ -56,7 +53,7 @@ export class LoaderScene extends Container implements IScene {
     manager.changeScene(new GameScene());
   }
 
-  public update(_framesPassed: number): void {
-    // To be a scene we must have the update method even if we don't use it.
-  }
+  update(_framesPassed: number): void {}
+
+  resize(_screenWidth: number, _screenHeight: number): void {}
 }

@@ -1,17 +1,12 @@
 import { Application, Ticker } from 'pixi.js';
-import { IScene } from '../../../interfaces';
+import { IScene } from '../../interfaces';
 
-// Manager for rendering scene with loop updating
+// Manager for rendering scene with loop updating and resizing
 export class Manager {
   private static _instance: Manager;
 
   private app!: Application;
   private currentScene!: IScene;
-
-  private width: number = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-  private height: number = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
-  public counter: number = 0;
 
   private constructor() {}
 
@@ -19,6 +14,7 @@ export class Manager {
     if (!Manager._instance) {
       Manager._instance = new Manager();
     }
+
     return Manager._instance;
   }
 
@@ -40,13 +36,7 @@ export class Manager {
     document.body.appendChild(this.app.canvas);
     this.app.ticker.add(this.update.bind(this));
 
-    window.addEventListener('resize', this.resize);
-  }
-
-  public resize(): void {
-    if (this.currentScene) {
-      this.currentScene.resize(this.getWidth(), this.getHeight());
-    }
+    window.addEventListener('resize', this.resize.bind(this));
   }
 
   public changeScene(newScene: IScene): void {
@@ -57,6 +47,12 @@ export class Manager {
 
     this.currentScene = newScene;
     this.app.stage.addChild(this.currentScene);
+  }
+
+  private resize(): void {
+    if (this.currentScene) {
+      this.currentScene.resize(this.getWidth(), this.getHeight());
+    }
   }
 
   private update(ticker: Ticker): void {

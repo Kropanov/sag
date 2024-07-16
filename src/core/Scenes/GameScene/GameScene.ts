@@ -1,6 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '../../../interfaces';
-import { Manager } from '../Manager/Manager';
+import { Manager } from '../../Manager';
 
 export class GameScene extends Container implements IScene {
   private bunny: Sprite;
@@ -18,14 +18,12 @@ export class GameScene extends Container implements IScene {
     this.bunny.y = this.manager.getHeight() / 2;
     this.addChild(this.bunny);
 
-    this.bunnyVelocity = 5;
-  }
-  resize(screenWidth: number, screenHeight: number): void {
-    throw new Error('Method not implemented.');
+    this.bunnyVelocity = 2;
   }
 
+  resize(_screenWidth: number, _screenHeight: number): void {}
+
   public update(framesPassed: number): void {
-    // Lets move bunny!
     this.bunny.x += this.bunnyVelocity * framesPassed;
 
     this.manager = Manager.getInstance();

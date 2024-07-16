@@ -1,8 +1,3 @@
-import { LoaderScene } from './core/Scenes/LoaderScene/LoaderScene';
-import { Manager } from './core/Scenes/Manager/Manager';
+import GameLauncher from './core/Game';
 
-const manager = Manager.getInstance();
-manager.initialize('#1099bb');
-
-const loady: LoaderScene = new LoaderScene();
-manager.changeScene(loady);
+GameLauncher.Run();
