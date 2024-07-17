@@ -1,4 +1,4 @@
-import { Manager } from '../Manager';
+import { Manager } from '../Manager/Manager';
 import { LoaderScene } from '../Scenes/LoaderScene/LoaderScene';
 
 export default class GameLauncher {

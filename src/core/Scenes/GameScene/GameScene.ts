@@ -1,6 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '../../../interfaces';
-import { Manager } from '../../Manager';
+import { Manager } from '../../Manager/Manager';
 
 export class GameScene extends Container implements IScene {
   private bunny: Sprite;
@@ -11,8 +11,8 @@ export class GameScene extends Container implements IScene {
     super();
 
     this.manager = Manager.getInstance();
-    this.bunny = Sprite.from('bunny');
 
+    this.bunny = Sprite.from('bunny');
     this.bunny.anchor.set(0.5);
     this.bunny.x = this.manager.getWidth() / 2;
     this.bunny.y = this.manager.getHeight() / 2;
