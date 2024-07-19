@@ -7,7 +7,6 @@ export interface IScene extends ContainerChild {
 
 export interface IPlayer {
   init(): void;
-  sync(): void;
+  sync(framesPassed: number): void;
   draw(gameScene: IScene): void;
-  close(): void;
 }

@@ -5,26 +5,29 @@ import Player from '../../Player/Player';
 
 export class GameScene extends Container implements IScene {
   private backgroundTiles: Sprite[] = [];
-  private bunny: Sprite;
-  private bunnyVelocity: number;
-  private manager: Manager;
+  private manager: Manager = Manager.getInstance();
   private player: Player;
 
   constructor() {
     super();
-    this.manager = Manager.getInstance();
 
     this.player = new Player();
+    this.player.init();
     this.player.draw(this);
 
-    this.bunny = Sprite.from('bunny');
-    this.bunny.anchor.set(0.5);
-    this.bunny.x = this.manager.getWidth() / 2;
-    this.bunny.y = this.manager.getHeight() / 2;
-    this.bunnyVelocity = 2;
-
-    this.addChild(this.bunny);
     this.tileBackground();
+  }
+
+  resize(_screenWidth: number, _screenHeight: number): void {
+    for (const tile of this.backgroundTiles) {
+      this.removeChild(tile);
+    }
+
+    this.tileBackground();
+  }
+
+  public update(framesPassed: number): void {
+    this.player.sync(framesPassed);
   }
 
   private tileBackground(): void {
@@ -41,28 +44,6 @@ export class GameScene extends Container implements IScene {
       tile.position.set(i * tile.width, this.manager.getHeight());
       this.addChild(tile);
       this.backgroundTiles.push(tile);
-    }
-  }
-
-  resize(_screenWidth: number, _screenHeight: number): void {
-    for (const tile of this.backgroundTiles) {
-      this.removeChild(tile);
-    }
-
-    this.tileBackground();
-  }
-
-  public update(framesPassed: number): void {
-    this.bunny.x += this.bunnyVelocity * framesPassed;
-
-    if (this.bunny.x > this.manager.getWidth()) {
-      this.bunny.x = this.manager.getWidth();
-      this.bunnyVelocity = -this.bunnyVelocity;
-    }
-
-    if (this.bunny.x < 0) {
-      this.bunny.x = 0;
-      this.bunnyVelocity = -this.bunnyVelocity;
     }
   }
 }
