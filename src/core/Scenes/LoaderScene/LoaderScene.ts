@@ -1,6 +1,6 @@
 import { Container, Graphics, Assets } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
-import { Manager } from '../../Manager';
+import { Manager } from '../../Manager/Manager';
 import { IScene } from '../../../interfaces';
 import { GameScene } from '../GameScene/GameScene';
 

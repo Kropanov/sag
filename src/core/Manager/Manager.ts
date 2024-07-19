@@ -32,7 +32,13 @@ export class Manager {
     // @ts-ignore
     globalThis.__PIXI_APP__ = this.app;
 
-    await this.app.init({ background: background, resizeTo: window });
+    await this.app.init({
+      background,
+      resizeTo: window,
+      autoDensity: true,
+      resolution: window.devicePixelRatio || 1,
+    });
+
     document.body.appendChild(this.app.canvas);
     this.app.ticker.add(this.update.bind(this));
 
