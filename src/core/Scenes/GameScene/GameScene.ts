@@ -1,16 +1,21 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 import { Manager } from '../../Manager/Manager';
+import Player from '../../Player/Player';
 
 export class GameScene extends Container implements IScene {
   private backgroundTiles: Sprite[] = [];
   private bunny: Sprite;
   private bunnyVelocity: number;
   private manager: Manager;
+  private player: Player;
 
   constructor() {
     super();
     this.manager = Manager.getInstance();
+
+    this.player = new Player();
+    this.player.draw(this);
 
     this.bunny = Sprite.from('bunny');
     this.bunny.anchor.set(0.5);
@@ -49,8 +54,6 @@ export class GameScene extends Container implements IScene {
 
   public update(framesPassed: number): void {
     this.bunny.x += this.bunnyVelocity * framesPassed;
-
-    this.manager = Manager.getInstance();
 
     if (this.bunny.x > this.manager.getWidth()) {
       this.bunny.x = this.manager.getWidth();
