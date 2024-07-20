@@ -13,7 +13,6 @@ export interface IPlayer {
 }
 
 export interface IEntity {
-  context: any;
   x: number;
   y: number;
   vx: number;
