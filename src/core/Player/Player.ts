@@ -1,11 +1,11 @@
 import { Sprite } from 'pixi.js';
 import { IPlayer, IScene } from '../../interfaces';
-import { Manager } from '../Manager/Manager';
+import { GameManager } from '../Manager/GameManager';
 import Keyboard from '../Keyboard/Keyboard';
 
 export default class Player implements IPlayer {
   public hero!: Sprite;
-  public manager!: Manager;
+  public manager!: GameManager;
   public keyboard!: Keyboard;
   public velocity: number = 2;
   isColliding!: boolean;
@@ -16,7 +16,7 @@ export default class Player implements IPlayer {
 
   init(): void {
     this.keyboard = Keyboard.getInstance();
-    this.manager = Manager.getInstance();
+    this.manager = GameManager.getInstance();
 
     this.hero = Sprite.from('bunny');
     this.hero.x = this.manager.getWidth() / 2;

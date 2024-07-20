@@ -1,21 +1,20 @@
 import { Application, Ticker } from 'pixi.js';
 import { IScene } from '../../interfaces';
 
-// Manager for rendering scene with loop updating and resizing
-export class Manager {
-  private static _instance: Manager;
+export class GameManager {
+  private static _instance: GameManager;
 
   private app!: Application;
   private currentScene!: IScene;
 
   private constructor() {}
 
-  public static getInstance(): Manager {
-    if (!Manager._instance) {
-      Manager._instance = new Manager();
+  public static getInstance(): GameManager {
+    if (!GameManager._instance) {
+      GameManager._instance = new GameManager();
     }
 
-    return Manager._instance;
+    return GameManager._instance;
   }
 
   public getWidth(): number {

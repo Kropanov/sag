@@ -1,4 +1,4 @@
-import { Manager } from '../Manager/Manager';
+import { GameManager } from '../Manager/GameManager';
 import { LoaderScene } from '../Scenes/LoaderScene/LoaderScene';
 
 export default class GameLauncher {
@@ -7,7 +7,7 @@ export default class GameLauncher {
   private constructor() {}
 
   public static Run(): GameLauncher {
-    const manager = Manager.getInstance();
+    const manager = GameManager.getInstance();
 
     if (!GameLauncher.instance) {
       manager.initialize('#1099bb');

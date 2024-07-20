@@ -1,12 +1,12 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '../../../interfaces';
-import { Manager } from '../../Manager/Manager';
+import { GameManager } from '../../Manager/GameManager';
 import Player from '../../Player/Player';
 import { rectIntersect } from '../../../utils';
 
 export class GameScene extends Container implements IScene {
   private ground!: Sprite;
-  private manager: Manager = Manager.getInstance();
+  private manager: GameManager = GameManager.getInstance();
   private player: Player;
 
   constructor() {
