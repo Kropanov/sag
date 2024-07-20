@@ -4,10 +4,11 @@ import { Manager } from '../Manager/Manager';
 import Keyboard from '../Keyboard/Keyboard';
 
 export default class Player implements IPlayer {
-  private hero!: Sprite;
-  private manager!: Manager;
-  private keyboard!: Keyboard;
-  private velocity: number = 4;
+  public hero!: Sprite;
+  public manager!: Manager;
+  public keyboard!: Keyboard;
+  public velocity: number = 2;
+  isColliding!: boolean;
 
   constructor() {
     this.init();
@@ -21,6 +22,7 @@ export default class Player implements IPlayer {
     this.hero.x = this.manager.getWidth() / 2;
     this.hero.y = this.manager.getHeight() / 2;
     this.hero.anchor.set(0.5);
+    this.isColliding = false;
   }
 
   sync(framesPassed: number): void {
@@ -31,7 +33,7 @@ export default class Player implements IPlayer {
     }
     if (this.keyboard.state.get('KeyW')) {
       this.hero.y += -this.velocity * framesPassed;
-    } else if (this.keyboard.state.get('KeyS')) {
+    } else if (this.keyboard.state.get('KeyS') && !this.isColliding) {
       this.hero.y += this.velocity * framesPassed;
     }
   }
