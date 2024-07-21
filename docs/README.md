@@ -1,3 +1,5 @@
 # Spells and Gears
 
-## The gameworld
+## The game world basics
+
+![Spells and Gears universe](../static/Image/univ.png)
