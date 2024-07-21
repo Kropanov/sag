@@ -1,49 +1,50 @@
-import { Container, Sprite } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { IScene } from '../../../interfaces';
-import { Manager } from '../../Manager/Manager';
+import { GameManager } from '../../Manager/GameManager';
 import Player from '../../Player/Player';
+import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
 
 export class GameScene extends Container implements IScene {
-  private backgroundTiles: Sprite[] = [];
-  private manager: Manager = Manager.getInstance();
+  private manager: GameManager = GameManager.getInstance();
   private player: Player;
+  private enemies: any;
+
+  private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
 
   constructor() {
     super();
 
-    this.player = new Player();
-    this.player.init();
-    this.player.draw(this);
+    this.player = new Player('bunny', 100, 100);
 
-    this.tileBackground();
+    let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
+    let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());
+
+    this.enemies = [enemy1, enemy2];
+
+    this.addChild(enemy1.sprite);
+    this.addChild(enemy2.sprite);
+    this.addChild(this.player.sprite);
+
+    this.updateFloorBounds();
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {
-    for (const tile of this.backgroundTiles) {
-      this.removeChild(tile);
-    }
-
-    this.tileBackground();
+    this.updateFloorBounds(_screenWidth, _screenHeight);
   }
 
-  public update(framesPassed: number): void {
-    this.player.sync(framesPassed);
+  update(delta: number): void {
+    this.player.update(delta, this.enemies, this.floorBounds);
   }
 
-  private tileBackground(): void {
-    this.backgroundTiles = [];
+  private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
+    const screenWidth = _screenWidth || this.manager.getWidth();
+    const screenHeight = _screenHeight || this.manager.getHeight();
 
-    const sprite = Sprite.from('ground');
-    sprite.scale.set(7);
-
-    const tilesNeeded = Math.ceil(this.manager.getWidth() / sprite.width);
-    for (let i = 0; i < tilesNeeded; i++) {
-      const tile = Sprite.from('ground');
-      tile.anchor.set(0, 1);
-      tile.scale.set(7);
-      tile.position.set(i * tile.width, this.manager.getHeight());
-      this.addChild(tile);
-      this.backgroundTiles.push(tile);
-    }
+    this.floorBounds = {
+      left: 0,
+      right: screenWidth,
+      top: 0,
+      bottom: screenHeight,
+    };
   }
 }

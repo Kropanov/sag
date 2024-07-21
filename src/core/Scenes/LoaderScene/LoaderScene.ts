@@ -1,6 +1,6 @@
 import { Container, Graphics, Assets } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
-import { Manager } from '../../Manager/Manager';
+import { GameManager } from '../../Manager/GameManager';
 import { IScene } from '../../../interfaces';
 import { GameScene } from '../GameScene/GameScene';
 
@@ -13,7 +13,7 @@ export class LoaderScene extends Container implements IScene {
   constructor() {
     super();
 
-    const manager = Manager.getInstance();
+    const manager = GameManager.getInstance();
     const loaderBarWidth = manager.getWidth() * 0.8;
 
     this.loaderBarFill = new Graphics();
@@ -49,7 +49,7 @@ export class LoaderScene extends Container implements IScene {
   }
 
   private gameLoaded(): void {
-    const manager = Manager.getInstance();
+    const manager = GameManager.getInstance();
     manager.changeScene(new GameScene());
   }
 
