@@ -3,35 +3,33 @@ import { manifest } from '../../../assets/Assets';
 import { GameManager } from '../../Manager/GameManager';
 import { IScene } from '../../../interfaces';
 import { GameScene } from '../GameScene/GameScene';
+import { CircularProgressBar } from '@pixi/ui';
 
 export class LoaderScene extends Container implements IScene {
-  // for making our loader graphics...
-  private loaderBar: Container;
-  private loaderBarBoder: Graphics;
-  private loaderBarFill: Graphics;
+  private manager = GameManager.getInstance();
+
+  private loaderValue = 0;
+  private isFilling: Boolean = true;
+  private loader: CircularProgressBar;
 
   constructor() {
     super();
 
-    const manager = GameManager.getInstance();
-    const loaderBarWidth = manager.getWidth() * 0.8;
+    this.loader = new CircularProgressBar({
+      backgroundColor: '#3d3d3d',
+      backgroundAlpha: 0.4,
+      lineWidth: 12,
+      fillColor: '#00b1dd',
+      fillAlpha: 0.7,
+      radius: 40,
+      value: 0,
+      cap: 'round',
+    });
 
-    this.loaderBarFill = new Graphics();
-    this.loaderBarFill.beginFill(0x008800, 1);
-    this.loaderBarFill.drawRect(0, 0, loaderBarWidth, 50);
-    this.loaderBarFill.endFill();
-    this.loaderBarFill.scale.x = 0;
+    this.loader.x = this.manager.getWidth() / 2;
+    this.loader.y = this.manager.getHeight() / 2;
 
-    this.loaderBarBoder = new Graphics();
-    this.loaderBarBoder.lineStyle(10, 0x0, 1);
-    this.loaderBarBoder.drawRect(0, 0, loaderBarWidth, 50);
-
-    this.loaderBar = new Container();
-    this.loaderBar.addChild(this.loaderBarFill);
-    this.loaderBar.addChild(this.loaderBarBoder);
-    this.loaderBar.position.x = (manager.getWidth() - this.loaderBar.width) / 2;
-    this.loaderBar.position.y = (manager.getHeight() - this.loaderBar.height) / 2;
-    this.addChild(this.loaderBar);
+    this.addChild(this.loader);
 
     this.initializeLoader().then(() => {
       this.gameLoaded();
@@ -41,11 +39,7 @@ export class LoaderScene extends Container implements IScene {
   private async initializeLoader(): Promise<void> {
     await Assets.init({ manifest: manifest });
     const bundleIds = manifest.bundles.map((bundle) => bundle.name);
-    await Assets.loadBundle(bundleIds, this.downloadProgress.bind(this));
-  }
-
-  private downloadProgress(progressRatio: number): void {
-    this.loaderBarFill.scale.x = progressRatio;
+    await Assets.loadBundle(bundleIds);
   }
 
   private gameLoaded(): void {
@@ -53,7 +47,19 @@ export class LoaderScene extends Container implements IScene {
     manager.changeScene(new GameScene());
   }
 
-  update(_framesPassed: number): void {}
-
-  resize(_screenWidth: number, _screenHeight: number): void {}
+  update(_framesPassed: number): void {
+    this.isFilling ? this.loaderValue++ : this.loaderValue--;
+    if (this.loaderValue >= 100) {
+      this.isFilling = false;
+    } else if (this.loaderValue <= 0) {
+      this.isFilling = true;
+    }
+    console.log(this.loader.progress);
+    this.loader.progress = this.loaderValue;
+    this.loader.rotation += 0.1;
+  }
+  resize(_screenWidth: number, _screenHeight: number): void {
+    this.loader.x = this.manager.getWidth() / 2;
+    this.loader.y = this.manager.getHeight() / 2;
+  }
 }
