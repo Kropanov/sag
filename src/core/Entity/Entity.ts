@@ -1,4 +1,5 @@
 import { Sprite } from 'pixi.js';
+import { g } from '../../config';
 
 export default class Entity {
   sprite: Sprite;
@@ -15,6 +16,9 @@ export default class Entity {
   }
 
   update(delta: number, _enemies: any, _floorBounds: any) {
+    // Add gravity to velocity
+    this.vy += g * delta;
+
     this.sprite.x += this.vx * delta;
     this.sprite.y += this.vy * delta;
   }

@@ -13,7 +13,7 @@ export default class Character extends Entity {
     this.defensePower = 5;
   }
 
-  move(dx: any, dy: any) {
+  move(dx: number, dy: number) {
     this.vx = dx;
     this.vy = dy;
   }
