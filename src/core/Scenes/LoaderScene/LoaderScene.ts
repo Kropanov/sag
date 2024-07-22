@@ -1,4 +1,4 @@
-import { Container, Graphics, Assets } from 'pixi.js';
+import { Container, Assets } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
 import { GameManager } from '../../Manager/GameManager';
 import { IScene } from '../../../interfaces';
