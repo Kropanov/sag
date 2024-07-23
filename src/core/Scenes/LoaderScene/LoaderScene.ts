@@ -2,8 +2,8 @@ import { Container, Assets, Text } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
 import { GameManager } from '../../Manager/GameManager';
 import { IScene } from '../../../interfaces';
-import { GameScene } from '../GameScene/GameScene';
 import { CircularProgressBar } from '@pixi/ui';
+import MenuScene from '../MenuScene/MenuScene';
 
 export class LoaderScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -60,7 +60,7 @@ export class LoaderScene extends Container implements IScene {
 
   private gameLoaded(): void {
     const manager = GameManager.getInstance();
-    manager.changeScene(new GameScene());
+    manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {
@@ -70,7 +70,7 @@ export class LoaderScene extends Container implements IScene {
     } else if (this.loaderValue <= 0) {
       this.isFilling = true;
     }
-    console.log(this.loader.progress);
+
     this.loader.progress = this.loaderValue;
     this.loader.rotation += 0.1;
   }
