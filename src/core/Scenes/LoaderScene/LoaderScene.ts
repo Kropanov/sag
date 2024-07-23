@@ -1,4 +1,4 @@
-import { Container, Assets } from 'pixi.js';
+import { Container, Assets, Text } from 'pixi.js';
 import { manifest } from '../../../assets/Assets';
 import { GameManager } from '../../Manager/GameManager';
 import { IScene } from '../../../interfaces';
@@ -11,9 +11,24 @@ export class LoaderScene extends Container implements IScene {
   private loaderValue = 0;
   private isFilling: Boolean = true;
   private loader: CircularProgressBar;
+  private text: Text;
 
   constructor() {
     super();
+
+    this.text = new Text({
+      text: 'Initial loading...',
+      style: {
+        fontSize: 20,
+        fill: '#00b1dd',
+        align: 'center',
+      },
+    });
+
+    this.text.x = this.manager.getWidth() / 2 - 64;
+    this.text.y = this.manager.getHeight() / 2 + 55;
+
+    this.addChild(this.text);
 
     this.loader = new CircularProgressBar({
       backgroundColor: '#3d3d3d',
@@ -29,6 +44,7 @@ export class LoaderScene extends Container implements IScene {
     this.loader.x = this.manager.getWidth() / 2;
     this.loader.y = this.manager.getHeight() / 2;
 
+    this.addChild(this.text);
     this.addChild(this.loader);
 
     this.initializeLoader().then(() => {
@@ -58,8 +74,12 @@ export class LoaderScene extends Container implements IScene {
     this.loader.progress = this.loaderValue;
     this.loader.rotation += 0.1;
   }
+
   resize(_screenWidth: number, _screenHeight: number): void {
     this.loader.x = this.manager.getWidth() / 2;
     this.loader.y = this.manager.getHeight() / 2;
+
+    this.text.x = this.manager.getWidth() / 2 - 64;
+    this.text.y = this.manager.getHeight() / 2 + 55;
   }
 }
