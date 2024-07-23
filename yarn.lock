@@ -127,6 +127,14 @@
   resolved "https://registry.yarnpkg.com/@pixi/sound/-/sound-6.0.0.tgz#1545ce8dc9096a96c749a0ec3b4e552399057f3a"
   integrity sha512-fEaCs2JmyYT1qqouFS3DydSccI35dyYD0pKK2hEbIGVDKUTvl224x0p4qme2YU9l465WRtM7gspLzP5fFf1mxQ==
 
+"@pixi/ui@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi/ui/-/ui-2.1.2.tgz#33a6e1da5724cc98596c9de660a6f73121034385"
+  integrity sha512-LULeEBLD6T0LbzegXg3kqEvPCR4GM4VGHXCbCOe2ihZ8bCCVXO2tVbxIdSVpVZbGHPIDPw5ERkNxzXWo8+Vtdw==
+  dependencies:
+    tweedle.js "^2.1.0"
+    typed-signals "^2.5.0"
+
 "@rollup/rollup-android-arm-eabi@4.18.1":
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.18.1.tgz#f0da481244b7d9ea15296b35f7fe39cd81157396"
@@ -359,6 +367,16 @@ source-map-js@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.0.tgz#16b809c162517b5b8c3e7dcd315a2a5c2612b2af"
   integrity sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==
+
+tweedle.js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tweedle.js/-/tweedle.js-2.1.0.tgz#523f5d50e5223c3c809b1aa627c6e9648e576d93"
+  integrity sha512-0ReQgVjepoZkE6t0upWNgCRbplHkQJQYk1LStXugwSR728GLFmGDRuaQJlxeC/iBlxud6+P1RdODjaO25vHAqw==
+
+typed-signals@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/typed-signals/-/typed-signals-2.5.0.tgz#7be73505c2ee0dc4e43f1c4ee002c855796bd89a"
+  integrity sha512-m9lHc3eBCJerXYdx+G0uWZihyUXdqTzzgOdqiDDsoUo75WjhFJH6vP5/6w/xhyu04zoxHUqgYhf9FEt85dk/Ng==
 
 typescript@^5.2.2:
   version "5.5.3"
