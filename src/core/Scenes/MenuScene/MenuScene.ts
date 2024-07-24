@@ -1,3 +1,4 @@
+import { sound } from '@pixi/sound';
 import { Container, Text } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 import { FancyButton, List } from '@pixi/ui';
@@ -61,9 +62,14 @@ export default class MenuScene extends Container implements IScene {
         },
       });
 
-      button.onPress.connect(() => this.manager.changeScene(_.scene));
+      button.onPress.connect(() => this.onClickMenuItem(_.scene));
       this.menu.addChild(button);
     });
+  }
+
+  onClickMenuItem(scene: IScene) {
+    sound.play('menu_item_click1');
+    this.manager.changeScene(scene);
   }
 
   update(_delta: number): void {}
