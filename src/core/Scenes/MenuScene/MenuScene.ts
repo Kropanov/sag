@@ -2,12 +2,19 @@ import { Container, Text } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { GameManager } from '../../Manager/GameManager';
+import { GameScene } from '../GameScene/GameScene';
+import { MenuItemsType } from '../../../types';
 
 export default class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private menu: List;
-  private items: Array<string> = ['Play', 'Multiplayer', 'Settings', 'Exit'];
+  private items: Array<MenuItemsType> = [
+    { text: 'Play', scene: new GameScene() },
+    { text: 'Multiplayer', scene: new GameScene() },
+    { text: 'Settings', scene: new GameScene() },
+    { text: 'Exit', scene: new GameScene() },
+  ];
 
   constructor() {
     super();
@@ -29,7 +36,7 @@ export default class MenuScene extends Container implements IScene {
     this.items.map((_) => {
       const button = new FancyButton({
         text: new Text({
-          text: _,
+          text: _.text,
           style: {
             fontSize: 25,
             fill: '#00b1dd',
@@ -53,6 +60,8 @@ export default class MenuScene extends Container implements IScene {
           },
         },
       });
+
+      button.onPress.connect(() => this.manager.changeScene(_.scene));
       this.menu.addChild(button);
     });
   }
