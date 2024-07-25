@@ -5,6 +5,7 @@ import { FancyButton, List } from '@pixi/ui';
 import { GameManager } from '../../Manager/GameManager';
 import { GameScene } from '../GameScene/GameScene';
 import { MenuItemsType } from '../../../types';
+import SettingsScene from '../SettingsScene/SettingsScene';
 
 export default class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -13,7 +14,7 @@ export default class MenuScene extends Container implements IScene {
   private items: Array<MenuItemsType> = [
     { text: 'Play', scene: new GameScene() },
     { text: 'Multiplayer', scene: new GameScene() },
-    { text: 'Settings', scene: new GameScene() },
+    { text: 'Settings', scene: new SettingsScene() },
     { text: 'Exit', scene: new GameScene() },
   ];
 
