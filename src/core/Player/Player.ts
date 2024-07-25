@@ -45,6 +45,9 @@ export default class Player extends Character {
     if (this.controls.state.get('KeyD')) {
       this.move(this.velocity, 0);
     }
+    if (this.controls.state.get('Space')) {
+      this.move(0, -this.velocity);
+    }
   }
 
   checkFloorBounds(bounds: any) {
