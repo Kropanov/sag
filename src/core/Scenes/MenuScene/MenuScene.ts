@@ -62,7 +62,9 @@ export default class MenuScene extends Container implements IScene {
         },
       });
 
+      button.onHover.connect(() => sound.play('menu_item_click3'));
       button.onPress.connect(() => this.onClickMenuItem(_.scene));
+
       this.menu.addChild(button);
     });
   }
