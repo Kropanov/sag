@@ -5,4 +5,10 @@
 ![Spells and Gears universe](../static/Image/universe/univ.png)
 
 ## Races
-![Image of game races](../static/Image/universe/races.png)
+![Races](../static/Image/universe/races.png)
+
+## Origin
+![Origin](../static/Image/universe/origin.png)
+
+## Potential
+![Potential](../static/Image/universe/potential.png)
