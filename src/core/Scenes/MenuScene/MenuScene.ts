@@ -19,6 +19,8 @@ export default class MenuScene extends Container implements IScene {
     { text: 'Exit', scene: new GameScene() },
   ];
 
+  private versionText!: Text;
+
   constructor() {
     super();
 
@@ -31,6 +33,7 @@ export default class MenuScene extends Container implements IScene {
     this.menu.y = this.manager.getHeight() / 2.3;
 
     this.fillMenu();
+    this.drawVersion();
 
     this.addChild(this.menu);
   }
@@ -76,10 +79,29 @@ export default class MenuScene extends Container implements IScene {
     this.manager.changeScene(scene);
   }
 
+  drawVersion() {
+    this.versionText = new Text({
+      text: 'v0.0.0 beta',
+      style: {
+        fontFamily: 'Consolas',
+        fontSize: 20,
+        fill: '#ADADAD',
+      },
+    });
+
+    this.versionText.x = this.manager.getWidth() - this.versionText.width - 10;
+    this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
+
+    this.addChild(this.versionText);
+  }
+
   update(_delta: number): void {}
 
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
+
+    this.versionText.x = screenWidth - this.versionText.width - 10;
+    this.versionText.y = screenHeight - this.versionText.height - 5;
   }
 }
