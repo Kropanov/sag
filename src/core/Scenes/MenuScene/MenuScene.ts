@@ -1,21 +1,27 @@
 import { sound } from '@pixi/sound';
-import { Container, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { GameManager } from '../../Manager/GameManager';
 import { GameScene } from '../GameScene/GameScene';
 import { MenuItemsType } from '../../../types';
+import SettingsScene from '../SettingsScene/SettingsScene';
+import { GITHUB_REP_LINK } from '../../../config';
 
 export default class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'Play', scene: new GameScene() },
-    { text: 'Multiplayer', scene: new GameScene() },
-    { text: 'Settings', scene: new GameScene() },
+    { text: 'Start', scene: new GameScene() },
+    { text: 'Online', scene: new GameScene() },
+    { text: 'Settings', scene: new SettingsScene() },
+    { text: 'Credits', scene: new GameScene() },
     { text: 'Exit', scene: new GameScene() },
   ];
+
+  private githubIcon!: Sprite;
+  private versionText!: Text;
 
   constructor() {
     super();
@@ -29,6 +35,8 @@ export default class MenuScene extends Container implements IScene {
     this.menu.y = this.manager.getHeight() / 2.3;
 
     this.fillMenu();
+    this.drawVersion();
+    this.drawMediaIcons();
 
     this.addChild(this.menu);
   }
@@ -62,7 +70,9 @@ export default class MenuScene extends Container implements IScene {
         },
       });
 
+      button.onHover.connect(() => sound.play('menu_item_click3'));
       button.onPress.connect(() => this.onClickMenuItem(_.scene));
+
       this.menu.addChild(button);
     });
   }
@@ -72,10 +82,51 @@ export default class MenuScene extends Container implements IScene {
     this.manager.changeScene(scene);
   }
 
+  drawVersion() {
+    this.versionText = new Text({
+      text: 'v0.0.0 beta',
+      style: {
+        fontFamily: 'Consolas',
+        fontSize: 20,
+        fill: '#ADADAD',
+      },
+    });
+
+    this.versionText.x = this.manager.getWidth() - this.versionText.width - 10;
+    this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
+
+    this.addChild(this.versionText);
+  }
+
+  drawMediaIcons() {
+    this.githubIcon = Sprite.from('github_white');
+    this.githubIcon.scale = 0.12;
+
+    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
+
+    this.githubIcon.eventMode = 'dynamic';
+    this.githubIcon.interactive = true;
+
+    this.githubIcon.cursor = 'pointer';
+
+    this.githubIcon.on('pointertap', () => {
+      window.open(GITHUB_REP_LINK);
+    });
+
+    this.addChild(this.githubIcon);
+  }
+
   update(_delta: number): void {}
 
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
+
+    this.versionText.x = screenWidth - this.versionText.width - 10;
+    this.versionText.y = screenHeight - this.versionText.height - 5;
+
+    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
   }
 }
