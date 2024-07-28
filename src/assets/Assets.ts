@@ -12,6 +12,7 @@ export const manifest: AssetsManifest = {
         menu_item_click3: './static/Audio/click3.ogg',
         menu_item_click4: './static/Audio/click4.ogg',
         menu_item_click5: './static/Audio/click5.ogg',
+        rollover: './static/Audio/rollover2.ogg',
       },
     },
   ],

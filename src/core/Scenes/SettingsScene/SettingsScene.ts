@@ -5,6 +5,7 @@ import Settings from '../../Settings/Settings';
 import { Slider } from '@pixi/ui';
 import Keyboard from '../../Keyboard/Keyboard';
 import MenuScene from '../MenuScene/MenuScene';
+import { sound } from '@pixi/sound';
 
 const OFFSET = 1.4;
 
@@ -92,8 +93,11 @@ export default class SettingsScene extends Container implements IScene {
     });
 
     singleSlider.x = (this.manager.getWidth() / OFFSET - width) / 2;
-    singleSlider.y = this.manager.getHeight() / OFFSET / 2 - 140;
-    singleSlider.onUpdate.connect((value) => this.settings.setVolume(value));
+    singleSlider.y = this.manager.getHeight() / OFFSET / 2 - 250;
+    singleSlider.onUpdate.connect((value) => {
+      this.settings.setVolume(value);
+      sound.play('rollover');
+    });
 
     this.container.addChild(singleSlider);
   }
