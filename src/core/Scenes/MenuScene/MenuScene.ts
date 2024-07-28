@@ -12,9 +12,10 @@ export default class MenuScene extends Container implements IScene {
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'Play', scene: new GameScene() },
-    { text: 'Multiplayer', scene: new GameScene() },
+    { text: 'Start', scene: new GameScene() },
+    { text: 'Online', scene: new GameScene() },
     { text: 'Settings', scene: new SettingsScene() },
+    { text: 'Credits', scene: new GameScene() },
     { text: 'Exit', scene: new GameScene() },
   ];
 
