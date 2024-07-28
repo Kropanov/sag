@@ -1,11 +1,12 @@
 import { sound } from '@pixi/sound';
-import { Container, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '../../../interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { GameManager } from '../../Manager/GameManager';
 import { GameScene } from '../GameScene/GameScene';
 import { MenuItemsType } from '../../../types';
 import SettingsScene from '../SettingsScene/SettingsScene';
+import { GITHUB_REP_LINK } from '../../../config';
 
 export default class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -19,6 +20,7 @@ export default class MenuScene extends Container implements IScene {
     { text: 'Exit', scene: new GameScene() },
   ];
 
+  private githubIcon!: Sprite;
   private versionText!: Text;
 
   constructor() {
@@ -34,6 +36,7 @@ export default class MenuScene extends Container implements IScene {
 
     this.fillMenu();
     this.drawVersion();
+    this.drawMediaIcons();
 
     this.addChild(this.menu);
   }
@@ -95,6 +98,25 @@ export default class MenuScene extends Container implements IScene {
     this.addChild(this.versionText);
   }
 
+  drawMediaIcons() {
+    this.githubIcon = Sprite.from('github_white');
+    this.githubIcon.scale = 0.12;
+
+    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
+
+    this.githubIcon.eventMode = 'dynamic';
+    this.githubIcon.interactive = true;
+
+    this.githubIcon.cursor = 'pointer';
+
+    this.githubIcon.on('pointertap', () => {
+      window.open(GITHUB_REP_LINK);
+    });
+
+    this.addChild(this.githubIcon);
+  }
+
   update(_delta: number): void {}
 
   resize(screenWidth: number, screenHeight: number): void {
@@ -103,5 +125,8 @@ export default class MenuScene extends Container implements IScene {
 
     this.versionText.x = screenWidth - this.versionText.width - 10;
     this.versionText.y = screenHeight - this.versionText.height - 5;
+
+    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
   }
 }
