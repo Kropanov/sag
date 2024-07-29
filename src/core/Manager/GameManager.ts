@@ -1,5 +1,5 @@
 import { Application, Ticker } from 'pixi.js';
-import { IScene } from '../../interfaces';
+import { IScene } from '@/interfaces';
 
 export class GameManager {
   private static _instance: GameManager;

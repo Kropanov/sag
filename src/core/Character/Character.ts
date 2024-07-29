@@ -1,7 +1,7 @@
-import { rectIntersect } from '../../utils';
-import Entity from '../Entity/Entity';
+import { rectIntersect } from '@/utils';
+import { Entity } from '@core/Entity';
 
-export default class Character extends Entity {
+export class Character extends Entity {
   health: number;
   attackPower: number;
   defensePower: number;

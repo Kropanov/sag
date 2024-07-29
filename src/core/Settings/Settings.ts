@@ -1,7 +1,7 @@
 import { sound } from '@pixi/sound';
-import { INITIAL_SOUND_VOLUME } from '../../config';
+import { INITIAL_SOUND_VOLUME } from '@/config';
 
-export default class Settings {
+export class Settings {
   private static instance: Settings;
 
   private constructor() {}

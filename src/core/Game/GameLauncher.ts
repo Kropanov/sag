@@ -1,7 +1,7 @@
-import { GameManager } from '../Manager/GameManager';
-import { LoaderScene } from '../Scenes/LoaderScene/LoaderScene';
+import { GameManager } from '@core/Manager';
+import { LoaderScene } from '@core/Scenes';
 
-export default class GameLauncher {
+export class GameLauncher {
   private static instance: GameLauncher;
 
   private constructor() {}

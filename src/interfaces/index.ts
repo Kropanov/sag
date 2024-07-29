@@ -1,5 +1,5 @@
 import { ContainerChild } from 'pixi.js';
-import { vCollisionNormType } from '../types';
+import { vCollisionNormType } from '@/types';
 
 export interface IScene extends ContainerChild {
   update(framesPassed: number): void;

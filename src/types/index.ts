@@ -1,4 +1,4 @@
-import { IScene } from '../interfaces';
+import { IScene } from '@/interfaces';
 
 export type vCollisionNormType = {
   x: number;

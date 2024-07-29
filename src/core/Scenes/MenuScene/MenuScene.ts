@@ -1,14 +1,13 @@
 import { sound } from '@pixi/sound';
 import { Container, Sprite, Text } from 'pixi.js';
-import { IScene } from '../../../interfaces';
+import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
-import { GameManager } from '../../Manager/GameManager';
-import { GameScene } from '../GameScene/GameScene';
-import { MenuItemsType } from '../../../types';
-import SettingsScene from '../SettingsScene/SettingsScene';
-import { GITHUB_REP_LINK } from '../../../config';
+import { MenuItemsType } from '@/types';
+import { GITHUB_REP_LINK } from '@/config';
+import { GameManager } from '@core/Manager/GameManager';
+import { GameScene, SettingsScene } from '@core/Scenes';
 
-export default class MenuScene extends Container implements IScene {
+export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private menu: List;
