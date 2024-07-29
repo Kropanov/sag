@@ -92,7 +92,7 @@ export default class MenuScene extends Container implements IScene {
       },
     });
 
-    this.versionText.x = this.manager.getWidth() - this.versionText.width - 10;
+    this.versionText.x = this.manager.getWidth() - this.versionText.width - 8;
     this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
 
     this.addChild(this.versionText);
@@ -102,7 +102,7 @@ export default class MenuScene extends Container implements IScene {
     this.githubIcon = Sprite.from('github_white');
     this.githubIcon.scale = 0.12;
 
-    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.x = 5;
     this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
 
     this.githubIcon.eventMode = 'dynamic';
@@ -123,10 +123,10 @@ export default class MenuScene extends Container implements IScene {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
 
-    this.versionText.x = screenWidth - this.versionText.width - 10;
+    this.versionText.x = screenWidth - this.versionText.width - 8;
     this.versionText.y = screenHeight - this.versionText.height - 5;
 
-    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.x = 5;
     this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
   }
 }
