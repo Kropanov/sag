@@ -12,11 +12,10 @@ export class MenuScene extends Container implements IScene {
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'Start', scene: new GameScene() },
-    { text: 'Online', scene: new GameScene() },
-    { text: 'Settings', scene: new SettingsScene() },
-    { text: 'Credits', scene: new GameScene() },
-    { text: 'Exit', scene: new GameScene() },
+    { text: 'Start', fn: () => this.start() },
+    { text: 'Online', fn: () => {} },
+    { text: 'Settings', fn: () => this.openSettings() },
+    { text: 'Credits', fn: () => {} },
   ];
 
   private githubIcon!: Sprite;
@@ -25,7 +24,8 @@ export class MenuScene extends Container implements IScene {
   constructor() {
     super();
 
-    sound.play('menu_theme');
+    // FIXME: uncomment
+    // sound.play('menu_theme');
 
     this.menu = new List({
       elementsMargin: 10,
@@ -40,6 +40,29 @@ export class MenuScene extends Container implements IScene {
     this.drawMediaIcons();
 
     this.addChild(this.menu);
+  }
+
+  game() {
+    this.manager.changeScene(new GameScene());
+  }
+
+  back() {
+    this.manager.changeScene(new MenuScene());
+  }
+
+  start() {
+    this.clearMenu();
+
+    this.items.push({ text: 'Standard', fn: () => this.game() });
+    this.items.push({ text: 'Custom', fn: () => {} });
+    this.items.push({ text: '🔙', fn: () => this.back() });
+
+    this.fillMenu();
+  }
+
+  clearMenu() {
+    this.items = [];
+    this.menu.removeChildren();
   }
 
   fillMenu() {
@@ -72,9 +95,11 @@ export class MenuScene extends Container implements IScene {
       });
 
       button.onHover.connect(() => sound.play('menu_item_click3'));
+      // FIXME: increase aria radius of the button
       button.onPress.connect(() => {
         sound.stop('menu_theme');
-        this.onClickMenuItem(_.scene);
+        sound.play('menu_item_click1');
+        _.fn();
       });
 
       this.menu.addChild(button);
@@ -119,6 +144,10 @@ export class MenuScene extends Container implements IScene {
     });
 
     this.addChild(this.githubIcon);
+  }
+
+  openSettings() {
+    this.manager.changeScene(new SettingsScene());
   }
 
   update(_delta: number): void {}
