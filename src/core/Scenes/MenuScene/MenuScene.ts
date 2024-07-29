@@ -4,8 +4,8 @@ import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { GITHUB_REP_LINK } from '@/config';
-import { GameManager } from '@core/Manager/GameManager';
 import { GameScene, SettingsScene } from '@core/Scenes';
+import { GameManager } from '@/core/Manager';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -24,6 +24,8 @@ export class MenuScene extends Container implements IScene {
 
   constructor() {
     super();
+
+    sound.play('menu_theme');
 
     this.menu = new List({
       elementsMargin: 10,
@@ -70,7 +72,10 @@ export class MenuScene extends Container implements IScene {
       });
 
       button.onHover.connect(() => sound.play('menu_item_click3'));
-      button.onPress.connect(() => this.onClickMenuItem(_.scene));
+      button.onPress.connect(() => {
+        sound.stop('menu_theme');
+        this.onClickMenuItem(_.scene);
+      });
 
       this.menu.addChild(button);
     });
