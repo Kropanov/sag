@@ -12,7 +12,8 @@ export class MenuScene extends Container implements IScene {
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'Start', fn: () => this.start() },
+    { text: 'New', fn: () => this.start() },
+    { text: 'Load', fn: () => {} },
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
     { text: 'Credits', fn: () => {} },
