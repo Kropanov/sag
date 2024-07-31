@@ -15,8 +15,8 @@
     "noEmit": true,
     /* Paths */
     "paths": {
-      "@/*": ["src/*"],
-      "@core/*": ["src/core/*"],
+      "@/*": ["./src/*"],
+      "@core/*": ["./src/core/*"],
     },
     /* Linting */
     "strict": true,
