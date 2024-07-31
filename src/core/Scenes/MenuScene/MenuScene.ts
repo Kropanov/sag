@@ -4,7 +4,7 @@ import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { GITHUB_REP_LINK } from '@/config';
-import { GameScene, SettingsScene } from '@core/Scenes';
+import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 
 export class MenuScene extends Container implements IScene {
@@ -12,7 +12,7 @@ export class MenuScene extends Container implements IScene {
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'New', fn: () => this.start() },
+    { text: 'New', fn: () => this.gameSetup() },
     { text: 'Load', fn: () => {} },
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
@@ -51,14 +51,8 @@ export class MenuScene extends Container implements IScene {
     this.manager.changeScene(new MenuScene());
   }
 
-  start() {
-    this.clearMenu();
-
-    this.items.push({ text: 'Standard', fn: () => this.game() });
-    this.items.push({ text: 'Custom', fn: () => {} });
-    this.items.push({ text: '🔙', fn: () => this.back() });
-
-    this.fillMenu();
+  gameSetup() {
+    this.manager.changeScene(new GameSetupScene());
   }
 
   clearMenu() {
