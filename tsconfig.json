@@ -13,7 +13,11 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-
+    /* Paths */
+    "paths": {
+      "@/*": ["./src/*"],
+      "@core/*": ["./src/core/*"],
+    },
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

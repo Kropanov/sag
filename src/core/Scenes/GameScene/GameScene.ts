@@ -1,15 +1,15 @@
 import { Container } from 'pixi.js';
-import { IScene } from '../../../interfaces';
-import { GameManager } from '../../Manager/GameManager';
-import Player from '../../Player/Player';
+import { IScene } from '@/interfaces';
+import { GameManager } from '@core/Manager';
 import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
-import Keyboard from '../../Keyboard/Keyboard';
-import MenuScene from '../MenuScene/MenuScene';
+import { Player } from '@core/Player';
+import { Keyboard } from '@core/Keyboard';
+import { MenuScene } from '@core/Scenes';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private player: Player;
-  private enemies: any;
+  private readonly enemies: any;
 
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
   private keyboard: Keyboard = Keyboard.getInstance();

@@ -16,6 +16,7 @@ export const manifest: AssetsManifest = {
         github_black: './static/Image/github.png',
         github_gray: './static/Image/github-mark.png',
         github_white: './static/Image/github-mark-white.png',
+        menu_theme: './static/Audio/no-time-to-die-hartzmann-main-version-9251-02-01.mp3',
       },
     },
   ],

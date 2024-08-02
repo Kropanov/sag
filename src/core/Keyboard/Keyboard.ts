@@ -1,4 +1,4 @@
-export default class Keyboard {
+export class Keyboard {
   private static _instance: Keyboard;
   public readonly state: Map<string, boolean> = new Map();
 

@@ -1,23 +1,22 @@
 import { sound } from '@pixi/sound';
 import { Container, Sprite, Text } from 'pixi.js';
-import { IScene } from '../../../interfaces';
+import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
-import { GameManager } from '../../Manager/GameManager';
-import { GameScene } from '../GameScene/GameScene';
-import { MenuItemsType } from '../../../types';
-import SettingsScene from '../SettingsScene/SettingsScene';
-import { GITHUB_REP_LINK } from '../../../config';
+import { MenuItemsType } from '@/types';
+import { GITHUB_REP_LINK } from '@/config';
+import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
+import { GameManager } from '@/core/Manager';
 
-export default class MenuScene extends Container implements IScene {
+export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private menu: List;
   private items: Array<MenuItemsType> = [
-    { text: 'Start', scene: new GameScene() },
-    { text: 'Online', scene: new GameScene() },
-    { text: 'Settings', scene: new SettingsScene() },
-    { text: 'Credits', scene: new GameScene() },
-    { text: 'Exit', scene: new GameScene() },
+    { text: 'New', fn: () => this.gameSetup() },
+    { text: 'Load', fn: () => {} },
+    { text: 'Online', fn: () => {} },
+    { text: 'Settings', fn: () => this.openSettings() },
+    { text: 'Credits', fn: () => {} },
   ];
 
   private githubIcon!: Sprite;
@@ -25,6 +24,9 @@ export default class MenuScene extends Container implements IScene {
 
   constructor() {
     super();
+
+    // FIXME: uncomment
+    // sound.play('menu_theme');
 
     this.menu = new List({
       elementsMargin: 10,
@@ -39,6 +41,23 @@ export default class MenuScene extends Container implements IScene {
     this.drawMediaIcons();
 
     this.addChild(this.menu);
+  }
+
+  game() {
+    this.manager.changeScene(new GameScene());
+  }
+
+  back() {
+    this.manager.changeScene(new MenuScene());
+  }
+
+  gameSetup() {
+    this.manager.changeScene(new GameSetupScene());
+  }
+
+  clearMenu() {
+    this.items = [];
+    this.menu.removeChildren();
   }
 
   fillMenu() {
@@ -71,7 +90,12 @@ export default class MenuScene extends Container implements IScene {
       });
 
       button.onHover.connect(() => sound.play('menu_item_click3'));
-      button.onPress.connect(() => this.onClickMenuItem(_.scene));
+      // FIXME: increase aria radius of the button
+      button.onPress.connect(() => {
+        sound.stop('menu_theme');
+        sound.play('menu_item_click1');
+        _.fn();
+      });
 
       this.menu.addChild(button);
     });
@@ -92,7 +116,7 @@ export default class MenuScene extends Container implements IScene {
       },
     });
 
-    this.versionText.x = this.manager.getWidth() - this.versionText.width - 10;
+    this.versionText.x = this.manager.getWidth() - this.versionText.width - 8;
     this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
 
     this.addChild(this.versionText);
@@ -102,7 +126,7 @@ export default class MenuScene extends Container implements IScene {
     this.githubIcon = Sprite.from('github_white');
     this.githubIcon.scale = 0.12;
 
-    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.x = 5;
     this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
 
     this.githubIcon.eventMode = 'dynamic';
@@ -117,16 +141,20 @@ export default class MenuScene extends Container implements IScene {
     this.addChild(this.githubIcon);
   }
 
+  openSettings() {
+    this.manager.changeScene(new SettingsScene());
+  }
+
   update(_delta: number): void {}
 
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
 
-    this.versionText.x = screenWidth - this.versionText.width - 10;
+    this.versionText.x = screenWidth - this.versionText.width - 8;
     this.versionText.y = screenHeight - this.versionText.height - 5;
 
-    this.githubIcon.x = this.githubIcon.x + 5;
+    this.githubIcon.x = 5;
     this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
   }
 }

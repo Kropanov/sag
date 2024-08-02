@@ -1,4 +1,4 @@
-import Character from '../Character/Character';
+import { Character } from '@core/Character';
 
 export class AttackStrategy {
   execute(_character: any, _target: any) {}

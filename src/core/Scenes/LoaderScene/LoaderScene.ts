@@ -1,17 +1,17 @@
 import { Container, Assets, Text } from 'pixi.js';
-import { manifest } from '../../../assets/Assets';
-import { GameManager } from '../../Manager/GameManager';
-import { IScene } from '../../../interfaces';
+import { manifest } from '@/assets/Assets.ts';
+import { GameManager } from '@core/Manager';
+import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
-import MenuScene from '../MenuScene/MenuScene';
+import { MenuScene } from '@core/Scenes';
 
 export class LoaderScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private loaderValue = 0;
   private isFilling: Boolean = true;
-  private loader: CircularProgressBar;
-  private text: Text;
+  private readonly loader: CircularProgressBar;
+  private readonly text: Text;
 
   constructor() {
     super();

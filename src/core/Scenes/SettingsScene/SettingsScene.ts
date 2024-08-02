@@ -1,15 +1,15 @@
 import { Container, Graphics, Text } from 'pixi.js';
-import { IScene } from '../../../interfaces';
-import { GameManager } from '../../Manager/GameManager';
-import Settings from '../../Settings/Settings';
+import { IScene } from '@/interfaces';
+import { GameManager } from '@core/Manager';
 import { Slider } from '@pixi/ui';
-import Keyboard from '../../Keyboard/Keyboard';
-import MenuScene from '../MenuScene/MenuScene';
 import { sound } from '@pixi/sound';
+import { Keyboard } from '@core/Keyboard';
+import { MenuScene } from '@core/Scenes';
+import { Settings } from '@core/Settings';
 
 const OFFSET = 1.4;
 
-export default class SettingsScene extends Container implements IScene {
+export class SettingsScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private settings: Settings = Settings.getInstance();
   private keyboard: Keyboard = Keyboard.getInstance();

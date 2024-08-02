@@ -1,7 +1,7 @@
-import Character from '../Character/Character';
-import Keyboard from '../Keyboard/Keyboard';
+import { Keyboard } from '@core/Keyboard';
+import { Character } from '@core/Character';
 
-export default class Player extends Character {
+export class Player extends Character {
   controls: Keyboard = Keyboard.getInstance();
 
   prevY: number;
