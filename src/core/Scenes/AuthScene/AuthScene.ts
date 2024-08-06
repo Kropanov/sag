@@ -7,7 +7,8 @@ export class AuthScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
 
-  private inputLogin!: Input;
+  private loginInput!: Input;
+  private passwordInput!: Input;
 
   constructor() {
     super();
@@ -15,7 +16,8 @@ export class AuthScene extends Container implements IScene {
     this.container = new Graphics();
     this.drawContainer();
 
-    this.drawInputLogin();
+    this.drawLoginInput();
+    this.drawPasswordInput();
   }
 
   drawContainer() {
@@ -33,8 +35,8 @@ export class AuthScene extends Container implements IScene {
     this.addChild(this.container);
   }
 
-  drawInputLogin() {
-    this.inputLogin = new Input({
+  drawLoginInput() {
+    this.loginInput = new Input({
       bg: new Graphics()
         .rect(0, 0, this.container.width / 1.5, 40)
         .fill('#282828')
@@ -43,25 +45,60 @@ export class AuthScene extends Container implements IScene {
           width: 1,
           alignment: 0.5,
         }),
-      maxLength: 60,
+      placeholder: 'Enter username...',
+      maxLength: 35,
+      padding: [5, 10],
       textStyle: {
-        fill: '#000000',
+        fill: '#8F8F8F',
         fontSize: 20,
         fontWeight: 'bold',
       },
-      align: 'center',
+      align: 'left',
       value: '',
       addMask: false,
     });
 
-    this.inputLogin.x = 100;
-    this.inputLogin.y = 100;
+    this.loginInput.x = 100;
+    this.loginInput.y = 100;
 
-    this.inputLogin.onChange.connect(() => {
-      console.log(this.inputLogin.value);
+    this.loginInput.onChange.connect(() => {
+      console.log(this.loginInput.value);
     });
 
-    this.container.addChild(this.inputLogin);
+    this.container.addChild(this.loginInput);
+  }
+
+  drawPasswordInput() {
+    this.passwordInput = new Input({
+      bg: new Graphics()
+        .rect(0, 0, this.container.width / 1.5, 40)
+        .fill('#282828')
+        .stroke({
+          color: 'black',
+          width: 1,
+          alignment: 0.5,
+        }),
+      placeholder: 'Enter password...',
+      maxLength: 35,
+      padding: [5, 10],
+      textStyle: {
+        fill: '#8F8F8F',
+        fontSize: 20,
+        fontWeight: 'bold',
+      },
+      align: 'left',
+      value: '',
+      addMask: false,
+    });
+
+    this.passwordInput.x = 100;
+    this.passwordInput.y = 180;
+
+    this.passwordInput.onChange.connect(() => {
+      console.log(this.passwordInput.value);
+    });
+
+    this.container.addChild(this.passwordInput);
   }
 
   update(_framesPassed: number): void {}
