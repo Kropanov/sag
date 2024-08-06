@@ -24,7 +24,7 @@ export class AuthScene extends Container implements IScene {
     this.container.rect(0, 0, 550, 650).fill('#282828');
 
     this.container.stroke({
-      color: 'black',
+      color: '#FFFFFF',
       width: 1,
       alignment: 0.5,
     });
@@ -38,19 +38,18 @@ export class AuthScene extends Container implements IScene {
   drawLoginInput() {
     this.loginInput = new Input({
       bg: new Graphics()
-        .rect(0, 0, this.container.width / 1.5, 40)
+        .roundRect(0, 0, this.container.width / 1.5, 40, 30)
         .fill('#282828')
         .stroke({
-          color: 'black',
+          color: '#FFFFFF',
           width: 1,
-          alignment: 0.5,
         }),
-      placeholder: 'Enter username...',
+      placeholder: 'Username or E-mail',
       maxLength: 35,
-      padding: [5, 10],
+      padding: [10, 15],
       textStyle: {
         fill: '#8F8F8F',
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
       },
       align: 'left',
@@ -71,19 +70,18 @@ export class AuthScene extends Container implements IScene {
   drawPasswordInput() {
     this.passwordInput = new Input({
       bg: new Graphics()
-        .rect(0, 0, this.container.width / 1.5, 40)
+        .roundRect(0, 0, this.container.width / 1.5, 40, 30)
         .fill('#282828')
         .stroke({
-          color: 'black',
+          color: '#FFFFFF',
           width: 1,
-          alignment: 0.5,
         }),
-      placeholder: 'Enter password...',
+      placeholder: 'Password',
       maxLength: 35,
-      padding: [5, 10],
+      padding: [10, 15],
       textStyle: {
         fill: '#8F8F8F',
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
       },
       align: 'left',
