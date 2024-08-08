@@ -1,7 +1,7 @@
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { Input } from '@pixi/ui';
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 
 export class AuthScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -9,6 +9,8 @@ export class AuthScene extends Container implements IScene {
 
   private loginInput!: Input;
   private passwordInput!: Input;
+
+  private linkText!: Text;
 
   constructor() {
     super();
@@ -18,10 +20,11 @@ export class AuthScene extends Container implements IScene {
 
     this.drawLoginInput();
     this.drawPasswordInput();
+    this.drawLinkText();
   }
 
   drawContainer() {
-    this.container.rect(0, 0, 550, 650).fill('#282828');
+    this.container.roundRect(0, 0, 550, 650, 30).fill('#282828');
 
     this.container.stroke({
       color: '#FFFFFF',
@@ -44,7 +47,7 @@ export class AuthScene extends Container implements IScene {
           color: '#FFFFFF',
           width: 1,
         }),
-      placeholder: 'Username or E-mail',
+      placeholder: 'E-mail',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
@@ -97,6 +100,36 @@ export class AuthScene extends Container implements IScene {
     });
 
     this.container.addChild(this.passwordInput);
+  }
+
+  drawLinkText() {
+    this.linkText = new Text({
+      text: 'Already have an account? Log in',
+      style: {
+        fontSize: 16,
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
+    this.linkText.eventMode = 'dynamic';
+
+    this.linkText.on('mouseenter', () => {
+      this.linkText.style.stroke = 'blue';
+    });
+
+    this.linkText.on('mouseleave', () => {
+      this.linkText.style.stroke = 0;
+    });
+
+    this.linkText.on('pointertap', () => {
+      console.log('Click!');
+    });
+
+    this.linkText.y = this.container.height - 100;
+    this.linkText.x = this.container.width / 2 - 108;
+
+    this.container.addChild(this.linkText);
   }
 
   update(_framesPassed: number): void {}
