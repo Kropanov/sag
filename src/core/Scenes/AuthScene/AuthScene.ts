@@ -1,6 +1,7 @@
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
-import { Input } from '@pixi/ui';
+import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Text } from 'pixi.js';
 
 export class AuthScene extends Container implements IScene {
@@ -10,7 +11,7 @@ export class AuthScene extends Container implements IScene {
   private loginInput!: Input;
   private passwordInput!: Input;
 
-  private linkText!: Text;
+  private signUpActionButton!: FancyButton;
 
   constructor() {
     super();
@@ -20,7 +21,7 @@ export class AuthScene extends Container implements IScene {
 
     this.drawLoginInput();
     this.drawPasswordInput();
-    this.drawLinkText();
+    this.drawSignUpActionButton();
   }
 
   drawContainer() {
@@ -102,34 +103,31 @@ export class AuthScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  drawLinkText() {
-    this.linkText = new Text({
-      text: 'Already have an account? Log in',
-      style: {
-        fontSize: 16,
-        fill: '#FFFFFF',
-        textBaseline: 'bottom',
-      },
+  drawSignUpActionButton() {
+    this.signUpActionButton = new FancyButton({
+      text: new Text({
+        text: "Don't have an account? Sign up",
+        style: {
+          fontSize: 18,
+          fill: '#FFFFFF',
+          textBaseline: 'bottom',
+        },
+      }),
+      animations: FANCY_BUTTON_BASE_ANIMATION,
     });
 
-    this.linkText.eventMode = 'dynamic';
+    this.signUpActionButton.eventMode = 'dynamic';
 
-    this.linkText.on('mouseenter', () => {
-      this.linkText.style.stroke = 'blue';
+    this.signUpActionButton.onPress.connect(() => {
+      console.log('Press!');
     });
 
-    this.linkText.on('mouseleave', () => {
-      this.linkText.style.stroke = 0;
-    });
+    this.signUpActionButton.onPress;
 
-    this.linkText.on('pointertap', () => {
-      console.log('Click!');
-    });
+    this.signUpActionButton.y = this.container.height - 100;
+    this.signUpActionButton.x = this.container.width / 2;
 
-    this.linkText.y = this.container.height - 100;
-    this.linkText.x = this.container.width / 2 - 108;
-
-    this.container.addChild(this.linkText);
+    this.container.addChild(this.signUpActionButton);
   }
 
   update(_framesPassed: number): void {}
