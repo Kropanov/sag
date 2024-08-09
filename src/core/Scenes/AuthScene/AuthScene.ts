@@ -3,6 +3,7 @@ import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Text } from 'pixi.js';
+import { MenuScene } from '../MenuScene/MenuScene';
 
 export class AuthScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -157,11 +158,14 @@ export class AuthScene extends Container implements IScene {
     this.submitLoginButton.y = this.container.height / 2 - 70;
     this.submitLoginButton.x = this.container.width / 2 - 100;
 
-    this.submitLoginButton.onPress.connect(() => {
-      console.log('Login button pressed!');
-    });
+    this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
 
     this.container.addChild(this.submitLoginButton);
+  }
+
+  handleLoginClick() {
+    // TODO: implement login login by getting some response form server
+    this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
