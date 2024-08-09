@@ -12,6 +12,7 @@ export class AuthScene extends Container implements IScene {
   private passwordInput!: Input;
 
   private signUpActionButton!: FancyButton;
+  private submitLoginButton!: FancyButton;
 
   constructor() {
     super();
@@ -22,6 +23,7 @@ export class AuthScene extends Container implements IScene {
     this.drawLoginInput();
     this.drawPasswordInput();
     this.drawSignUpActionButton();
+    this.drawSubmitLoginButton();
   }
 
   drawContainer() {
@@ -128,6 +130,38 @@ export class AuthScene extends Container implements IScene {
     this.signUpActionButton.x = this.container.width / 2;
 
     this.container.addChild(this.signUpActionButton);
+  }
+
+  drawSubmitLoginButton() {
+    const buttonGraphics = (color: number) => {
+      return new Graphics().roundRect(0, 0, 200, 60, 30).fill(color);
+    };
+
+    this.submitLoginButton = new FancyButton({
+      defaultView: buttonGraphics(0x282828),
+      hoverView: buttonGraphics(0x3c3c3c),
+      pressedView: buttonGraphics(0x1f1f1f),
+      disabledView: buttonGraphics(0x8f8f8f),
+      text: new Text({
+        text: 'Log in',
+        style: {
+          fontSize: 20,
+          fill: '#FFFFFF',
+          textBaseline: 'middle',
+          align: 'center',
+        },
+      }),
+      animations: FANCY_BUTTON_BASE_ANIMATION,
+    });
+
+    this.submitLoginButton.y = this.container.height / 2 - 70;
+    this.submitLoginButton.x = this.container.width / 2 - 100;
+
+    this.submitLoginButton.onPress.connect(() => {
+      console.log('Login button pressed!');
+    });
+
+    this.container.addChild(this.submitLoginButton);
   }
 
   update(_framesPassed: number): void {}
