@@ -3,7 +3,7 @@ import { manifest } from '@/assets/Assets.ts';
 import { GameManager } from '@core/Manager';
 import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
-import { AuthScene } from '@core/Scenes';
+import { LogInScene } from '@core/Scenes';
 
 export class LoaderScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -60,7 +60,7 @@ export class LoaderScene extends Container implements IScene {
 
   private assetsLoaded(): void {
     const manager = GameManager.getInstance();
-    manager.changeScene(new AuthScene());
+    manager.changeScene(new LogInScene());
   }
 
   update(_framesPassed: number): void {

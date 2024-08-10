@@ -1,27 +1,26 @@
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
-import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
-// import { MenuScene } from '../MenuScene/MenuScene';
+import { LogInScene } from '../LogInScene/LogInScene';
+import { MenuScene } from '../MenuScene/MenuScene';
 
-export class AuthScene extends Container implements IScene {
+export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
 
   private loginInput!: Input;
   private passwordInput!: Input;
+  private passwordVerifyInput!: Input;
 
-  private signUpActionButton!: FancyButton;
-  private submitLoginButton!: FancyButton;
+  private logInActionButton!: FancyButton;
+  private submitSignUpButton!: FancyButton;
 
   constructor() {
     super();
 
-    sound.play('auth_main_theme');
-
-    const background = Sprite.from('auth_background');
+    const background = Sprite.from('sign_up_background');
     this.addChild(background);
 
     this.container = new Graphics();
@@ -29,8 +28,10 @@ export class AuthScene extends Container implements IScene {
 
     this.drawLoginInput();
     this.drawPasswordInput();
-    this.drawSignUpActionButton();
-    this.drawSubmitLoginButton();
+    this.drawPasswordVerifyInput();
+
+    this.drawLogInActionButton();
+    this.drawSubmitSignUpButton();
   }
 
   drawContainer() {
@@ -112,10 +113,42 @@ export class AuthScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  drawSignUpActionButton() {
-    this.signUpActionButton = new FancyButton({
+  drawPasswordVerifyInput() {
+    this.passwordVerifyInput = new Input({
+      bg: new Graphics()
+        .roundRect(0, 0, this.container.width / 1.5, 40, 30)
+        .fill('#ffffff00')
+        .stroke({
+          color: '#FFFFFF',
+          width: 1,
+        }),
+      placeholder: 'Repeat Password',
+      maxLength: 35,
+      padding: [10, 15],
+      textStyle: {
+        fill: '#8F8F8F',
+        fontSize: 15,
+        fontWeight: 'bold',
+      },
+      align: 'left',
+      value: '',
+      addMask: false,
+    });
+
+    this.passwordVerifyInput.x = 90;
+    this.passwordVerifyInput.y = 260;
+
+    this.passwordVerifyInput.onChange.connect(() => {
+      console.log(this.passwordVerifyInput.value);
+    });
+
+    this.container.addChild(this.passwordVerifyInput);
+  }
+
+  drawLogInActionButton() {
+    this.logInActionButton = new FancyButton({
       text: new Text({
-        text: "Don't have an account? Sign up",
+        text: 'Already have an account? Log in',
         style: {
           fontSize: 18,
           fill: '#FFFFFF',
@@ -125,28 +158,28 @@ export class AuthScene extends Container implements IScene {
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
 
-    this.signUpActionButton.eventMode = 'dynamic';
+    this.logInActionButton.eventMode = 'dynamic';
 
-    this.signUpActionButton.onPress.connect(() => {
-      console.log('Press!');
+    this.logInActionButton.onPress.connect(() => {
+      this.manager.changeScene(new LogInScene());
     });
 
-    this.signUpActionButton.onPress;
+    this.logInActionButton.onPress;
 
-    this.signUpActionButton.y = this.container.height - 100;
-    this.signUpActionButton.x = this.container.width / 2;
+    this.logInActionButton.y = this.container.height - 100;
+    this.logInActionButton.x = this.container.width / 2;
 
-    this.container.addChild(this.signUpActionButton);
+    this.container.addChild(this.logInActionButton);
   }
 
-  drawSubmitLoginButton() {
-    this.submitLoginButton = new FancyButton({
+  drawSubmitSignUpButton() {
+    this.submitSignUpButton = new FancyButton({
       defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill('#ffffff00').stroke({
         color: '#FFFFFF',
         width: 1,
       }),
       text: new Text({
-        text: 'Log in',
+        text: 'Sign up',
         style: {
           fontSize: 20,
           fill: '#FFFFFF',
@@ -174,17 +207,16 @@ export class AuthScene extends Container implements IScene {
       },
     });
 
-    this.submitLoginButton.y = this.container.height / 2 - 70;
-    this.submitLoginButton.x = this.container.width / 2 - 100;
+    this.submitSignUpButton.y = this.container.height / 2 + 15;
+    this.submitSignUpButton.x = this.container.width / 2 - 100;
 
-    this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
+    this.submitSignUpButton.onPress.connect(() => this.handleSignUpClick());
 
-    this.container.addChild(this.submitLoginButton);
+    this.container.addChild(this.submitSignUpButton);
   }
 
-  handleLoginClick() {
-    // TODO: implement login login by getting some response form server
-    // this.manager.changeScene(new MenuScene());
+  handleSignUpClick() {
+    this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
