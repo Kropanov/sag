@@ -6,11 +6,13 @@ import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION, GITHUB_REP_LINK } from '@/config';
 import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
+import { handleProgramVersionResize } from '@/core/Components';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
-
+  private version!: Text;
   private menu: List;
+
   private items: Array<MenuItemsType> = [
     { text: 'New', fn: () => this.gameSetup() },
     { text: 'Load', fn: () => {} },
@@ -20,7 +22,6 @@ export class MenuScene extends Container implements IScene {
   ];
 
   private githubIcon!: Sprite;
-  private versionText!: Text;
 
   constructor() {
     super();
@@ -92,7 +93,7 @@ export class MenuScene extends Container implements IScene {
   }
 
   drawVersion() {
-    this.versionText = new Text({
+    this.version = new Text({
       text: 'v0.0.0 beta',
       style: {
         fontFamily: 'Consolas',
@@ -101,10 +102,9 @@ export class MenuScene extends Container implements IScene {
       },
     });
 
-    this.versionText.x = this.manager.getWidth() - this.versionText.width - 8;
-    this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
+    handleProgramVersionResize(this.version, this.manager.getWidth(), this.manager.getHeight());
 
-    this.addChild(this.versionText);
+    this.addChild(this.version);
   }
 
   drawMediaIcons() {
@@ -136,8 +136,7 @@ export class MenuScene extends Container implements IScene {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
 
-    this.versionText.x = screenWidth - this.versionText.width - 8;
-    this.versionText.y = screenHeight - this.versionText.height - 5;
+    handleProgramVersionResize(this.version, screenWidth, screenHeight);
 
     this.githubIcon.x = 5;
     this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;

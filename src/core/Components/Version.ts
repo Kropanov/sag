@@ -19,4 +19,9 @@ function getProgramVersion() {
   return version;
 }
 
-export { getProgramVersion };
+function handleProgramVersionResize(version: Text, screenWidth: number, screenHeight: number) {
+  version.x = screenWidth - version.width - 8;
+  version.y = screenHeight - version.height - 5;
+}
+
+export { getProgramVersion, handleProgramVersionResize };

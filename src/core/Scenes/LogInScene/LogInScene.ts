@@ -5,12 +5,13 @@ import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { SignUpScene } from '../SignUpScene/SignUpScene';
-import { getProgramVersion } from '@/core/Components';
+import { getProgramVersion, handleProgramVersionResize } from '@/core/Components';
 // import { MenuScene } from '../MenuScene/MenuScene';
 
 export class LogInScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
+  private version: Text;
 
   private loginInput!: Input;
   private passwordInput!: Input;
@@ -26,8 +27,8 @@ export class LogInScene extends Container implements IScene {
     const background = Sprite.from('auth_background');
     this.addChild(background);
 
-    const version = getProgramVersion();
-    this.addChild(version);
+    this.version = getProgramVersion();
+    this.addChild(this.version);
 
     this.container = new Graphics();
     this.drawContainer();
@@ -196,5 +197,6 @@ export class LogInScene extends Container implements IScene {
 
   resize(_screenWidth: number, _screenHeight: number): void {
     this.container.position.set(this.manager.getWidth() / 2, this.manager.getHeight() / 2);
+    handleProgramVersionResize(this.version, _screenWidth, _screenHeight);
   }
 }
