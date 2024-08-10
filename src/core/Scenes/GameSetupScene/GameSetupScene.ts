@@ -1,3 +1,4 @@
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { IScene } from '@/interfaces';
 import { sound } from '@pixi/sound';
 import { FancyButton } from '@pixi/ui';
@@ -57,22 +58,7 @@ export class GameSetupScene extends Container implements IScene {
           align: 'center',
         },
       }),
-      animations: {
-        hover: {
-          props: {
-            scale: { x: 1.1, y: 1.1 },
-            y: 0,
-          },
-          duration: 100,
-        },
-        pressed: {
-          props: {
-            scale: { x: 0.9, y: 0.9 },
-            y: 10,
-          },
-          duration: 100,
-        },
-      },
+      animations: FANCY_BUTTON_BASE_ANIMATION,
     });
 
     this.nextButton.x = 535;
@@ -94,22 +80,7 @@ export class GameSetupScene extends Container implements IScene {
           align: 'center',
         },
       }),
-      animations: {
-        hover: {
-          props: {
-            scale: { x: 1.1, y: 1.1 },
-            y: 0,
-          },
-          duration: 100,
-        },
-        pressed: {
-          props: {
-            scale: { x: 0.9, y: 0.9 },
-            y: 10,
-          },
-          duration: 100,
-        },
-      },
+      animations: FANCY_BUTTON_BASE_ANIMATION,
     });
 
     this.backButton.x = 415;

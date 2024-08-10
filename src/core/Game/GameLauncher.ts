@@ -10,7 +10,7 @@ export class GameLauncher {
     const manager = GameManager.getInstance();
 
     if (!GameLauncher.instance) {
-      manager.initialize('#222425');
+      manager.initialize('#282828');
       manager.changeScene(new LoaderScene());
       GameLauncher.instance = new GameLauncher();
     }

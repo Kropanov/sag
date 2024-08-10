@@ -3,7 +3,7 @@ import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
-import { GITHUB_REP_LINK } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION, GITHUB_REP_LINK } from '@/config';
 import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 
@@ -71,22 +71,7 @@ export class MenuScene extends Container implements IScene {
             align: 'center',
           },
         }),
-        animations: {
-          hover: {
-            props: {
-              scale: { x: 1.1, y: 1.1 },
-              y: 0,
-            },
-            duration: 100,
-          },
-          pressed: {
-            props: {
-              scale: { x: 0.9, y: 0.9 },
-              y: 10,
-            },
-            duration: 100,
-          },
-        },
+        animations: FANCY_BUTTON_BASE_ANIMATION,
       });
 
       button.onHover.connect(() => sound.play('menu_item_click3'));
