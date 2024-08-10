@@ -1,9 +1,10 @@
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
+import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
-import { Container, Graphics, Text } from 'pixi.js';
-import { MenuScene } from '../MenuScene/MenuScene';
+import { Container, Graphics, Sprite, Text } from 'pixi.js';
+// import { MenuScene } from '../MenuScene/MenuScene';
 
 export class AuthScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -18,6 +19,11 @@ export class AuthScene extends Container implements IScene {
   constructor() {
     super();
 
+    sound.play('auth_main_theme');
+
+    const background = Sprite.from('auth_background');
+    this.addChild(background);
+
     this.container = new Graphics();
     this.drawContainer();
 
@@ -28,7 +34,7 @@ export class AuthScene extends Container implements IScene {
   }
 
   drawContainer() {
-    this.container.roundRect(0, 0, 550, 650, 30).fill('#282828');
+    this.container.roundRect(0, 0, 550, 650, 30).fill('#ffffff12');
 
     this.container.stroke({
       color: '#FFFFFF',
@@ -46,7 +52,7 @@ export class AuthScene extends Container implements IScene {
     this.loginInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#282828')
+        .fill('#ffffff00')
         .stroke({
           color: '#FFFFFF',
           width: 1,
@@ -64,7 +70,7 @@ export class AuthScene extends Container implements IScene {
       addMask: false,
     });
 
-    this.loginInput.x = 100;
+    this.loginInput.x = 90;
     this.loginInput.y = 100;
 
     this.loginInput.onChange.connect(() => {
@@ -78,7 +84,7 @@ export class AuthScene extends Container implements IScene {
     this.passwordInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#282828')
+        .fill('#ffffff00')
         .stroke({
           color: '#FFFFFF',
           width: 1,
@@ -96,7 +102,7 @@ export class AuthScene extends Container implements IScene {
       addMask: false,
     });
 
-    this.passwordInput.x = 100;
+    this.passwordInput.x = 90;
     this.passwordInput.y = 180;
 
     this.passwordInput.onChange.connect(() => {
@@ -134,15 +140,11 @@ export class AuthScene extends Container implements IScene {
   }
 
   drawSubmitLoginButton() {
-    const buttonGraphics = (color: number) => {
-      return new Graphics().roundRect(0, 0, 200, 60, 30).fill(color);
-    };
-
     this.submitLoginButton = new FancyButton({
-      defaultView: buttonGraphics(0x282828),
-      hoverView: buttonGraphics(0x3c3c3c),
-      pressedView: buttonGraphics(0x1f1f1f),
-      disabledView: buttonGraphics(0x8f8f8f),
+      defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill('#ffffff00').stroke({
+        color: '#FFFFFF',
+        width: 1,
+      }),
       text: new Text({
         text: 'Log in',
         style: {
@@ -152,7 +154,24 @@ export class AuthScene extends Container implements IScene {
           align: 'center',
         },
       }),
-      animations: FANCY_BUTTON_BASE_ANIMATION,
+      animations: {
+        hover: {
+          props: {
+            scale: { x: 1.15, y: 1.15 },
+            y: 0,
+            x: -15,
+          },
+          duration: 100,
+        },
+        pressed: {
+          props: {
+            scale: { x: 1, y: 1 },
+            y: 15,
+            x: 0,
+          },
+          duration: 100,
+        },
+      },
     });
 
     this.submitLoginButton.y = this.container.height / 2 - 70;
@@ -165,7 +184,7 @@ export class AuthScene extends Container implements IScene {
 
   handleLoginClick() {
     // TODO: implement login login by getting some response form server
-    this.manager.changeScene(new MenuScene());
+    // this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
