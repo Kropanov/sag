@@ -5,6 +5,7 @@ import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { SignUpScene } from '../SignUpScene/SignUpScene';
+import { getProgramVersion } from '@/core/Components';
 // import { MenuScene } from '../MenuScene/MenuScene';
 
 export class LogInScene extends Container implements IScene {
@@ -24,6 +25,9 @@ export class LogInScene extends Container implements IScene {
 
     const background = Sprite.from('auth_background');
     this.addChild(background);
+
+    const version = getProgramVersion();
+    this.addChild(version);
 
     this.container = new Graphics();
     this.drawContainer();

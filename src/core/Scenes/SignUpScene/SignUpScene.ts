@@ -5,6 +5,7 @@ import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { LogInScene } from '../LogInScene/LogInScene';
 import { MenuScene } from '../MenuScene/MenuScene';
+import { getProgramVersion } from '@/core/Components';
 
 export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -22,6 +23,9 @@ export class SignUpScene extends Container implements IScene {
 
     const background = Sprite.from('sign_up_background');
     this.addChild(background);
+
+    const version = getProgramVersion();
+    this.addChild(version);
 
     this.container = new Graphics();
     this.drawContainer();
