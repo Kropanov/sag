@@ -2,7 +2,7 @@ import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
 import { SignUpScene } from '../SignUpScene/SignUpScene';
 import {
   getProgramVersion,
@@ -130,17 +130,25 @@ export class LogInScene extends Container implements IScene {
   }
 
   drawSignUpActionButton() {
+    const buttonText = new Text({
+      text: "Don't have an account? Sign up",
+      style: {
+        fontSize: 18,
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
     this.signUpActionButton = new FancyButton({
-      text: new Text({
-        text: "Don't have an account? Sign up",
-        style: {
-          fontSize: 18,
-          fill: '#FFFFFF',
-          textBaseline: 'bottom',
-        },
-      }),
+      text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
+
+    const padding = 5;
+    const width = buttonText.width + padding * 2;
+    const height = buttonText.height + padding * 2;
+
+    this.signUpActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
     this.signUpActionButton.eventMode = 'dynamic';
 
@@ -148,8 +156,6 @@ export class LogInScene extends Container implements IScene {
       sound.play('auth_second_click');
       this.manager.changeScene(new SignUpScene());
     });
-
-    this.signUpActionButton.onPress;
 
     this.signUpActionButton.y = this.container.height - 100;
     this.signUpActionButton.x = this.container.width / 2;

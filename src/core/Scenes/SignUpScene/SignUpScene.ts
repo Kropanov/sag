@@ -2,7 +2,7 @@ import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
 import { LogInScene } from '../LogInScene/LogInScene';
 import { MenuScene } from '../MenuScene/MenuScene';
 import {
@@ -162,17 +162,25 @@ export class SignUpScene extends Container implements IScene {
   }
 
   drawLogInActionButton() {
+    const buttonText = new Text({
+      text: 'Already have an account? Log in',
+      style: {
+        fontSize: 18,
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
     this.logInActionButton = new FancyButton({
-      text: new Text({
-        text: 'Already have an account? Log in',
-        style: {
-          fontSize: 18,
-          fill: '#FFFFFF',
-          textBaseline: 'bottom',
-        },
-      }),
+      text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
+
+    const padding = 5;
+    const width = buttonText.width + padding * 2;
+    const height = buttonText.height + padding * 2;
+
+    this.logInActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
     this.logInActionButton.eventMode = 'dynamic';
 
