@@ -1,4 +1,4 @@
-import { sound } from '@pixi/sound';
+// import { sound } from '@pixi/sound';
 import { Container, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
@@ -74,11 +74,11 @@ export class MenuScene extends Container implements IScene {
         animations: FANCY_BUTTON_BASE_ANIMATION,
       });
 
-      button.onHover.connect(() => sound.play('menu_item_click3'));
+      // button.onHover.connect(() => sound.play('menu_item_click3'));
       // FIXME: increase aria radius of the button
       button.onPress.connect(() => {
-        sound.stop('menu_theme');
-        sound.play('menu_item_click1');
+        // sound.stop('menu_theme');
+        // sound.play('menu_item_click1');
         _.fn();
       });
 
@@ -87,7 +87,7 @@ export class MenuScene extends Container implements IScene {
   }
 
   onClickMenuItem(scene: IScene) {
-    sound.play('menu_item_click1');
+    // sound.play('menu_item_click1');
     this.manager.changeScene(scene);
   }
 

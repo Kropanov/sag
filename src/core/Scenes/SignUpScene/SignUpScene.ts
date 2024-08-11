@@ -11,6 +11,7 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@/core/Components';
+import { sound } from '@pixi/sound';
 
 export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -29,7 +30,7 @@ export class SignUpScene extends Container implements IScene {
   constructor() {
     super();
 
-    const background = Sprite.from('sign_up_background');
+    const background = Sprite.from('auth_background_2');
     this.addChild(background);
 
     this.version = getProgramVersion();
@@ -176,6 +177,7 @@ export class SignUpScene extends Container implements IScene {
     this.logInActionButton.eventMode = 'dynamic';
 
     this.logInActionButton.onPress.connect(() => {
+      sound.play('auth_second_click');
       this.manager.changeScene(new LogInScene());
     });
 

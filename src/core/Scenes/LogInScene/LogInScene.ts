@@ -11,6 +11,7 @@ import {
   handleSocialMediaIconsResize,
 } from '@/core/Components';
 import { MusicController } from '@/core/Music/MusicController';
+import { sound } from '@pixi/sound';
 
 export class LogInScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -29,9 +30,9 @@ export class LogInScene extends Container implements IScene {
     super();
 
     const player = new MusicController();
-    player.play('main_auth_theme');
+    player.play('auth_main_theme');
 
-    const background = Sprite.from('auth_background');
+    const background = Sprite.from('auth_background_1');
     this.addChild(background);
 
     this.version = getProgramVersion();
@@ -144,6 +145,7 @@ export class LogInScene extends Container implements IScene {
     this.signUpActionButton.eventMode = 'dynamic';
 
     this.signUpActionButton.onPress.connect(() => {
+      sound.play('auth_second_click');
       this.manager.changeScene(new SignUpScene());
     });
 
