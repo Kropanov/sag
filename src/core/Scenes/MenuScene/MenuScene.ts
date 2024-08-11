@@ -6,7 +6,12 @@ import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameScene, GameSetupScene, LogInScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
-import { getSocialMediaIcons, handleProgramVersionResize, handleSocialMediaIconsResize } from '@/core/Components';
+import {
+  getProgramVersion,
+  getSocialMediaIcons,
+  handleProgramVersionResize,
+  handleSocialMediaIconsResize,
+} from '@/core/Components';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -30,6 +35,9 @@ export class MenuScene extends Container implements IScene {
     const background = Sprite.from('menu_background');
     this.addChild(background);
 
+    this.version = getProgramVersion();
+    this.addChild(this.version);
+
     this.socialMediaIcons = getSocialMediaIcons();
     this.addChild(this.socialMediaIcons);
 
@@ -42,7 +50,6 @@ export class MenuScene extends Container implements IScene {
     this.menu.y = this.manager.getHeight() / 2.3;
 
     this.fillMenu();
-    this.drawVersion();
 
     this.addChild(this.menu);
   }
@@ -91,27 +98,11 @@ export class MenuScene extends Container implements IScene {
   }
 
   onClickMenuItem(scene: IScene) {
-    // sound.play('menu_item_click1');
     this.manager.changeScene(scene);
   }
 
   logout() {
     this.manager.changeScene(new LogInScene());
-  }
-
-  drawVersion() {
-    this.version = new Text({
-      text: 'v0.0.0 beta',
-      style: {
-        fontFamily: 'Consolas',
-        fontSize: 20,
-        fill: '#ADADAD',
-      },
-    });
-
-    handleProgramVersionResize(this.version, this.manager.getWidth(), this.manager.getHeight());
-
-    this.addChild(this.version);
   }
 
   openSettings() {
