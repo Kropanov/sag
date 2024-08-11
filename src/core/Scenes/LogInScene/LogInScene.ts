@@ -195,12 +195,14 @@ export class LogInScene extends Container implements IScene {
     this.submitLoginButton.y = this.container.height / 2 - 67;
     this.submitLoginButton.x = this.container.width / 2 - 100;
 
+    this.submitLoginButton.onHover.connect(() => sound.play('auth_main_hover'));
     this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
 
     this.container.addChild(this.submitLoginButton);
   }
 
   handleLoginClick() {
+    sound.play('auth_main_click');
     // TODO: implement login login by getting some response form server
     // this.manager.changeScene(new MenuScene());
   }
