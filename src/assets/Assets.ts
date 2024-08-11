@@ -18,7 +18,7 @@ export const manifest: AssetsManifest = {
         github_white: './static/Image/github-mark-white.png',
         auth_background: './static/Image/Space_background.png',
         sign_up_background: './static/Image/Space_Background2.png',
-        auth_main_theme: './static/Audio/Night Ambient 1.wav',
+        main_auth_theme: './static/Audio/Night Ambient 1.wav',
       },
     },
   ],

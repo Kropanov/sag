@@ -1,7 +1,6 @@
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
-import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { SignUpScene } from '../SignUpScene/SignUpScene';
@@ -11,7 +10,7 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@/core/Components';
-// import { MenuScene } from '../MenuScene/MenuScene';
+import { MusicController } from '@/core/Music/MusicController';
 
 export class LogInScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -29,7 +28,8 @@ export class LogInScene extends Container implements IScene {
   constructor() {
     super();
 
-    sound.play('auth_main_theme');
+    const player = new MusicController();
+    player.play('main_auth_theme');
 
     const background = Sprite.from('auth_background');
     this.addChild(background);
