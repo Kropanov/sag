@@ -1,10 +1,10 @@
 // import { sound } from '@pixi/sound';
-import { Container, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
-import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
+import { GameScene, GameSetupScene, LogInScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 import { getSocialMediaIcons, handleProgramVersionResize, handleSocialMediaIconsResize } from '@/core/Components';
 
@@ -19,12 +19,16 @@ export class MenuScene extends Container implements IScene {
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
     { text: 'Credits', fn: () => {} },
+    { text: 'Log out', fn: () => this.logout() },
   ];
 
   private socialMediaIcons: Container;
 
   constructor() {
     super();
+
+    const background = Sprite.from('menu_background');
+    this.addChild(background);
 
     this.socialMediaIcons = getSocialMediaIcons();
     this.addChild(this.socialMediaIcons);
@@ -89,6 +93,10 @@ export class MenuScene extends Container implements IScene {
   onClickMenuItem(scene: IScene) {
     // sound.play('menu_item_click1');
     this.manager.changeScene(scene);
+  }
+
+  logout() {
+    this.manager.changeScene(new LogInScene());
   }
 
   drawVersion() {
