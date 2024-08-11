@@ -1,12 +1,12 @@
 import { sound } from '@pixi/sound';
-import { Container, Sprite, Text } from 'pixi.js';
+import { Container, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
-import { FANCY_BUTTON_BASE_ANIMATION, GITHUB_REP_LINK } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
-import { handleProgramVersionResize } from '@/core/Components';
+import { getSocialMediaIcons, handleProgramVersionResize, handleSocialMediaIconsResize } from '@/core/Components';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -21,13 +21,13 @@ export class MenuScene extends Container implements IScene {
     { text: 'Credits', fn: () => {} },
   ];
 
-  private githubIcon!: Sprite;
+  private socialMediaIcons: Container;
 
   constructor() {
     super();
 
-    // FIXME: uncomment
-    // sound.play('menu_theme');
+    this.socialMediaIcons = getSocialMediaIcons();
+    this.addChild(this.socialMediaIcons);
 
     this.menu = new List({
       elementsMargin: 10,
@@ -39,7 +39,6 @@ export class MenuScene extends Container implements IScene {
 
     this.fillMenu();
     this.drawVersion();
-    this.drawMediaIcons();
 
     this.addChild(this.menu);
   }
@@ -107,25 +106,6 @@ export class MenuScene extends Container implements IScene {
     this.addChild(this.version);
   }
 
-  drawMediaIcons() {
-    this.githubIcon = Sprite.from('github_white');
-    this.githubIcon.scale = 0.12;
-
-    this.githubIcon.x = 5;
-    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
-
-    this.githubIcon.eventMode = 'dynamic';
-    this.githubIcon.interactive = true;
-
-    this.githubIcon.cursor = 'pointer';
-
-    this.githubIcon.on('pointertap', () => {
-      window.open(GITHUB_REP_LINK);
-    });
-
-    this.addChild(this.githubIcon);
-  }
-
   openSettings() {
     this.manager.changeScene(new SettingsScene());
   }
@@ -137,8 +117,6 @@ export class MenuScene extends Container implements IScene {
     this.menu.y = screenHeight / 2.3;
 
     handleProgramVersionResize(this.version, screenWidth, screenHeight);
-
-    this.githubIcon.x = 5;
-    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
+    handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
   }
 }

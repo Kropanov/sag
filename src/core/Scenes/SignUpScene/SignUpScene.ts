@@ -5,7 +5,12 @@ import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { LogInScene } from '../LogInScene/LogInScene';
 import { MenuScene } from '../MenuScene/MenuScene';
-import { getProgramVersion, handleProgramVersionResize } from '@/core/Components';
+import {
+  getProgramVersion,
+  getSocialMediaIcons,
+  handleProgramVersionResize,
+  handleSocialMediaIconsResize,
+} from '@/core/Components';
 
 export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -19,6 +24,8 @@ export class SignUpScene extends Container implements IScene {
   private logInActionButton!: FancyButton;
   private submitSignUpButton!: FancyButton;
 
+  private socialMediaIcons: Container;
+
   constructor() {
     super();
 
@@ -30,6 +37,9 @@ export class SignUpScene extends Container implements IScene {
 
     this.container = new Graphics();
     this.drawContainer();
+
+    this.socialMediaIcons = getSocialMediaIcons();
+    this.addChild(this.socialMediaIcons);
 
     this.drawLoginInput();
     this.drawPasswordInput();
@@ -226,8 +236,10 @@ export class SignUpScene extends Container implements IScene {
 
   update(_framesPassed: number): void {}
 
-  resize(_screenWidth: number, _screenHeight: number): void {
-    this.container.position.set(_screenWidth / 2, _screenHeight / 2);
-    handleProgramVersionResize(this.version, _screenWidth, _screenHeight);
+  resize(screenWidth: number, screenHeight: number): void {
+    this.container.position.set(screenWidth / 2, screenHeight / 2);
+
+    handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
+    handleProgramVersionResize(this.version, screenWidth, screenHeight);
   }
 }
