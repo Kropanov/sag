@@ -5,6 +5,7 @@ import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
 import { Player } from '@core/Player';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
+import { MusicController } from '@/core/Music/MusicController';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -16,6 +17,9 @@ export class GameScene extends Container implements IScene {
 
   constructor() {
     super();
+
+    const player = new MusicController();
+    player.stop();
 
     this.player = new Player('bunny', 100, 100);
 

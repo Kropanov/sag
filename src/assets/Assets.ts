@@ -13,6 +13,7 @@ export const manifest: AssetsManifest = {
         auth_main_theme: './static/Audio/Music/Night Ambient 1.wav',
         auth_background_1: './static/Image/Space_background.png',
         auth_background_2: './static/Image/Space_Background2.png',
+        // menu_background: './static/Image/background/Castles/2DBackground_35.png',
         menu_background: './static/Image/Space Background3.png',
         auth_main_click: './static/Audio/Sounds/Air_FX_Pitched_Down.wav',
         auth_main_hover: './static/Audio/Sounds/FUI Holographic Interaction Radiate.wav',

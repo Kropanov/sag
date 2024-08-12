@@ -15,11 +15,13 @@ import {
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
+  private background: Sprite;
+
   private version!: Text;
   private menu: List;
 
   private items: Array<MenuItemsType> = [
-    { text: 'New', fn: () => this.gameSetup() },
+    { text: 'New', fn: () => this.game() },
     { text: 'Load', fn: () => {} },
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
@@ -32,8 +34,10 @@ export class MenuScene extends Container implements IScene {
   constructor() {
     super();
 
-    const background = Sprite.from('menu_background');
-    this.addChild(background);
+    this.background = Sprite.from('menu_background');
+    this.background.width = this.manager.getWidth();
+    this.background.height = this.manager.getHeight();
+    this.addChild(this.background);
 
     this.version = getProgramVersion();
     this.addChild(this.version);
@@ -114,6 +118,9 @@ export class MenuScene extends Container implements IScene {
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
+
+    this.background.width = screenWidth;
+    this.background.height = screenHeight;
 
     handleProgramVersionResize(this.version, screenWidth, screenHeight);
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);

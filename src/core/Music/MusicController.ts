@@ -21,6 +21,10 @@ export class MusicController {
     sound.play(value);
   }
 
+  stop() {
+    sound.stop(this._cache);
+  }
+
   #same(value: string) {
     return value === this._cache;
   }
