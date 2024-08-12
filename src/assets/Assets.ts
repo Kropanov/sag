@@ -17,6 +17,7 @@ export const manifest: AssetsManifest = {
         auth_main_click: './static/Audio/Sounds/Air_FX_Pitched_Down.wav',
         auth_main_hover: './static/Audio/Sounds/FUI Holographic Interaction Radiate.wav',
         auth_second_click: './static/Audio/Sounds/FUI Holographic Button Press-1.wav',
+        star: './static/Image/star.png',
       },
     },
   ],
