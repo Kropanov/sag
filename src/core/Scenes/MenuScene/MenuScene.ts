@@ -35,8 +35,6 @@ export class MenuScene extends Container implements IScene {
     super();
 
     this.background = Sprite.from('menu_background');
-    this.background.width = this.manager.getWidth();
-    this.background.height = this.manager.getHeight();
     this.addChild(this.background);
 
     this.version = getProgramVersion();
