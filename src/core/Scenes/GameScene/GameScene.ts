@@ -1,4 +1,4 @@
-import { Container, Sprite } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
@@ -6,6 +6,7 @@ import { Player } from '@core/Player';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
+import { Gun } from '@/core/Weapons';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -14,12 +15,8 @@ export class GameScene extends Container implements IScene {
 
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
   private keyboard: Keyboard = Keyboard.getInstance();
-  private nv: any = {
-    x: 0,
-    y: 0,
-  };
 
-  star: Sprite;
+  gun: Gun;
 
   constructor() {
     super();
@@ -27,11 +24,8 @@ export class GameScene extends Container implements IScene {
     const player = new MusicController();
     player.stop();
 
-    this.star = Sprite.from('star');
-    this.star.scale.x = 0.05;
-    this.star.scale.y = 0.05;
-
     this.player = new Player('bunny', 100, 100);
+    this.gun = new Gun(this, this.player);
 
     let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
     let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());
@@ -43,24 +37,6 @@ export class GameScene extends Container implements IScene {
     this.addChild(this.player.sprite);
 
     this.updateFloorBounds();
-
-    window.addEventListener('mousedown', this.click.bind(this));
-  }
-
-  click({ clientX, clientY }: MouseEvent) {
-    const x0 = this.player.prevX;
-    const y0 = this.player.prevY;
-
-    const x1 = clientX;
-    const y1 = clientY;
-
-    const v = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
-    this.nv = { x: (x1 - x0) / v, y: (y1 - y0) / v };
-
-    this.star.x = x0;
-    this.star.y = y0;
-
-    this.addChild(this.star);
   }
 
   // TODO: add handleInput to IScene
@@ -74,17 +50,9 @@ export class GameScene extends Container implements IScene {
     this.updateFloorBounds(_screenWidth, _screenHeight);
   }
 
-  handleStar(delta: number) {
-    console.log(this.star.x, this.star.y);
-    if (this.nv.x !== 0 || this.nv.y !== 0) {
-      this.star.x += this.nv.x * delta;
-      this.star.y += this.nv.y * delta;
-    }
-  }
-
   update(delta: number): void {
     this.handleInput();
-    this.handleStar(delta);
+    this.gun.update(delta);
     this.player.update(delta, this.enemies, this.floorBounds);
   }
 

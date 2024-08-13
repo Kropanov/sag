@@ -7,3 +7,8 @@ export type MenuItemsType = {
   text: string;
   fn: () => void;
 };
+
+export type LerpType = {
+  x: number;
+  y: number;
+};
