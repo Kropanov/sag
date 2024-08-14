@@ -5,7 +5,7 @@ import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { LogInScene } from '@core/Scenes';
 
-export class LoaderScene extends Container implements IScene {
+export class InitialScene extends Container implements IScene {
   private manager = GameManager.getInstance();
 
   private loaderValue = 0;
