@@ -1,25 +1,30 @@
+import { GameManager } from '@/core/Manager';
+import { HUDController } from '@/core/Player';
 import { lerp } from '@/utils';
 import { Sprite } from 'pixi.js';
 
 // TODO: optimize and do refactoring
 export class Gun {
+  private manager = GameManager.getInstance();
+  private hud = new HUDController();
+
   private queue: any = [];
   private world: any = [];
 
   private player: any;
-  private scene: any;
 
   private dir: any = {
     x: 0,
     y: 0,
   };
 
-  constructor(scene: any, player: any) {
-    this.scene = scene;
+  constructor(player: any) {
     this.player = player;
 
     this.recharge();
     this.listen();
+
+    this.hud.setUIAmmo(this.queue.length);
   }
 
   listen() {
@@ -56,7 +61,9 @@ export class Gun {
     this.queue[0].direction = this.dir;
 
     const element = this.queue.shift();
-    this.scene.addChild(element.bullet);
+    this.hud.setUIAmmo(this.queue.length);
+    const scene = this.manager.getCurrentScene();
+    scene.addChild(element.bullet);
     this.world.push(element);
   }
 

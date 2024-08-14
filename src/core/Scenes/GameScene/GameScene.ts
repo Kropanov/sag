@@ -2,7 +2,7 @@ import { Container } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
-import { Player } from '@core/Player';
+import { HUDController, Player } from '@core/Player';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
@@ -10,6 +10,8 @@ import { Gun } from '@/core/Weapons';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
+  private display: HUDController = new HUDController();
+
   private player: Player;
   private readonly enemies: any;
 
@@ -21,11 +23,13 @@ export class GameScene extends Container implements IScene {
   constructor() {
     super();
 
+    this.display.setHUD(this);
+
     const player = new MusicController();
     player.stop();
 
     this.player = new Player('bunny', 100, 100);
-    this.gun = new Gun(this, this.player);
+    this.gun = new Gun(this.player);
 
     let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
     let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());
@@ -47,6 +51,7 @@ export class GameScene extends Container implements IScene {
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {
+    this.display.resize(_screenWidth, _screenHeight);
     this.updateFloorBounds(_screenWidth, _screenHeight);
   }
 
