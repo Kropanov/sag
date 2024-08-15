@@ -25,8 +25,8 @@ export class GameScene extends Container implements IScene {
 
     this.display.initHUD(this);
 
-    const player = new MusicController();
-    player.stop();
+    const music = new MusicController();
+    music.stop();
 
     this.player = new Player('bunny', 100, 100);
     this.gun = new Gun(this.player);
