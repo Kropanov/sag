@@ -1,5 +1,5 @@
 import { GameManager } from '@core/Manager';
-import { LoaderScene } from '@core/Scenes';
+import { InitialScene } from '@core/Scenes';
 
 export class GameLauncher {
   private static instance: GameLauncher;
@@ -10,8 +10,8 @@ export class GameLauncher {
     const manager = GameManager.getInstance();
 
     if (!GameLauncher.instance) {
-      manager.initialize('#282828');
-      manager.changeScene(new LoaderScene());
+      manager.initialize('#000000');
+      manager.changeScene(new InitialScene());
       GameLauncher.instance = new GameLauncher();
     }
 

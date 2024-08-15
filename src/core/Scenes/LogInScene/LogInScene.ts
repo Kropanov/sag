@@ -1,15 +1,22 @@
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
-import { sound } from '@pixi/sound';
 import { FancyButton, Input } from '@pixi/ui';
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
 import { SignUpScene } from '../SignUpScene/SignUpScene';
-// import { MenuScene } from '../MenuScene/MenuScene';
+import {
+  getProgramVersion,
+  getSocialMediaIcons,
+  handleProgramVersionResize,
+  handleSocialMediaIconsResize,
+} from '@/core/Components';
+import { MusicController } from '@/core/Music/MusicController';
+import { sound } from '@pixi/sound';
 
 export class LogInScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
+  private version: Text;
 
   private loginInput!: Input;
   private passwordInput!: Input;
@@ -17,16 +24,25 @@ export class LogInScene extends Container implements IScene {
   private signUpActionButton!: FancyButton;
   private submitLoginButton!: FancyButton;
 
+  private socialMediaIcons: Container;
+
   constructor() {
     super();
 
-    sound.play('auth_main_theme');
+    const player = new MusicController();
+    player.play('auth_main_theme');
 
-    const background = Sprite.from('auth_background');
+    const background = Sprite.from('auth_background_1');
     this.addChild(background);
+
+    this.version = getProgramVersion();
+    this.addChild(this.version);
 
     this.container = new Graphics();
     this.drawContainer();
+
+    this.socialMediaIcons = getSocialMediaIcons();
+    this.addChild(this.socialMediaIcons);
 
     this.drawLoginInput();
     this.drawPasswordInput();
@@ -114,25 +130,32 @@ export class LogInScene extends Container implements IScene {
   }
 
   drawSignUpActionButton() {
+    const buttonText = new Text({
+      text: "Don't have an account? Sign up",
+      style: {
+        fontSize: 18,
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
     this.signUpActionButton = new FancyButton({
-      text: new Text({
-        text: "Don't have an account? Sign up",
-        style: {
-          fontSize: 18,
-          fill: '#FFFFFF',
-          textBaseline: 'bottom',
-        },
-      }),
+      text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
+
+    const padding = 5;
+    const width = buttonText.width + padding * 2;
+    const height = buttonText.height + padding * 2;
+
+    this.signUpActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
     this.signUpActionButton.eventMode = 'dynamic';
 
     this.signUpActionButton.onPress.connect(() => {
+      sound.play('auth_second_click');
       this.manager.changeScene(new SignUpScene());
     });
-
-    this.signUpActionButton.onPress;
 
     this.signUpActionButton.y = this.container.height - 100;
     this.signUpActionButton.x = this.container.width / 2;
@@ -178,19 +201,24 @@ export class LogInScene extends Container implements IScene {
     this.submitLoginButton.y = this.container.height / 2 - 67;
     this.submitLoginButton.x = this.container.width / 2 - 100;
 
+    this.submitLoginButton.onHover.connect(() => sound.play('auth_main_hover'));
     this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
 
     this.container.addChild(this.submitLoginButton);
   }
 
   handleLoginClick() {
+    sound.play('auth_main_click');
     // TODO: implement login login by getting some response form server
     // this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
 
-  resize(_screenWidth: number, _screenHeight: number): void {
-    this.container.position.set(this.manager.getWidth() / 2, this.manager.getHeight() / 2);
+  resize(screenWidth: number, screenHeight: number): void {
+    this.container.position.set(screenWidth / 2, screenHeight / 2);
+
+    handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
+    handleProgramVersionResize(this.version, screenWidth, screenHeight);
   }
 }

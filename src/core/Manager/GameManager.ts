@@ -44,6 +44,10 @@ export class GameManager {
     window.addEventListener('resize', this.resize.bind(this));
   }
 
+  public getCurrentScene() {
+    return this.currentScene;
+  }
+
   public changeScene(newScene: IScene): void {
     if (this.currentScene) {
       this.app.stage.removeChild(this.currentScene);

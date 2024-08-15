@@ -1,32 +1,47 @@
-import { sound } from '@pixi/sound';
+// import { sound } from '@pixi/sound';
 import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
-import { FANCY_BUTTON_BASE_ANIMATION, GITHUB_REP_LINK } from '@/config';
-import { GameScene, GameSetupScene, SettingsScene } from '@core/Scenes';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { GameScene, GameSetupScene, LogInScene, SettingsScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
+import {
+  getProgramVersion,
+  getSocialMediaIcons,
+  handleProgramVersionResize,
+  handleSocialMediaIconsResize,
+} from '@/core/Components';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
+  private background: Sprite;
 
+  private version!: Text;
   private menu: List;
+
   private items: Array<MenuItemsType> = [
-    { text: 'New', fn: () => this.gameSetup() },
+    { text: 'New', fn: () => this.game() },
     { text: 'Load', fn: () => {} },
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
     { text: 'Credits', fn: () => {} },
+    { text: 'Log out', fn: () => this.logout() },
   ];
 
-  private githubIcon!: Sprite;
-  private versionText!: Text;
+  private socialMediaIcons: Container;
 
   constructor() {
     super();
 
-    // FIXME: uncomment
-    // sound.play('menu_theme');
+    this.background = Sprite.from('menu_background');
+    this.addChild(this.background);
+
+    this.version = getProgramVersion();
+    this.addChild(this.version);
+
+    this.socialMediaIcons = getSocialMediaIcons();
+    this.addChild(this.socialMediaIcons);
 
     this.menu = new List({
       elementsMargin: 10,
@@ -37,8 +52,6 @@ export class MenuScene extends Container implements IScene {
     this.menu.y = this.manager.getHeight() / 2.3;
 
     this.fillMenu();
-    this.drawVersion();
-    this.drawMediaIcons();
 
     this.addChild(this.menu);
   }
@@ -74,11 +87,11 @@ export class MenuScene extends Container implements IScene {
         animations: FANCY_BUTTON_BASE_ANIMATION,
       });
 
-      button.onHover.connect(() => sound.play('menu_item_click3'));
+      // button.onHover.connect(() => sound.play('menu_item_click3'));
       // FIXME: increase aria radius of the button
       button.onPress.connect(() => {
-        sound.stop('menu_theme');
-        sound.play('menu_item_click1');
+        // sound.stop('menu_theme');
+        // sound.play('menu_item_click1');
         _.fn();
       });
 
@@ -87,43 +100,11 @@ export class MenuScene extends Container implements IScene {
   }
 
   onClickMenuItem(scene: IScene) {
-    sound.play('menu_item_click1');
     this.manager.changeScene(scene);
   }
 
-  drawVersion() {
-    this.versionText = new Text({
-      text: 'v0.0.0 beta',
-      style: {
-        fontFamily: 'Consolas',
-        fontSize: 20,
-        fill: '#ADADAD',
-      },
-    });
-
-    this.versionText.x = this.manager.getWidth() - this.versionText.width - 8;
-    this.versionText.y = this.manager.getHeight() - this.versionText.height - 5;
-
-    this.addChild(this.versionText);
-  }
-
-  drawMediaIcons() {
-    this.githubIcon = Sprite.from('github_white');
-    this.githubIcon.scale = 0.12;
-
-    this.githubIcon.x = 5;
-    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
-
-    this.githubIcon.eventMode = 'dynamic';
-    this.githubIcon.interactive = true;
-
-    this.githubIcon.cursor = 'pointer';
-
-    this.githubIcon.on('pointertap', () => {
-      window.open(GITHUB_REP_LINK);
-    });
-
-    this.addChild(this.githubIcon);
+  logout() {
+    this.manager.changeScene(new LogInScene());
   }
 
   openSettings() {
@@ -136,10 +117,10 @@ export class MenuScene extends Container implements IScene {
     this.menu.x = screenWidth / 2;
     this.menu.y = screenHeight / 2.3;
 
-    this.versionText.x = screenWidth - this.versionText.width - 8;
-    this.versionText.y = screenHeight - this.versionText.height - 5;
+    this.background.width = screenWidth;
+    this.background.height = screenHeight;
 
-    this.githubIcon.x = 5;
-    this.githubIcon.y = this.manager.getHeight() - this.githubIcon.height - 5;
+    handleProgramVersionResize(this.version, screenWidth, screenHeight);
+    handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
   }
 }

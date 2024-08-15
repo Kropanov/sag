@@ -1,5 +1,5 @@
 export * from './GameScene/GameScene';
-export * from './LoaderScene/LoaderScene';
+export * from './InitialScene/InitialScene';
 export * from './MenuScene/MenuScene';
 export * from './SettingsScene/SettingsScene';
 export * from './GameSetupScene/GameSetupScene';

@@ -2,7 +2,7 @@ import { Container, Graphics, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { Slider } from '@pixi/ui';
-import { sound } from '@pixi/sound';
+// import { sound } from '@pixi/sound';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { Settings } from '@core/Settings';
@@ -96,7 +96,7 @@ export class SettingsScene extends Container implements IScene {
     singleSlider.y = this.manager.getHeight() / OFFSET / 2 - 250;
     singleSlider.onUpdate.connect((value) => {
       this.settings.setVolume(value);
-      sound.play('rollover');
+      // sound.play('rollover');
     });
 
     this.container.addChild(singleSlider);

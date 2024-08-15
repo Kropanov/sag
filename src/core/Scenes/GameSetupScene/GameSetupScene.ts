@@ -1,6 +1,6 @@
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { IScene } from '@/interfaces';
-import { sound } from '@pixi/sound';
+// import { sound } from '@pixi/sound';
 import { FancyButton } from '@pixi/ui';
 import { Container, FederatedEvent, Graphics, Text } from 'pixi.js';
 
@@ -66,8 +66,8 @@ export class GameSetupScene extends Container implements IScene {
 
     this.addChild(this.nextButton);
 
-    this.nextButton.onHover.connect(() => sound.play('menu_item_click3'));
-    this.nextButton.onPress.connect(() => sound.play('menu_item_click1'));
+    // this.nextButton.onHover.connect(() => sound.play('menu_item_click3'));
+    // this.nextButton.onPress.connect(() => sound.play('menu_item_click1'));
   }
 
   drawBackButton() {
@@ -87,8 +87,8 @@ export class GameSetupScene extends Container implements IScene {
     this.backButton.y = 850;
 
     this.addChild(this.backButton);
-    this.backButton.onHover.connect(() => sound.play('menu_item_click3'));
-    this.backButton.onPress.connect(() => sound.play('menu_item_click1'));
+    // this.backButton.onHover.connect(() => sound.play('menu_item_click3'));
+    // this.backButton.onPress.connect(() => sound.play('menu_item_click1'));
   }
 
   hover(context: FederatedEvent) {

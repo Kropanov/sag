@@ -2,13 +2,21 @@ import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
 import { LogInScene } from '../LogInScene/LogInScene';
 import { MenuScene } from '../MenuScene/MenuScene';
+import {
+  getProgramVersion,
+  getSocialMediaIcons,
+  handleProgramVersionResize,
+  handleSocialMediaIconsResize,
+} from '@/core/Components';
+import { sound } from '@pixi/sound';
 
 export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
+  private version: Text;
 
   private loginInput!: Input;
   private passwordInput!: Input;
@@ -17,14 +25,22 @@ export class SignUpScene extends Container implements IScene {
   private logInActionButton!: FancyButton;
   private submitSignUpButton!: FancyButton;
 
+  private socialMediaIcons: Container;
+
   constructor() {
     super();
 
-    const background = Sprite.from('sign_up_background');
+    const background = Sprite.from('auth_background_2');
     this.addChild(background);
+
+    this.version = getProgramVersion();
+    this.addChild(this.version);
 
     this.container = new Graphics();
     this.drawContainer();
+
+    this.socialMediaIcons = getSocialMediaIcons();
+    this.addChild(this.socialMediaIcons);
 
     this.drawLoginInput();
     this.drawPasswordInput();
@@ -146,21 +162,30 @@ export class SignUpScene extends Container implements IScene {
   }
 
   drawLogInActionButton() {
+    const buttonText = new Text({
+      text: 'Already have an account? Log in',
+      style: {
+        fontSize: 18,
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
     this.logInActionButton = new FancyButton({
-      text: new Text({
-        text: 'Already have an account? Log in',
-        style: {
-          fontSize: 18,
-          fill: '#FFFFFF',
-          textBaseline: 'bottom',
-        },
-      }),
+      text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
+
+    const padding = 5;
+    const width = buttonText.width + padding * 2;
+    const height = buttonText.height + padding * 2;
+
+    this.logInActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
     this.logInActionButton.eventMode = 'dynamic';
 
     this.logInActionButton.onPress.connect(() => {
+      sound.play('auth_second_click');
       this.manager.changeScene(new LogInScene());
     });
 
@@ -210,18 +235,23 @@ export class SignUpScene extends Container implements IScene {
     this.submitSignUpButton.y = this.container.height / 2 + 15;
     this.submitSignUpButton.x = this.container.width / 2 - 100;
 
+    this.submitSignUpButton.onHover.connect(() => sound.play('auth_main_hover'));
     this.submitSignUpButton.onPress.connect(() => this.handleSignUpClick());
 
     this.container.addChild(this.submitSignUpButton);
   }
 
   handleSignUpClick() {
+    sound.play('auth_main_click');
     this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
 
-  resize(_screenWidth: number, _screenHeight: number): void {
-    this.container.position.set(this.manager.getWidth() / 2, this.manager.getHeight() / 2);
+  resize(screenWidth: number, screenHeight: number): void {
+    this.container.position.set(screenWidth / 2, screenHeight / 2);
+
+    handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
+    handleProgramVersionResize(this.version, screenWidth, screenHeight);
   }
 }
