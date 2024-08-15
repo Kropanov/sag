@@ -32,7 +32,7 @@ export class Gun {
   }
 
   recharge() {
-    for (let i = 0; i <= 30; i++) {
+    for (let i = 0; i < 30; i++) {
       const star = Sprite.from('star');
       star.scale.x = 0.05;
       star.scale.y = 0.05;

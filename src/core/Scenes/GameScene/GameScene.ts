@@ -23,7 +23,7 @@ export class GameScene extends Container implements IScene {
   constructor() {
     super();
 
-    this.display.setHUD(this);
+    this.display.initHUD(this);
 
     const player = new MusicController();
     player.stop();

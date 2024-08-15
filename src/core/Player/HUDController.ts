@@ -18,7 +18,7 @@ class HUDController {
     HUDController._instance = this;
   }
 
-  setHUD(scene: IScene) {
+  initHUD(scene: IScene) {
     this.scene = scene;
     this.#drawUI();
   }
