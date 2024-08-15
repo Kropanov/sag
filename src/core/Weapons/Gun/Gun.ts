@@ -1,10 +1,13 @@
+import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
 import { HUDController } from '@/core/Player';
 import { lerp } from '@/utils';
+import { sound } from '@pixi/sound';
 import { Sprite } from 'pixi.js';
 
 // TODO: optimize and do refactoring
 export class Gun {
+  private keyboard = Keyboard.getInstance();
   private manager = GameManager.getInstance();
   private hud = new HUDController();
 
@@ -20,11 +23,8 @@ export class Gun {
 
   constructor(player: any) {
     this.player = player;
-
     this.recharge();
     this.listen();
-
-    this.hud.setUIAmmo(this.queue.length);
   }
 
   listen() {
@@ -32,6 +32,7 @@ export class Gun {
   }
 
   recharge() {
+    this.queue.length = 0;
     for (let i = 0; i < 30; i++) {
       const star = Sprite.from('star');
       star.scale.x = 0.05;
@@ -45,6 +46,8 @@ export class Gun {
         },
       });
     }
+
+    this.hud.setUIAmmo(this.queue.length);
   }
 
   click({ clientX, clientY }: MouseEvent) {
@@ -76,7 +79,16 @@ export class Gun {
     });
   }
 
+  handleInput() {
+    if (this.keyboard.state.get('KeyR')) {
+      this.keyboard.state.set('KeyR', false);
+      sound.play('recharge');
+      this.recharge();
+    }
+  }
+
   update(delta: number) {
+    this.handleInput();
     this.handleStar(delta);
   }
 }
