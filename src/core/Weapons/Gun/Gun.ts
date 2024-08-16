@@ -112,7 +112,7 @@ export class Gun {
   handleInput() {
     if (this.keyboard.state.get('KeyR')) {
       this.keyboard.state.set('KeyR', false);
-      sound.play('recharge');
+      sound.play('recharge_cartridges');
       this.recharge();
     }
   }

@@ -21,10 +21,9 @@ export const manifest: AssetsManifest = {
     {
       name: 'sounds',
       assets: {
-        auth_main_click: './static/audio/sounds/Air_FX_Pitched_Down.wav',
-        auth_main_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
-        auth_second_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
-        recharge: './static/audio/sounds/High-Tech Gadget Activate.wav',
+        auth_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
+        auth_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
+        recharge_cartridges: './static/audio/sounds/High-Tech Gadget Activate.wav',
       },
     },
     {
