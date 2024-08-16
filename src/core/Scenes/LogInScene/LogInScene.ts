@@ -18,6 +18,9 @@ export class LogInScene extends Container implements IScene {
   private container: Graphics;
   private version: Text;
 
+  private player: MusicController;
+  private background: Sprite;
+
   private loginInput!: Input;
   private passwordInput!: Input;
 
@@ -29,11 +32,11 @@ export class LogInScene extends Container implements IScene {
   constructor() {
     super();
 
-    const player = new MusicController();
-    player.play('auth_main_theme');
+    this.player = new MusicController();
+    this.player.play('auth_theme');
 
-    const background = Sprite.from('login_background');
-    this.addChild(background);
+    this.background = Sprite.from('login_background');
+    this.addChild(this.background);
 
     this.version = getProgramVersion();
     this.addChild(this.version);

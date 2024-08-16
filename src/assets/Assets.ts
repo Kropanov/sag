@@ -30,7 +30,7 @@ export const manifest: AssetsManifest = {
     {
       name: 'music',
       assets: {
-        auth_main_theme: './static/audio/music/Night Ambient 1.wav',
+        auth_theme: './static/audio/music/Night Ambient 1.wav',
       },
     },
     {
