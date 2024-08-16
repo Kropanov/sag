@@ -1,33 +1,26 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { HUDController } from '@/core/Player';
+import { HUDController, Player } from '@/core/Player';
 import { lerp } from '@/utils';
-import { sound } from '@pixi/sound';
-import { Sprite } from 'pixi.js';
+import { Cartridge } from '../Cartridge/Cartridge';
 
-// TODO: split on files
-export class Gun {
-  private keyboard = Keyboard.getInstance();
-  private manager = GameManager.getInstance();
+class Gun {
+  private player: Player;
+  private cartridge: Cartridge;
+
   private hud = new HUDController();
 
-  private queue: any = [];
+  private keyboard = Keyboard.getInstance();
+  private manager = GameManager.getInstance();
+
   private world: any = [];
 
   private mouseEvent!: MouseEvent;
-
-  private player: any;
-
-  private dir: any = {
-    x: 0,
-    y: 0,
-  };
-
   shootingInterval: any;
 
-  constructor(player: any) {
+  constructor(player: Player, cartridge: Cartridge) {
+    this.cartridge = cartridge;
     this.player = player;
-    this.recharge();
     this.listen();
   }
 
@@ -60,7 +53,11 @@ export class Gun {
   }
 
   shoot(event: MouseEvent) {
-    if (this.queue.length === 0) return;
+    const currentAmmo = this.cartridge.getCurrentAmmo();
+    this.hud.setUIAmmo(currentAmmo);
+    if (currentAmmo === 0) {
+      return;
+    }
 
     const x0 = this.player.prevX;
     const y0 = this.player.prevY;
@@ -68,43 +65,31 @@ export class Gun {
     const x1 = event.clientX;
     const y1 = event.clientY;
 
-    this.dir = lerp(x0, y0, x1, y1);
+    const direction = lerp(x0, y0, x1, y1);
 
-    this.queue[0].bullet.x = x0;
-    this.queue[0].bullet.y = y0;
-    this.queue[0].direction = this.dir;
+    this.cartridge.ammo[0].sprite.x = x0;
+    this.cartridge.ammo[0].sprite.y = y0;
+    this.cartridge.ammo[0].direction = direction;
 
-    const element = this.queue.shift();
-    this.hud.setUIAmmo(this.queue.length);
-    const scene = this.manager.getCurrentScene();
-    scene.addChild(element.bullet);
-    this.world.push(element);
-  }
-
-  recharge() {
-    this.queue.length = 0;
-    for (let i = 0; i < 30; i++) {
-      const star = Sprite.from('star');
-      star.scale.x = 0.05;
-      star.scale.y = 0.05;
-
-      this.queue.push({
-        bullet: star,
-        direction: {
-          x: 0,
-          y: 0,
-        },
-      });
+    const ammo = this.cartridge.shoot();
+    if (!ammo) {
+      return;
     }
 
-    this.hud.setUIAmmo(this.queue.length);
+    const scene = this.manager.getCurrentScene();
+    scene.addChild(ammo.sprite);
+    this.world.push(ammo);
+  }
+
+  setCartridge(cartridge: Cartridge) {
+    this.cartridge = cartridge;
   }
 
   handleStar(delta: number) {
-    this.world.forEach((element: any) => {
-      if (element.direction.x !== 0 || element.direction.y !== 0) {
-        element.bullet.x += element.direction.x * 2 * delta;
-        element.bullet.y += element.direction.y * 2 * delta;
+    this.world.forEach((entity: any) => {
+      if (entity.direction.x !== 0 || entity.direction.y !== 0) {
+        entity.sprite.x += entity.direction.x * 2 * delta;
+        entity.sprite.y += entity.direction.y * 2 * delta;
       }
     });
   }
@@ -112,9 +97,12 @@ export class Gun {
   handleInput() {
     if (this.keyboard.state.get('KeyR')) {
       this.keyboard.state.set('KeyR', false);
-      sound.play('recharge_cartridge');
-      this.recharge();
+      this.reload();
     }
+  }
+
+  reload() {
+    this.cartridge.reload();
   }
 
   update(delta: number) {
@@ -122,3 +110,5 @@ export class Gun {
     this.handleStar(delta);
   }
 }
+
+export { Gun };

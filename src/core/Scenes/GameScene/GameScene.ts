@@ -6,7 +6,7 @@ import { HUDController, Player } from '@core/Player';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
-import { Gun } from '@/core/Weapons';
+import { Cartridge, Gun } from '@/core/Weapons';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -29,7 +29,7 @@ export class GameScene extends Container implements IScene {
     music.stop();
 
     this.player = new Player('bunny', 100, 100);
-    this.gun = new Gun(this.player);
+    this.gun = new Gun(this.player, new Cartridge('default', 70, 3));
 
     let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
     let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());
