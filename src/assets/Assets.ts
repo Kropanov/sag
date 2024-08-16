@@ -23,7 +23,7 @@ export const manifest: AssetsManifest = {
       assets: {
         auth_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
         auth_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
-        recharge_cartridges: './static/audio/sounds/High-Tech Gadget Activate.wav',
+        recharge_cartridge: './static/audio/sounds/High-Tech Gadget Activate.wav',
       },
     },
     {
