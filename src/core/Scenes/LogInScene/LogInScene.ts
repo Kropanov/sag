@@ -32,7 +32,7 @@ export class LogInScene extends Container implements IScene {
     const player = new MusicController();
     player.play('auth_main_theme');
 
-    const background = Sprite.from('auth_background_1');
+    const background = Sprite.from('login_background');
     this.addChild(background);
 
     this.version = getProgramVersion();

@@ -30,7 +30,7 @@ export class SignUpScene extends Container implements IScene {
   constructor() {
     super();
 
-    const background = Sprite.from('auth_background_2');
+    const background = Sprite.from('signup_background');
     this.addChild(background);
 
     this.version = getProgramVersion();
