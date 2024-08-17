@@ -4,9 +4,12 @@ import { Sprite } from 'pixi.js';
 
 class Cartridge {
   public ammo: any = [];
-  private type: string;
   private maxAmmo: number;
+
+  private type: string;
+
   private reloadTime: number;
+  private isReloading: boolean = false;
 
   private hud = new HUDController();
 
@@ -26,12 +29,17 @@ class Cartridge {
     return this.ammo.shift();
   }
 
-  reload(): Promise<unknown> {
+  reload(): Promise<unknown> | undefined {
+    if (this.isReloading) {
+      return;
+    }
+
+    this.isReloading = true;
     sound.play('recharge_cartridge');
+
     return new Promise((resolve) => {
       setTimeout(() => {
         this.refill();
-        this.hud.setUIAmmo(this.ammo.length);
         resolve(`Reloaded! Ammo restored to ${this.ammo.length} (type: ${this.type})`);
       }, this.reloadTime * 1000);
     });
@@ -52,6 +60,9 @@ class Cartridge {
       };
 
       this.ammo.push({ sprite, direction });
+      this.hud.setUIAmmo(this.ammo.length);
+
+      this.isReloading = false;
     }
   }
 
