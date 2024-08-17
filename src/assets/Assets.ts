@@ -7,7 +7,7 @@ export const manifest: AssetsManifest = {
       assets: {
         bunny: './static/images/bunny.png',
         tile: './static/images/tile_0000.png',
-        star: './static/images/star.png',
+        ammo_default: './static/images/star.png',
       },
     },
     {

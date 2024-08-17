@@ -1,9 +1,10 @@
 import { HUDController } from '@/core/Player';
 import { sound } from '@pixi/sound';
-import { Sprite } from 'pixi.js';
+import { Ammo } from '..';
+import { AMMO } from '@/types/ammo.enum';
 
-class Cartridge {
-  public ammo: any = [];
+export class Cartridge {
+  private bullets: Ammo[];
   private maxAmmo: number;
 
   private type: string;
@@ -13,20 +14,26 @@ class Cartridge {
 
   private hud = new HUDController();
 
-  constructor(type: string, maxAmmo: number, reloadTime: number) {
+  constructor(maxAmmo: number, type: AMMO, reloadTime: number) {
     this.type = type;
+    this.bullets = [];
     this.maxAmmo = maxAmmo;
     this.reloadTime = reloadTime;
-    this.refill();
-    this.hud.setUIAmmo(this.ammo.length);
+
+    this.fill();
+    this.hud.setUIAmmo(this.bullets.length);
+  }
+
+  getBullets() {
+    return this.bullets;
   }
 
   shoot() {
-    if (this.ammo.length === 0) {
+    if (this.bullets.length === 0) {
       return null;
     }
 
-    return this.ammo.shift();
+    return this.bullets.shift();
   }
 
   reload(): Promise<unknown> | undefined {
@@ -39,36 +46,25 @@ class Cartridge {
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        this.refill();
-        resolve(`Reloaded! Ammo restored to ${this.ammo.length} (type: ${this.type})`);
+        this.fill();
+        resolve(`Reloaded! Ammo restored to ${this.bullets.length} (type: ${this.type})`);
       }, this.reloadTime * 1000);
     });
   }
 
-  refill() {
-    this.ammo.length = 0;
+  fill() {
+    this.bullets.length = 0;
 
     for (let i = 0; i < this.maxAmmo; i++) {
-      const sprite = Sprite.from('star');
-
-      sprite.scale.x = 0.05;
-      sprite.scale.y = 0.05;
-
-      const direction = {
-        x: 0,
-        y: 0,
-      };
-
-      this.ammo.push({ sprite, direction });
-      this.hud.setUIAmmo(this.ammo.length);
-
-      this.isReloading = false;
+      const ammo = new Ammo(10, this.type);
+      this.bullets.push(ammo);
     }
+
+    this.hud.setUIAmmo(this.bullets.length);
+    this.isReloading = false;
   }
 
   getCurrentAmmo() {
-    return this.ammo.length;
+    return this.bullets.length;
   }
 }
-
-export { Cartridge };

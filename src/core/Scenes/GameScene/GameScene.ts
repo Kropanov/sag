@@ -7,6 +7,7 @@ import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
 import { Cartridge, Gun } from '@/core/Weapons';
+import { AMMO } from '@/types/ammo.enum';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -18,7 +19,8 @@ export class GameScene extends Container implements IScene {
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
   private keyboard: Keyboard = Keyboard.getInstance();
 
-  gun: Gun;
+  private gun: Gun;
+  private cartridge: Cartridge;
 
   constructor() {
     super();
@@ -29,7 +31,8 @@ export class GameScene extends Container implements IScene {
     music.stop();
 
     this.player = new Player('bunny', 100, 100);
-    this.gun = new Gun(this.player, new Cartridge('default', 70, 3));
+    this.cartridge = new Cartridge(70, AMMO.DEFAULT, 3);
+    this.gun = new Gun(this.player, this.cartridge);
 
     let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
     let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());

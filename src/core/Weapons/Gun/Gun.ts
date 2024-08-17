@@ -3,6 +3,7 @@ import { GameManager } from '@/core/Manager';
 import { HUDController, Player } from '@/core/Player';
 import { lerp } from '@/utils';
 import { Cartridge } from '../Cartridge/Cartridge';
+import { Ammo } from '../Ammo/Ammo';
 
 class Gun {
   private player: Player;
@@ -67,17 +68,19 @@ class Gun {
 
     const direction = lerp(x0, y0, x1, y1);
 
-    this.cartridge.ammo[0].sprite.x = x0;
-    this.cartridge.ammo[0].sprite.y = y0;
-    this.cartridge.ammo[0].direction = direction;
+    const ammo = this.cartridge.getBullets()[0];
+    const ammoSprite = ammo.getSprite();
 
-    const ammo = this.cartridge.shoot();
-    if (!ammo) {
+    ammo.setDirection(direction);
+    ammo.setSpritePosition(x0, y0);
+
+    const bullet = this.cartridge.shoot();
+    if (!bullet) {
       return;
     }
 
     const scene = this.manager.getCurrentScene();
-    scene.addChild(ammo.sprite);
+    scene.addChild(ammoSprite);
     this.world.push(ammo);
   }
 
@@ -86,11 +89,16 @@ class Gun {
   }
 
   handleStar(delta: number) {
-    this.world.forEach((entity: any) => {
-      if (entity.direction.x !== 0 || entity.direction.y !== 0) {
-        entity.sprite.x += entity.direction.x * 2 * delta;
-        entity.sprite.y += entity.direction.y * 2 * delta;
+    this.world.forEach((ammo: Ammo) => {
+      const sprite = ammo.getSprite();
+      const direction = ammo.getDirection();
+
+      if (direction.x === 0 || direction.y === 0) {
+        return;
       }
+
+      sprite.x += direction.x * 2 * delta;
+      sprite.y += direction.y * 2 * delta;
     });
   }
 
