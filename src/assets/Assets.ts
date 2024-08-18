@@ -7,7 +7,14 @@ export const manifest: AssetsManifest = {
       assets: {
         bunny: './static/images/bunny.png',
         tile: './static/images/tile_0000.png',
-        ammo_default: './static/images/star.png',
+      },
+    },
+    {
+      name: 'ammo',
+      assets: {
+        ammo_default: './static/images/ammo/star.png',
+        ammo_energy: './static/images/ammo/energyball_1.png',
+        ammo_ice: './static/images/ammo/energyball_7.png',
       },
     },
     {
@@ -37,7 +44,7 @@ export const manifest: AssetsManifest = {
       assets: {
         login_background: './static/backgrounds/Space_background_5.png',
         signup_background: './static/backgrounds/Space_background_6.png',
-        game_background: './static/backgrounds/Space_background_3.png',
+        game_background: './static/backgrounds/Space_background_7.png',
         menu_background: './static/backgrounds/Space_background_2.png',
       },
     },

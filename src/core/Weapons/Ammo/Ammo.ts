@@ -1,21 +1,26 @@
+import { AMMO_DAMAGE } from '@/config';
 import { DirectionType } from '@/types';
+import { AMMO_TYPE } from '@/types/ammo.enum';
 import { Sprite } from 'pixi.js';
 
 export class Ammo {
   private sprite: Sprite;
   private damage: number;
-  private type: string;
+  private type: AMMO_TYPE;
   private direction: DirectionType = { x: 0, y: 0 };
 
-  constructor(damage: number, type: string) {
+  constructor(type: AMMO_TYPE) {
     this.sprite = Sprite.from(type);
-    this.damage = damage;
+    this.damage = AMMO_DAMAGE[type];
     this.type = type;
+    this.#init();
+  }
 
+  #init() {
     this.setSpriteSize();
   }
 
-  setAmmo(damage: number, type: string) {
+  setAmmo(damage: number, type: AMMO_TYPE) {
     this.sprite = Sprite.from(type);
     this.damage = damage;
     this.type = type;

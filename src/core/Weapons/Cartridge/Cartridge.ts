@@ -1,20 +1,19 @@
 import { HUDController } from '@/core/Player';
 import { sound } from '@pixi/sound';
 import { Ammo } from '..';
-import { AMMO } from '@/types/ammo.enum';
+import { AMMO_TYPE } from '@/types/ammo.enum';
 
 export class Cartridge {
+  private type: AMMO_TYPE;
   private bullets: Ammo[];
   private maxAmmo: number;
-
-  private type: string;
 
   private reloadTime: number;
   private isReloading: boolean = false;
 
   private hud = new HUDController();
 
-  constructor(maxAmmo: number, type: AMMO, reloadTime: number) {
+  constructor(maxAmmo: number, type: AMMO_TYPE, reloadTime: number) {
     this.type = type;
     this.bullets = [];
     this.maxAmmo = maxAmmo;
@@ -56,7 +55,7 @@ export class Cartridge {
     this.bullets.length = 0;
 
     for (let i = 0; i < this.maxAmmo; i++) {
-      const ammo = new Ammo(10, this.type);
+      const ammo = new Ammo(this.type);
       this.bullets.push(ammo);
     }
 

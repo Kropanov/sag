@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
@@ -7,11 +7,14 @@ import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
 import { Cartridge, Gun } from '@/core/Weapons';
-import { AMMO } from '@/types/ammo.enum';
+import { AMMO_TYPE } from '@/types/ammo.enum';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private display: HUDController = new HUDController();
+
+  private background: Sprite;
+  private music: MusicController;
 
   private player: Player;
   private readonly enemies: any;
@@ -27,11 +30,14 @@ export class GameScene extends Container implements IScene {
 
     this.display.initHUD(this);
 
-    const music = new MusicController();
-    music.stop();
+    this.background = Sprite.from('game_background');
+    this.addChild(this.background);
+
+    this.music = new MusicController();
+    this.music.stop();
 
     this.player = new Player('bunny', 100, 100);
-    this.cartridge = new Cartridge(70, AMMO.DEFAULT, 3);
+    this.cartridge = new Cartridge(70, AMMO_TYPE.ENERGY, 3);
     this.gun = new Gun(this.player, this.cartridge);
 
     let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
