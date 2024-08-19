@@ -54,9 +54,7 @@ class Gun {
   }
 
   shoot(event: MouseEvent) {
-    const currentAmmo = this.cartridge.getCurrentAmmo();
-    this.hud.setUIAmmo(currentAmmo);
-    if (currentAmmo === 0) {
+    if (!this.cartridge.getCurrentAmmo()) {
       return;
     }
 
@@ -74,10 +72,8 @@ class Gun {
     ammo.setDirection(direction);
     ammo.setSpritePosition(x0, y0);
 
-    const bullet = this.cartridge.shoot();
-    if (!bullet) {
-      return;
-    }
+    const currentAmmo = this.cartridge.shoot();
+    this.hud.setUIAmmo(currentAmmo);
 
     const scene = this.manager.getCurrentScene();
     scene.addChild(ammoSprite);

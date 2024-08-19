@@ -29,10 +29,12 @@ export class Cartridge {
 
   shoot() {
     if (this.bullets.length === 0) {
-      return null;
+      return 0;
     }
 
-    return this.bullets.shift();
+    this.bullets.shift();
+
+    return this.bullets.length;
   }
 
   reload(): Promise<unknown> | undefined {
