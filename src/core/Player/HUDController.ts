@@ -33,6 +33,7 @@ class HUDController {
     this.#drawUIHPText();
     this.#drawUIPlanet();
     this.#drawUIUsername();
+    this.#drawUIOtherHPBar();
   }
 
   #drawUIAmmo() {
@@ -114,6 +115,53 @@ class HUDController {
 
     this.username.zIndex = 1;
     this.scene.addChild(this.username);
+  }
+
+  #drawUIOtherHPBar() {
+    const names = ['Brave_', '(❁´◡`❁)', 'pkwr300'];
+
+    for (let i = 0; i < 3; i++) {
+      const hpBar = new Graphics()
+        .roundRect(40, 290 + 75 * i, 270, 20, 10)
+        .fill('#FF8481')
+        .stroke({
+          color: '#7C838A',
+          width: 6,
+        });
+
+      const name = new Text({
+        text: names[i],
+        style: {
+          fontFamily: 'Consolas',
+          fontSize: 20,
+          fill: '#FFF',
+        },
+      });
+
+      name.x = 50;
+      name.y = 264 + 75 * i;
+
+      const hp = new Text({
+        text: '100',
+        style: {
+          fontFamily: 'Consolas',
+          fontSize: 20,
+          fill: '#3a994c',
+          fontWeight: 'bold',
+        },
+      });
+
+      hp.x = 270;
+      hp.y = 264 + 75 * i;
+
+      name.zIndex = 1;
+      hpBar.zIndex = 1;
+      hp.zIndex = 1;
+
+      this.scene.addChild(hpBar);
+      this.scene.addChild(hp);
+      this.scene.addChild(name);
+    }
   }
 
   setUIAmmo(value: number | string) {
