@@ -12,3 +12,8 @@ export type LerpType = {
   x: number;
   y: number;
 };
+
+export type DirectionType = {
+  x: number;
+  y: number;
+};

@@ -1,33 +1,27 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { HUDController } from '@/core/Player';
+import { HUDController, Player } from '@/core/Player';
 import { lerp } from '@/utils';
-import { sound } from '@pixi/sound';
-import { Sprite } from 'pixi.js';
+import { Cartridge } from '../Cartridge/Cartridge';
+import { Ammo } from '../Ammo/Ammo';
 
-// TODO: split on files
-export class Gun {
-  private keyboard = Keyboard.getInstance();
-  private manager = GameManager.getInstance();
+class Gun {
+  private player: Player;
+  private cartridge: Cartridge;
+
   private hud = new HUDController();
 
-  private queue: any = [];
+  private keyboard = Keyboard.getInstance();
+  private manager = GameManager.getInstance();
+
   private world: any = [];
 
   private mouseEvent!: MouseEvent;
-
-  private player: any;
-
-  private dir: any = {
-    x: 0,
-    y: 0,
-  };
-
   shootingInterval: any;
 
-  constructor(player: any) {
+  constructor(player: Player, cartridge: Cartridge) {
+    this.cartridge = cartridge;
     this.player = player;
-    this.recharge();
     this.listen();
   }
 
@@ -60,7 +54,9 @@ export class Gun {
   }
 
   shoot(event: MouseEvent) {
-    if (this.queue.length === 0) return;
+    if (!this.cartridge.getCurrentAmmo()) {
+      return;
+    }
 
     const x0 = this.player.prevX;
     const y0 = this.player.prevY;
@@ -68,53 +64,49 @@ export class Gun {
     const x1 = event.clientX;
     const y1 = event.clientY;
 
-    this.dir = lerp(x0, y0, x1, y1);
+    const direction = lerp(x0, y0, x1, y1);
 
-    this.queue[0].bullet.x = x0;
-    this.queue[0].bullet.y = y0;
-    this.queue[0].direction = this.dir;
+    const ammo = this.cartridge.getBullets()[0];
+    const ammoSprite = ammo.getSprite();
 
-    const element = this.queue.shift();
-    this.hud.setUIAmmo(this.queue.length);
+    ammo.setDirection(direction);
+    ammo.setSpritePosition(x0, y0);
+
+    const currentAmmo = this.cartridge.shoot();
+    this.hud.setUIAmmo(currentAmmo);
+
     const scene = this.manager.getCurrentScene();
-    scene.addChild(element.bullet);
-    this.world.push(element);
+    scene.addChild(ammoSprite);
+    this.world.push(ammo);
   }
 
-  recharge() {
-    this.queue.length = 0;
-    for (let i = 0; i < 30; i++) {
-      const star = Sprite.from('star');
-      star.scale.x = 0.05;
-      star.scale.y = 0.05;
-
-      this.queue.push({
-        bullet: star,
-        direction: {
-          x: 0,
-          y: 0,
-        },
-      });
-    }
-
-    this.hud.setUIAmmo(this.queue.length);
+  setCartridge(cartridge: Cartridge) {
+    this.cartridge = cartridge;
   }
 
   handleStar(delta: number) {
-    this.world.forEach((element: any) => {
-      if (element.direction.x !== 0 || element.direction.y !== 0) {
-        element.bullet.x += element.direction.x * 2 * delta;
-        element.bullet.y += element.direction.y * 2 * delta;
+    this.world.forEach((ammo: Ammo) => {
+      const sprite = ammo.getSprite();
+      const direction = ammo.getDirection();
+
+      if (direction.x === 0 || direction.y === 0) {
+        return;
       }
+
+      sprite.x += direction.x * 2 * delta;
+      sprite.y += direction.y * 2 * delta;
     });
   }
 
   handleInput() {
     if (this.keyboard.state.get('KeyR')) {
       this.keyboard.state.set('KeyR', false);
-      sound.play('recharge');
-      this.recharge();
+      this.reload();
     }
+  }
+
+  reload() {
+    this.cartridge.reload();
   }
 
   update(delta: number) {
@@ -122,3 +114,5 @@ export class Gun {
     this.handleStar(delta);
   }
 }
+
+export { Gun };

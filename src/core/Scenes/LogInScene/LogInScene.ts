@@ -18,6 +18,9 @@ export class LogInScene extends Container implements IScene {
   private container: Graphics;
   private version: Text;
 
+  private player: MusicController;
+  private background: Sprite;
+
   private loginInput!: Input;
   private passwordInput!: Input;
 
@@ -29,11 +32,11 @@ export class LogInScene extends Container implements IScene {
   constructor() {
     super();
 
-    const player = new MusicController();
-    player.play('auth_main_theme');
+    this.player = new MusicController();
+    this.player.play('auth_theme');
 
-    const background = Sprite.from('auth_background_1');
-    this.addChild(background);
+    this.background = Sprite.from('login_background');
+    this.addChild(this.background);
 
     this.version = getProgramVersion();
     this.addChild(this.version);
@@ -153,7 +156,7 @@ export class LogInScene extends Container implements IScene {
     this.signUpActionButton.eventMode = 'dynamic';
 
     this.signUpActionButton.onPress.connect(() => {
-      sound.play('auth_second_click');
+      sound.play('auth_click');
       this.manager.changeScene(new SignUpScene());
     });
 
@@ -201,14 +204,14 @@ export class LogInScene extends Container implements IScene {
     this.submitLoginButton.y = this.container.height / 2 - 67;
     this.submitLoginButton.x = this.container.width / 2 - 100;
 
-    this.submitLoginButton.onHover.connect(() => sound.play('auth_main_hover'));
+    this.submitLoginButton.onHover.connect(() => sound.play('auth_hover'));
     this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
 
     this.container.addChild(this.submitLoginButton);
   }
 
   handleLoginClick() {
-    sound.play('auth_main_click');
+    sound.play('auth_click');
     // TODO: implement login login by getting some response form server
     // this.manager.changeScene(new MenuScene());
   }

@@ -3,23 +3,57 @@ import type { AssetsManifest } from 'pixi.js';
 export const manifest: AssetsManifest = {
   bundles: [
     {
-      name: 'bundleName',
+      name: 'images',
       assets: {
-        bunny: './static/Image/bunny.png',
-        tile: './static/Image/tile_0000.png',
-        github_black: './static/Image/github.png',
-        github_gray: './static/Image/github-mark.png',
-        github_white: './static/Image/github-mark-white.png',
-        auth_main_theme: './static/Audio/Music/Night Ambient 1.wav',
-        auth_background_1: './static/Image/Space_background.png',
-        auth_background_2: './static/Image/Space_Background2.png',
-        game_bakcground: './static/Image/Space Background6.png',
-        menu_background: './static/Image/Space Background4.png',
-        auth_main_click: './static/Audio/Sounds/Air_FX_Pitched_Down.wav',
-        auth_main_hover: './static/Audio/Sounds/FUI Holographic Interaction Radiate.wav',
-        auth_second_click: './static/Audio/Sounds/FUI Holographic Button Press-1.wav',
-        star: './static/Image/star.png',
-        recharge: './static/Audio/Sounds/High-Tech Gadget Activate.wav',
+        bunny: './static/images/bunny.png',
+        tile: './static/images/tile_0000.png',
+      },
+    },
+    {
+      name: 'ammo',
+      assets: {
+        ammo_default: './static/images/ammo/star.png',
+        ammo_energy: './static/images/ammo/energyball_1.png',
+        ammo_ice: './static/images/ammo/energyball_7.png',
+        ammo_fire: './static/images/ammo/energyball_8.png',
+        ammo_poison: './static/images/ammo/energyball_6.png',
+        ammo_treatment: './static/images/ammo/energyball_3.png',
+        ammo_wind: './static/images/ammo/energyball_2.png',
+        ammo_lightning: './static/images/ammo/energyball_10.png',
+        ammo_venom: './static/images/ammo/energyball_9.png',
+        ammo_divine: './static/images/ammo/energyball_4.png',
+        ammo_arcane: './static/images/ammo/energyball_5.png',
+      },
+    },
+    {
+      name: 'icons',
+      assets: {
+        github_black: './static/icons/github.png',
+        github_gray: './static/icons/github-mark.png',
+        github_white: './static/icons/github-mark-white.png',
+      },
+    },
+    {
+      name: 'sounds',
+      assets: {
+        auth_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
+        auth_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
+        recharge_cartridge: './static/audio/sounds/High-Tech Gadget Activate.wav',
+      },
+    },
+    {
+      name: 'music',
+      assets: {
+        auth_theme: './static/audio/music/Night Ambient 1.wav',
+      },
+    },
+    {
+      name: 'backgrounds',
+      assets: {
+        login_background: './static/backgrounds/Space_background_5.png',
+        signup_background: './static/backgrounds/Space_background_6.png',
+        game_background: './static/backgrounds/Space_background_7.png',
+        menu_background: './static/backgrounds/Space_background_2.png',
       },
     },
   ],
