@@ -49,6 +49,8 @@ class HUDController {
     this.ammo.x = this.manager.getWidth() - 50;
     this.ammo.y = this.manager.getHeight() - this.ammo.height - 6;
 
+    this.ammo.zIndex = 1;
+
     this.scene.addChild(this.ammo);
   }
 
@@ -126,7 +128,7 @@ class HUDController {
         .fill('#FF8481')
         .stroke({
           color: '#7C838A',
-          width: 6,
+          width: 5,
         });
 
       const name = new Text({
