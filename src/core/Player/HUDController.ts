@@ -33,6 +33,7 @@ class HUDController {
     this.#drawUIHPText();
     this.#drawUIPlanet();
     this.#drawUIUsername();
+    this.#drawUIBackpack();
     this.#drawUIOtherHPBar();
   }
 
@@ -163,6 +164,24 @@ class HUDController {
       this.scene.addChild(hpBar);
       this.scene.addChild(hp);
       this.scene.addChild(name);
+    }
+  }
+
+  #drawUIBackpack() {
+    const startX = (this.manager.getWidth() - (60 * 8 - 10)) / 2;
+    const startY = 20;
+
+    for (let i = 0; i < 8; i++) {
+      const cell = new Graphics()
+        .roundRect(startX + 60 * i, startY, 50, 50, 10)
+        .fill('#202325')
+        .stroke({
+          color: '#7C838A',
+          width: 2,
+        });
+
+      cell.zIndex = 1;
+      this.scene.addChild(cell);
     }
   }
 
