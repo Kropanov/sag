@@ -15,7 +15,9 @@ class HUDController {
   private username!: Text;
 
   private cells: any = [];
+
   private cellsContainer!: Container;
+  private hpBarsContainer!: Container;
 
   constructor() {
     if (HUDController._instance) {
@@ -64,7 +66,7 @@ class HUDController {
       width: 5,
     });
 
-    this.HPBar.zIndex = 1;
+    this.HPBar.zIndex = 2;
     this.scene.addChild(this.HPBar);
   }
 
@@ -101,7 +103,7 @@ class HUDController {
     this.HPText.x = 340;
     this.HPText.y = 60;
 
-    this.HPText.zIndex = 1;
+    this.HPText.zIndex = 2;
     this.scene.addChild(this.HPText);
   }
 
@@ -125,6 +127,9 @@ class HUDController {
 
   #drawUIOtherHPBar() {
     const names = ['Brave_', '(❁´◡`❁)', 'pkwr300'];
+
+    this.hpBarsContainer = new Container();
+    this.scene.addChild(this.hpBarsContainer);
 
     for (let i = 0; i < 3; i++) {
       const hpBar = new Graphics()
@@ -164,9 +169,12 @@ class HUDController {
       hpBar.zIndex = 1;
       hp.zIndex = 1;
 
-      this.scene.addChild(hpBar);
-      this.scene.addChild(hp);
-      this.scene.addChild(name);
+      this.hpBarsContainer.zIndex = 1;
+      this.hpBarsContainer.visible = false;
+
+      this.hpBarsContainer.addChild(hpBar);
+      this.hpBarsContainer.addChild(hp);
+      this.hpBarsContainer.addChild(name);
     }
   }
 
