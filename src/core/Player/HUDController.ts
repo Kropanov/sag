@@ -1,6 +1,6 @@
 import { IScene } from '@/interfaces';
 import { GameManager } from '../Manager';
-import { Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 
 class HUDController {
   private static _instance: HUDController;
@@ -13,6 +13,9 @@ class HUDController {
   private HPText!: Text;
   private planet!: Graphics;
   private username!: Text;
+
+  private cells: any = [];
+  private cellsContainer!: Container;
 
   constructor() {
     if (HUDController._instance) {
@@ -168,12 +171,16 @@ class HUDController {
   }
 
   #drawUIBackpack() {
-    const startX = (this.manager.getWidth() - (60 * 8 - 10)) / 2;
-    const startY = 20;
+    this.cellsContainer = new Container();
+    this.scene.addChild(this.cellsContainer);
 
-    for (let i = 0; i < 8; i++) {
+    const cellWidth = 50;
+    const cellSpacing = 10;
+    const cellCount = 8;
+
+    for (let i = 0; i < cellCount; i++) {
       const cell = new Graphics()
-        .roundRect(startX + 60 * i, startY, 50, 50, 10)
+        .roundRect((cellWidth + cellSpacing) * i, 0, cellWidth, cellWidth, 10)
         .fill('#202325')
         .stroke({
           color: '#7C838A',
@@ -181,8 +188,13 @@ class HUDController {
         });
 
       cell.zIndex = 1;
-      this.scene.addChild(cell);
+      this.cellsContainer.addChild(cell);
+      this.cells.push(cell);
     }
+
+    this.cellsContainer.zIndex = 1;
+    this.cellsContainer.x = (this.manager.getWidth() - this.cellsContainer.width) / 2;
+    this.cellsContainer.y = 20;
   }
 
   setUIAmmo(value: number | string) {
@@ -196,6 +208,9 @@ class HUDController {
   resize(screenWidth: number, screenHeight: number) {
     this.ammo.x = screenWidth - 50;
     this.ammo.y = screenHeight - this.ammo.height - 6;
+
+    this.cellsContainer.x = (screenWidth - this.cellsContainer.width) / 2;
+    this.cellsContainer.y = 20;
   }
 }
 
