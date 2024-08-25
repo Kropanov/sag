@@ -1,9 +1,9 @@
 import { IScene } from '@/interfaces';
+import { Graphics, Container, Text } from 'pixi.js';
 import { GameManager } from '../Manager';
-import { Container, Graphics, Text } from 'pixi.js';
 
-class HUDController {
-  private static _instance: HUDController;
+class HUDClient {
+  private static _instance: HUDClient;
 
   private manager = GameManager.getInstance();
 
@@ -20,11 +20,11 @@ class HUDController {
   private hpBarsContainer!: Container;
 
   constructor() {
-    if (HUDController._instance) {
-      return HUDController._instance;
+    if (HUDClient._instance) {
+      return HUDClient._instance;
     }
 
-    HUDController._instance = this;
+    HUDClient._instance = this;
   }
 
   initHUD(scene: IScene) {
@@ -222,4 +222,4 @@ class HUDController {
   }
 }
 
-export { HUDController };
+export { HUDClient };

@@ -1,7 +1,7 @@
-import { HUDController } from '@/core/Player';
 import { sound } from '@pixi/sound';
 import { Ammo } from '..';
 import { AMMO_TYPE } from '@/types/ammo.enum';
+import { HUDController } from '@/core/Display';
 
 export class Cartridge {
   private type: AMMO_TYPE;

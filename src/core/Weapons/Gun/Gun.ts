@@ -1,9 +1,10 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { HUDController, Player } from '@/core/Player';
+import { Player } from '@/core/Player';
 import { lerp } from '@/utils';
 import { Cartridge } from '../Cartridge/Cartridge';
 import { Ammo } from '../Ammo/Ammo';
+import { HUDController } from '@/core/Display';
 
 class Gun {
   private player: Player;

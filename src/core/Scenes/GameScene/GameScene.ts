@@ -2,12 +2,13 @@ import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
-import { HUDController, Player } from '@core/Player';
+import { Player } from '@core/Player';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music/MusicController';
 import { Cartridge, Gun } from '@/core/Weapons';
 import { AMMO_TYPE } from '@/types/ammo.enum';
+import { HUDController } from '@/core/Display';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -28,7 +29,7 @@ export class GameScene extends Container implements IScene {
   constructor() {
     super();
 
-    this.display.initHUD(this);
+    this.display.init(this);
 
     this.background = Sprite.from('game_background');
     this.addChild(this.background);
