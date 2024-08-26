@@ -1,5 +1,5 @@
 import { IScene } from '@/interfaces';
-import { Graphics, Container, Text } from 'pixi.js';
+import { Graphics, Container, Text, Sprite } from 'pixi.js';
 import { GameManager } from '../Manager';
 
 class HUDClient {
@@ -13,6 +13,7 @@ class HUDClient {
   private HPText!: Text;
   private planet!: Graphics;
   private username!: Text;
+  private gun!: Sprite;
 
   private cells: any = [];
 
@@ -33,6 +34,7 @@ class HUDClient {
   }
 
   #drawUI() {
+    this.#drawUIGun();
     this.#drawUIAmmo();
     this.#drawUIHPBar();
     this.#drawUIHPText();
@@ -205,6 +207,17 @@ class HUDClient {
     this.cellsContainer.y = 20;
   }
 
+  #drawUIGun() {
+    this.gun = Sprite.from('gun');
+
+    this.gun.scale = 2;
+    this.gun.x = this.manager.getWidth() - 170;
+    this.gun.y += 10;
+
+    this.gun.zIndex = 1;
+    this.scene.addChild(this.gun);
+  }
+
   setUIAmmo(value: number | string) {
     this.ammo.text = value;
   }
@@ -219,6 +232,8 @@ class HUDClient {
 
     this.cellsContainer.x = (screenWidth - this.cellsContainer.width) / 2;
     this.cellsContainer.y = 20;
+
+    this.gun.x = this.manager.getWidth() - 170;
   }
 }
 

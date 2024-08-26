@@ -26,6 +26,12 @@ export const manifest: AssetsManifest = {
       },
     },
     {
+      name: 'weapons',
+      assets: {
+        gun: './static/images/SCAR-L.png',
+      },
+    },
+    {
       name: 'icons',
       assets: {
         github_black: './static/icons/github.png',
