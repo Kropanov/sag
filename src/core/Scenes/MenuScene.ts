@@ -11,7 +11,7 @@ import {
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Components';
+} from '@/core/Misc';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();

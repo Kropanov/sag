@@ -1,7 +1,7 @@
 import { Sprite } from 'pixi.js';
 import { g } from '@/config';
 
-export class Entity {
+export class Creature {
   sprite: Sprite;
 
   vx: number;

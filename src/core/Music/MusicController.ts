@@ -22,7 +22,15 @@ export class MusicController {
   }
 
   stop() {
+    if (this.#noCache()) {
+      return;
+    }
+
     sound.stop(this._cache);
+  }
+
+  #noCache() {
+    return !this._cache;
   }
 
   #same(value: string) {

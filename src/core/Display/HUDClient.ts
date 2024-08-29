@@ -1,9 +1,9 @@
 import { IScene } from '@/interfaces';
+import { Graphics, Container, Text, Sprite } from 'pixi.js';
 import { GameManager } from '../Manager';
-import { Graphics, Text } from 'pixi.js';
 
-class HUDController {
-  private static _instance: HUDController;
+class HUDClient {
+  private static _instance: HUDClient;
 
   private manager = GameManager.getInstance();
 
@@ -13,13 +13,19 @@ class HUDController {
   private HPText!: Text;
   private planet!: Graphics;
   private username!: Text;
+  private gun!: Sprite;
+
+  private cells: any = [];
+
+  private cellsContainer!: Container;
+  private hpBarsContainer!: Container;
 
   constructor() {
-    if (HUDController._instance) {
-      return HUDController._instance;
+    if (HUDClient._instance) {
+      return HUDClient._instance;
     }
 
-    HUDController._instance = this;
+    HUDClient._instance = this;
   }
 
   initHUD(scene: IScene) {
@@ -28,6 +34,7 @@ class HUDController {
   }
 
   #drawUI() {
+    this.#drawUIGun();
     this.#drawUIAmmo();
     this.#drawUIHPBar();
     this.#drawUIHPText();
@@ -61,7 +68,7 @@ class HUDController {
       width: 5,
     });
 
-    this.HPBar.zIndex = 1;
+    this.HPBar.zIndex = 2;
     this.scene.addChild(this.HPBar);
   }
 
@@ -98,7 +105,7 @@ class HUDController {
     this.HPText.x = 340;
     this.HPText.y = 60;
 
-    this.HPText.zIndex = 1;
+    this.HPText.zIndex = 2;
     this.scene.addChild(this.HPText);
   }
 
@@ -122,6 +129,9 @@ class HUDController {
 
   #drawUIOtherHPBar() {
     const names = ['Brave_', '(❁´◡`❁)', 'pkwr300'];
+
+    this.hpBarsContainer = new Container();
+    this.scene.addChild(this.hpBarsContainer);
 
     for (let i = 0; i < 3; i++) {
       const hpBar = new Graphics()
@@ -161,19 +171,26 @@ class HUDController {
       hpBar.zIndex = 1;
       hp.zIndex = 1;
 
-      this.scene.addChild(hpBar);
-      this.scene.addChild(hp);
-      this.scene.addChild(name);
+      this.hpBarsContainer.zIndex = 1;
+      this.hpBarsContainer.visible = false;
+
+      this.hpBarsContainer.addChild(hpBar);
+      this.hpBarsContainer.addChild(hp);
+      this.hpBarsContainer.addChild(name);
     }
   }
 
   #drawUIBackpack() {
-    const startX = (this.manager.getWidth() - (60 * 8 - 10)) / 2;
-    const startY = 20;
+    this.cellsContainer = new Container();
+    this.scene.addChild(this.cellsContainer);
 
-    for (let i = 0; i < 8; i++) {
+    const cellWidth = 50;
+    const cellSpacing = 10;
+    const cellCount = 8;
+
+    for (let i = 0; i < cellCount; i++) {
       const cell = new Graphics()
-        .roundRect(startX + 60 * i, startY, 50, 50, 10)
+        .roundRect((cellWidth + cellSpacing) * i, 0, cellWidth, cellWidth, 10)
         .fill('#202325')
         .stroke({
           color: '#7C838A',
@@ -181,8 +198,24 @@ class HUDController {
         });
 
       cell.zIndex = 1;
-      this.scene.addChild(cell);
+      this.cellsContainer.addChild(cell);
+      this.cells.push(cell);
     }
+
+    this.cellsContainer.zIndex = 1;
+    this.cellsContainer.x = (this.manager.getWidth() - this.cellsContainer.width) / 2;
+    this.cellsContainer.y = 20;
+  }
+
+  #drawUIGun() {
+    this.gun = Sprite.from('gun');
+
+    this.gun.scale = 2;
+    this.gun.x = this.manager.getWidth() - 170;
+    this.gun.y += 10;
+
+    this.gun.zIndex = 1;
+    this.scene.addChild(this.gun);
   }
 
   setUIAmmo(value: number | string) {
@@ -196,7 +229,12 @@ class HUDController {
   resize(screenWidth: number, screenHeight: number) {
     this.ammo.x = screenWidth - 50;
     this.ammo.y = screenHeight - this.ammo.height - 6;
+
+    this.cellsContainer.x = (screenWidth - this.cellsContainer.width) / 2;
+    this.cellsContainer.y = 20;
+
+    this.gun.x = this.manager.getWidth() - 170;
   }
 }
 
-export { HUDController };
+export { HUDClient };

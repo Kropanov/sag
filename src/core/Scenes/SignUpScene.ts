@@ -1,42 +1,37 @@
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config/ui-styles';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
-import { SignUpScene } from '../SignUpScene/SignUpScene';
+import { LogInScene } from './LogInScene';
+import { MenuScene } from './MenuScene';
 import {
   getProgramVersion,
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Components';
-import { MusicController } from '@/core/Music/MusicController';
+} from '@/core/Misc';
 import { sound } from '@pixi/sound';
 
-export class LogInScene extends Container implements IScene {
+export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private container: Graphics;
   private version: Text;
 
-  private player: MusicController;
-  private background: Sprite;
-
   private loginInput!: Input;
   private passwordInput!: Input;
+  private passwordVerifyInput!: Input;
 
-  private signUpActionButton!: FancyButton;
-  private submitLoginButton!: FancyButton;
+  private logInActionButton!: FancyButton;
+  private submitSignUpButton!: FancyButton;
 
   private socialMediaIcons: Container;
 
   constructor() {
     super();
 
-    this.player = new MusicController();
-    this.player.play('auth_theme');
-
-    this.background = Sprite.from('login_background');
-    this.addChild(this.background);
+    const background = Sprite.from('signup_background');
+    this.addChild(background);
 
     this.version = getProgramVersion();
     this.addChild(this.version);
@@ -49,8 +44,10 @@ export class LogInScene extends Container implements IScene {
 
     this.drawLoginInput();
     this.drawPasswordInput();
-    this.drawSignUpActionButton();
-    this.drawSubmitLoginButton();
+    this.drawPasswordVerifyInput();
+
+    this.drawLogInActionButton();
+    this.drawSubmitSignUpButton();
   }
 
   drawContainer() {
@@ -132,9 +129,41 @@ export class LogInScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  drawSignUpActionButton() {
+  drawPasswordVerifyInput() {
+    this.passwordVerifyInput = new Input({
+      bg: new Graphics()
+        .roundRect(0, 0, this.container.width / 1.5, 40, 30)
+        .fill('#ffffff00')
+        .stroke({
+          color: '#FFFFFF',
+          width: 1,
+        }),
+      placeholder: 'Repeat Password',
+      maxLength: 35,
+      padding: [10, 15],
+      textStyle: {
+        fill: '#8F8F8F',
+        fontSize: 15,
+        fontWeight: 'bold',
+      },
+      align: 'left',
+      value: '',
+      addMask: false,
+    });
+
+    this.passwordVerifyInput.x = 90;
+    this.passwordVerifyInput.y = 260;
+
+    this.passwordVerifyInput.onChange.connect(() => {
+      console.log(this.passwordVerifyInput.value);
+    });
+
+    this.container.addChild(this.passwordVerifyInput);
+  }
+
+  drawLogInActionButton() {
     const buttonText = new Text({
-      text: "Don't have an account? Sign up",
+      text: 'Already have an account? Log in',
       style: {
         fontSize: 18,
         fill: '#FFFFFF',
@@ -142,7 +171,7 @@ export class LogInScene extends Container implements IScene {
       },
     });
 
-    this.signUpActionButton = new FancyButton({
+    this.logInActionButton = new FancyButton({
       text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
@@ -151,29 +180,31 @@ export class LogInScene extends Container implements IScene {
     const width = buttonText.width + padding * 2;
     const height = buttonText.height + padding * 2;
 
-    this.signUpActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
+    this.logInActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
-    this.signUpActionButton.eventMode = 'dynamic';
+    this.logInActionButton.eventMode = 'dynamic';
 
-    this.signUpActionButton.onPress.connect(() => {
+    this.logInActionButton.onPress.connect(() => {
       sound.play('auth_click');
-      this.manager.changeScene(new SignUpScene());
+      this.manager.changeScene(new LogInScene());
     });
 
-    this.signUpActionButton.y = this.container.height - 100;
-    this.signUpActionButton.x = this.container.width / 2;
+    this.logInActionButton.onPress;
 
-    this.container.addChild(this.signUpActionButton);
+    this.logInActionButton.y = this.container.height - 100;
+    this.logInActionButton.x = this.container.width / 2;
+
+    this.container.addChild(this.logInActionButton);
   }
 
-  drawSubmitLoginButton() {
-    this.submitLoginButton = new FancyButton({
+  drawSubmitSignUpButton() {
+    this.submitSignUpButton = new FancyButton({
       defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill('#ffffff00').stroke({
         color: '#FFFFFF',
         width: 1,
       }),
       text: new Text({
-        text: 'Log in',
+        text: 'Sign up',
         style: {
           fontSize: 20,
           fill: '#FFFFFF',
@@ -201,19 +232,18 @@ export class LogInScene extends Container implements IScene {
       },
     });
 
-    this.submitLoginButton.y = this.container.height / 2 - 67;
-    this.submitLoginButton.x = this.container.width / 2 - 100;
+    this.submitSignUpButton.y = this.container.height / 2 + 15;
+    this.submitSignUpButton.x = this.container.width / 2 - 100;
 
-    this.submitLoginButton.onHover.connect(() => sound.play('auth_hover'));
-    this.submitLoginButton.onPress.connect(() => this.handleLoginClick());
+    this.submitSignUpButton.onHover.connect(() => sound.play('auth_hover'));
+    this.submitSignUpButton.onPress.connect(() => this.handleSignUpClick());
 
-    this.container.addChild(this.submitLoginButton);
+    this.container.addChild(this.submitSignUpButton);
   }
 
-  handleLoginClick() {
+  handleSignUpClick() {
     sound.play('auth_click');
-    // TODO: implement login login by getting some response form server
-    // this.manager.changeScene(new MenuScene());
+    this.manager.changeScene(new MenuScene());
   }
 
   update(_framesPassed: number): void {}
