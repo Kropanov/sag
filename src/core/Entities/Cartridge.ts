@@ -1,5 +1,5 @@
 import { sound } from '@pixi/sound';
-import { Ammo } from '..';
+import { Ammo } from './Ammo';
 import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@/core/Display';
 

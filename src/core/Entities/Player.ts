@@ -1,5 +1,5 @@
 import { Keyboard } from '@core/Keyboard';
-import { Character } from '@core/Character';
+import { Character } from '@core/Entities';
 
 export class Player extends Character {
   controls: Keyboard = Keyboard.getInstance();

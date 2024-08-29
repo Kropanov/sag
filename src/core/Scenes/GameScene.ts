@@ -1,12 +1,11 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import { CharacterWithStrategy, MeleeAttack } from '../../Strategy';
-import { Player } from '@core/Player';
+import { Player } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
-import { MusicController } from '@/core/Music/MusicController';
-import { Cartridge, Gun } from '@/core/Weapons';
+import { MusicController } from '@/core/Music';
+import { Cartridge, Gun } from '@/core/Entities';
 import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@/core/Display';
 
@@ -18,7 +17,7 @@ export class GameScene extends Container implements IScene {
   private music: MusicController;
 
   private player: Player;
-  private readonly enemies: any;
+  private readonly enemies: any = [];
 
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
   private keyboard: Keyboard = Keyboard.getInstance();
@@ -41,19 +40,10 @@ export class GameScene extends Container implements IScene {
     this.cartridge = new Cartridge(70, AMMO_TYPE.ENERGY, 3);
     this.gun = new Gun(this.player, this.cartridge);
 
-    let enemy1 = new CharacterWithStrategy('tile', 200, 200, new MeleeAttack());
-    let enemy2 = new CharacterWithStrategy('tile', 300, 300, new MeleeAttack());
-
-    this.enemies = [enemy1, enemy2];
-
-    this.addChild(enemy1.sprite);
-    this.addChild(enemy2.sprite);
     this.addChild(this.player.sprite);
-
     this.updateFloorBounds();
   }
 
-  // TODO: add handleInput to IScene
   handleInput() {
     if (this.keyboard.state.get('Escape')) {
       this.manager.changeScene(new MenuScene());
