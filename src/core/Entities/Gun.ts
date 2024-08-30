@@ -1,8 +1,8 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { Player } from '@/core/Player';
+import { Player } from '@/core/Entities';
 import { lerp } from '@/utils';
-import { Cartridge } from '../Cartridge/Cartridge';
+import { Cartridge } from './Cartridge';
 import { Ammo } from './Ammo';
 import { HUDController } from '@/core/Display';
 
