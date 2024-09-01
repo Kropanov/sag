@@ -38,7 +38,7 @@ export class GameScene extends Container implements IScene {
 
     this.player = new Player('bunny', 100, 100);
     this.cartridge = new Cartridge(70, AMMO_TYPE.ENERGY, 3);
-    this.gun = new Gun(this.player, this.cartridge);
+    this.gun = new Gun({}, this.player, this.cartridge);
 
     this.addChild(this.player.sprite);
     this.updateFloorBounds();

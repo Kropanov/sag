@@ -1,12 +1,13 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { Player } from '@/core/Entities';
+import { Item, Player } from '@/core/Entities';
 import { lerp } from '@/utils';
 import { Cartridge } from './Cartridge';
 import { Ammo } from './Ammo';
 import { HUDController } from '@/core/Display';
+import { ItemProps } from '@/interfaces';
 
-class Gun {
+class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
@@ -20,7 +21,8 @@ class Gun {
   private mouseEvent!: MouseEvent;
   shootingInterval: any;
 
-  constructor(player: Player, cartridge: Cartridge) {
+  constructor(props: ItemProps, player: Player, cartridge: Cartridge) {
+    super(props);
     this.cartridge = cartridge;
     this.player = player;
     this.listen();
