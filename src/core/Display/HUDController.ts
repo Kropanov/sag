@@ -1,5 +1,6 @@
 import { IScene } from '@/interfaces';
 import { HUDService } from './HUDService';
+import { Item } from '../Entities';
 
 class HUDController {
   private static _instance: HUDController;
@@ -23,6 +24,10 @@ class HUDController {
 
   setUIUsername(value: string) {
     this.hudService.setUIUsername(value);
+  }
+
+  setUIBackpack(backpack: Array<Item> | undefined) {
+    this.hudService.setUIBackpack(backpack);
   }
 
   resize(screenWidth: number, screenHeight: number) {

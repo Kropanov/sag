@@ -1,3 +1,4 @@
+import { Item } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
 import { Container, Graphics } from 'pixi.js';
@@ -5,22 +6,28 @@ import { Container, Graphics } from 'pixi.js';
 export class UIBackpack implements UIComponent {
   private manager = GameManager.getInstance();
 
-  private cells: any = [];
+  private cells: Array<{ item: Item; graphics: Graphics }> = [];
   private cellsContainer: Container;
+
+  private backpack: Array<Item> = [];
 
   constructor() {
     this.cellsContainer = new Container();
+    this.cellsContainer.sortableChildren = true;
+  }
+
+  setBackpack(newBackpack: Array<Item> | undefined) {
+    this.backpack = newBackpack ?? [];
+    this.draw();
   }
 
   draw(): Array<any> {
-    this.cellsContainer = new Container();
-
     const cellWidth = 50;
     const cellSpacing = 10;
     const cellCount = 8;
 
     for (let i = 0; i < cellCount; i++) {
-      const cell = new Graphics()
+      const graphics = new Graphics()
         .roundRect((cellWidth + cellSpacing) * i, 0, cellWidth, cellWidth, 10)
         .fill('#202325')
         .stroke({
@@ -28,9 +35,23 @@ export class UIBackpack implements UIComponent {
           width: 2,
         });
 
-      cell.zIndex = 1;
-      this.cellsContainer.addChild(cell);
-      this.cells.push(cell);
+      graphics.zIndex = 1;
+      this.cellsContainer.addChild(graphics);
+
+      if (this.backpack.length === 0 || this.backpack.length <= i) {
+        continue;
+      }
+
+      const item = this.backpack[i];
+      const scaleFactor = 50 / 128;
+
+      item.sprite.zIndex = 2;
+      item.sprite.x = (cellWidth + cellSpacing) * i;
+      item.sprite.scale.set(scaleFactor);
+
+      this.cellsContainer.addChild(item.sprite);
+
+      this.cells.push({ graphics, item });
     }
 
     this.cellsContainer.zIndex = 1;

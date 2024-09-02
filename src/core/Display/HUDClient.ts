@@ -2,10 +2,13 @@ import { IScene } from '@/interfaces';
 import { Graphics, Container, Text, Sprite } from 'pixi.js';
 import { GameManager } from '../Manager';
 import { UIBackpack } from './Components/UIBackpack';
+import { Item } from '../Entities';
 
 class HUDClient {
   private static _instance: HUDClient;
   private manager = GameManager.getInstance();
+
+  private uiBackpack!: UIBackpack;
 
   private ammo!: Text;
   private gun!: Sprite;
@@ -183,8 +186,8 @@ class HUDClient {
   }
 
   #drawUIBackpack() {
-    const uiBackpack = new UIBackpack();
-    this.#addComponents(uiBackpack.draw());
+    this.uiBackpack = new UIBackpack();
+    this.#addComponents(this.uiBackpack.draw());
   }
 
   #drawUIGun() {
@@ -204,11 +207,17 @@ class HUDClient {
     this.username.text = value;
   }
 
+  setUIBackpack(backpack: Array<Item> | undefined) {
+    this.uiBackpack.setBackpack(backpack);
+  }
+
   resize(screenWidth: number, screenHeight: number) {
     this.ammo.x = screenWidth - 50;
     this.ammo.y = screenHeight - this.ammo.height - 6;
 
     this.gun.x = this.manager.getWidth() - 170;
+
+    this.uiBackpack.resize(screenWidth, screenHeight);
   }
 }
 

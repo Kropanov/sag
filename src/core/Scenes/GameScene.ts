@@ -83,19 +83,13 @@ export class GameScene extends Container implements IScene {
     const player = new Player('bunny', 100, 100);
     const cartridge = new Cartridge(70, AMMO_TYPE.DIVINE, 3);
 
-    const itemProps1 = { cost: 20, asset: 'gun', rarity: ItemRarity.Common };
-    const itemProps2 = { cost: 320, asset: 'tile', rarity: ItemRarity.Epic };
-
+    const itemProps1 = { cost: 120, asset: 'pistol', rarity: ItemRarity.Common };
+    const itemProps2 = { cost: 220, asset: 'pistol', rarity: ItemRarity.Legendary };
     const item1 = new Gun(itemProps1, player, cartridge);
     const item2 = new Gun(itemProps2, player, cartridge);
 
     backpack.Add(item1);
-    // console.log(backpack.Open());
     backpack.Add(item2);
-    // console.log(backpack.Open());
-    console.log(backpack.Remove(item1));
-    console.log(backpack.Remove(item2));
-    // console.log(backpack.Open());
-    console.log(backpack.Open());
+    this.display.setUIBackpack(backpack.Open());
   }
 }
