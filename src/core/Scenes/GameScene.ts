@@ -8,6 +8,8 @@ import { MusicController } from '@/core/Music';
 import { Cartridge, Gun } from '@/core/Entities';
 import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@/core/Display';
+import { Backpack } from '../Entities/Backpack';
+import { ItemRarity } from '@/types/item-rarity.enum';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -42,6 +44,8 @@ export class GameScene extends Container implements IScene {
 
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
+
+    this.testBackpack();
   }
 
   handleInput() {
@@ -71,5 +75,27 @@ export class GameScene extends Container implements IScene {
       top: 0,
       bottom: screenHeight,
     };
+  }
+
+  testBackpack() {
+    const backpack = new Backpack();
+
+    const player = new Player('bunny', 100, 100);
+    const cartridge = new Cartridge(70, AMMO_TYPE.DIVINE, 3);
+
+    const itemProps1 = { cost: 20, asset: 'gun', rarity: ItemRarity.Common };
+    const itemProps2 = { cost: 320, asset: 'tile', rarity: ItemRarity.Epic };
+
+    const item1 = new Gun(itemProps1, player, cartridge);
+    const item2 = new Gun(itemProps2, player, cartridge);
+
+    backpack.Add(item1);
+    // console.log(backpack.Open());
+    backpack.Add(item2);
+    // console.log(backpack.Open());
+    console.log(backpack.Remove(item1));
+    console.log(backpack.Remove(item2));
+    // console.log(backpack.Open());
+    console.log(backpack.Open());
   }
 }

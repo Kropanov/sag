@@ -1,19 +1,35 @@
 import { Item, ItemStorage } from '.';
 
 export class Backpack extends ItemStorage {
-  Open(): void {
-    throw new Error('Method not implemented.');
+  private storage: Array<Item> = [];
+
+  constructor() {
+    super();
   }
 
-  Add(_item: Item): void {
-    throw new Error('Method not implemented.');
+  Open(): Array<Item> {
+    return this.storage;
   }
 
-  Remove(item: Item): Item {
-    return item;
+  GetChild(index: number): Item {
+    return this.storage[index];
   }
 
-  GetChild(_index: number): Item {
-    throw new Error('Method not implemented.');
+  Add(item: Item): void {
+    this.storage.push(item);
+  }
+
+  Remove(item: Item): Item[] | undefined {
+    if (!this.storage.includes(item)) {
+      return;
+    }
+
+    const index = this.storage.indexOf(item);
+
+    if (index === -1) {
+      return;
+    }
+
+    return this.storage.splice(index, 1);
   }
 }
