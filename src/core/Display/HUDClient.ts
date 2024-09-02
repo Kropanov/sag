@@ -1,23 +1,19 @@
 import { IScene } from '@/interfaces';
 import { Graphics, Container, Text, Sprite } from 'pixi.js';
 import { GameManager } from '../Manager';
+import { UIBackpack } from './Components/UIBackpack';
 
 class HUDClient {
   private static _instance: HUDClient;
-
   private manager = GameManager.getInstance();
 
   private ammo!: Text;
-  private scene!: IScene;
-  private HPBar!: Graphics;
-  private HPText!: Text;
-  private planet!: Graphics;
-  private username!: Text;
   private gun!: Sprite;
-
-  private cells: any = [];
-
-  private cellsContainer!: Container;
+  private HPText!: Text;
+  private scene!: IScene;
+  private username!: Text;
+  private HPBar!: Graphics;
+  private planet!: Graphics;
   private hpBarsContainer!: Container;
 
   constructor() {
@@ -42,6 +38,12 @@ class HUDClient {
     this.#drawUIUsername();
     this.#drawUIBackpack();
     this.#drawUIOtherHPBar();
+  }
+
+  #addComponents(components: any) {
+    for (let item of components) {
+      this.scene.addChild(item);
+    }
   }
 
   #drawUIAmmo() {
@@ -181,40 +183,16 @@ class HUDClient {
   }
 
   #drawUIBackpack() {
-    this.cellsContainer = new Container();
-    this.scene.addChild(this.cellsContainer);
-
-    const cellWidth = 50;
-    const cellSpacing = 10;
-    const cellCount = 8;
-
-    for (let i = 0; i < cellCount; i++) {
-      const cell = new Graphics()
-        .roundRect((cellWidth + cellSpacing) * i, 0, cellWidth, cellWidth, 10)
-        .fill('#202325')
-        .stroke({
-          color: '#7C838A',
-          width: 2,
-        });
-
-      cell.zIndex = 1;
-      this.cellsContainer.addChild(cell);
-      this.cells.push(cell);
-    }
-
-    this.cellsContainer.zIndex = 1;
-    this.cellsContainer.x = (this.manager.getWidth() - this.cellsContainer.width) / 2;
-    this.cellsContainer.y = 20;
+    const uiBackpack = new UIBackpack();
+    this.#addComponents(uiBackpack.draw());
   }
 
   #drawUIGun() {
-    this.gun = Sprite.from('gun');
-
-    this.gun.scale = 2;
-    this.gun.x = this.manager.getWidth() - 170;
-    this.gun.y += 10;
+    this.gun = Sprite.from('pistol');
 
     this.gun.zIndex = 1;
+    this.gun.x = this.manager.getWidth() - 170;
+
     this.scene.addChild(this.gun);
   }
 
@@ -229,9 +207,6 @@ class HUDClient {
   resize(screenWidth: number, screenHeight: number) {
     this.ammo.x = screenWidth - 50;
     this.ammo.y = screenHeight - this.ammo.height - 6;
-
-    this.cellsContainer.x = (screenWidth - this.cellsContainer.width) / 2;
-    this.cellsContainer.y = 20;
 
     this.gun.x = this.manager.getWidth() - 170;
   }

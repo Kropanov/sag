@@ -29,6 +29,7 @@ export const manifest: AssetsManifest = {
       name: 'weapons',
       assets: {
         gun: './static/images/SCAR-L.png',
+        pistol: './static/images/pistol.png',
       },
     },
     {

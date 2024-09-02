@@ -32,3 +32,8 @@ export interface ItemProps {
   name?: string;
   rarity?: ItemRarity;
 }
+
+export interface UIComponent {
+  draw(): Array<any>;
+  resize(screenWidth: number, screenHeight: number): void;
+}
