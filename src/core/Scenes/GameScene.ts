@@ -10,6 +10,7 @@ import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@/core/Display';
 import { Backpack } from '../Entities/Backpack';
 import { ItemRarity } from '@/types/item-rarity.enum';
+import { ItemType } from '@/types/item-type.enum';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -83,7 +84,7 @@ export class GameScene extends Container implements IScene {
     const player = new Player('bunny', 100, 100);
     const cartridge = new Cartridge(70, AMMO_TYPE.DIVINE, 3);
 
-    const itemProps1 = { cost: 120, asset: 'pistol', rarity: ItemRarity.Common };
+    const itemProps1 = { cost: 120, type: ItemType.Gun, asset: 'pistol', rarity: ItemRarity.Common };
     const itemProps2 = { cost: 220, asset: 'pistol', rarity: ItemRarity.Legendary };
     const item1 = new Gun(itemProps1, player, cartridge);
     const item2 = new Gun(itemProps2, player, cartridge);

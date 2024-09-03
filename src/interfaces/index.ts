@@ -1,6 +1,7 @@
 import { ContainerChild } from 'pixi.js';
 import { vCollisionNormType } from '@/types';
 import { ItemRarity } from '@/types/item-rarity.enum';
+import { ItemType } from '@/types/item-type.enum';
 
 export interface IScene extends ContainerChild {
   update(framesPassed: number): void;
@@ -26,11 +27,12 @@ export interface IEntity {
 }
 
 export interface ItemProps {
-  asset?: string;
-  cost?: number;
-  description?: string;
   name?: string;
+  type?: ItemType;
+  cost?: number;
+  asset?: string;
   rarity?: ItemRarity;
+  description?: string;
 }
 
 export interface UIComponent {
