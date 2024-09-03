@@ -33,6 +33,12 @@ export const manifest: AssetsManifest = {
       },
     },
     {
+      name: 'items',
+      assets: {
+        coin: './static/images/coin.png',
+      },
+    },
+    {
       name: 'icons',
       assets: {
         github_black: './static/icons/github.png',

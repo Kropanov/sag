@@ -85,7 +85,7 @@ export class GameScene extends Container implements IScene {
     const cartridge = new Cartridge(70, AMMO_TYPE.DIVINE, 3);
 
     const itemProps1 = { cost: 120, type: ItemType.Gun, asset: 'pistol', rarity: ItemRarity.Common };
-    const itemProps2 = { cost: 220, asset: 'pistol', rarity: ItemRarity.Legendary };
+    const itemProps2 = { cost: 220, asset: 'coin', rarity: ItemRarity.Legendary };
     const item1 = new Gun(itemProps1, player, cartridge);
     const item2 = new Gun(itemProps2, player, cartridge);
 
