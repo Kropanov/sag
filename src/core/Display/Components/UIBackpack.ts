@@ -6,7 +6,7 @@ import { Container, Graphics } from 'pixi.js';
 export class UIBackpack implements UIComponent {
   private manager = GameManager.getInstance();
 
-  private cells: Array<{ item: Item; graphics: Graphics }> = [];
+  private cells: Array<{ item: Item | null; graphics: Graphics }> = [];
   private cellsContainer: Container;
 
   private backpack: Array<Item> = [];
@@ -22,6 +22,8 @@ export class UIBackpack implements UIComponent {
   }
 
   draw(): Array<any> {
+    this.clear();
+
     const cellWidth = 50;
     const cellSpacing = 10;
     const cellCount = 8;
@@ -39,6 +41,7 @@ export class UIBackpack implements UIComponent {
       this.cellsContainer.addChild(graphics);
 
       if (this.backpack.length === 0 || this.backpack.length <= i) {
+        this.cells.push({ graphics, item: null });
         continue;
       }
 
@@ -59,6 +62,13 @@ export class UIBackpack implements UIComponent {
     this.cellsContainer.y = 20;
 
     return [this.cellsContainer];
+  }
+
+  // FIXME: It's not good to use the way of backpack rendering, I'll rewrite draw() and clear() in the future
+  clear() {
+    for (let cell of this.cells) {
+      cell.graphics.destroy();
+    }
   }
 
   resize(screenWidth: number, _screenHeight: number): void {

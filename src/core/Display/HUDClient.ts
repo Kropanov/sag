@@ -3,12 +3,14 @@ import { Graphics, Container, Text, Sprite } from 'pixi.js';
 import { GameManager } from '../Manager';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item } from '../Entities';
+import { UICurrentItem } from './Components/UICurrentItem';
 
 class HUDClient {
   private static _instance: HUDClient;
   private manager = GameManager.getInstance();
 
   private uiBackpack!: UIBackpack;
+  private uiCurrentItem!: UICurrentItem;
 
   private ammo!: Text;
   private gun!: Sprite;
@@ -33,7 +35,6 @@ class HUDClient {
   }
 
   #drawUI() {
-    this.#drawUIGun();
     this.#drawUIAmmo();
     this.#drawUIHPBar();
     this.#drawUIHPText();
@@ -41,6 +42,7 @@ class HUDClient {
     this.#drawUIUsername();
     this.#drawUIBackpack();
     this.#drawUIOtherHPBar();
+    this.#drawUICurrentItem();
   }
 
   #addComponents(components: any) {
@@ -94,6 +96,11 @@ class HUDClient {
     this.planet.addChild(b1);
 
     this.scene.addChild(this.planet);
+  }
+
+  #drawUICurrentItem() {
+    this.uiCurrentItem = new UICurrentItem();
+    this.#addComponents(this.uiCurrentItem.draw());
   }
 
   #drawUIHPText() {
@@ -188,15 +195,6 @@ class HUDClient {
   #drawUIBackpack() {
     this.uiBackpack = new UIBackpack();
     this.#addComponents(this.uiBackpack.draw());
-  }
-
-  #drawUIGun() {
-    this.gun = Sprite.from('pistol');
-
-    this.gun.zIndex = 1;
-    this.gun.x = this.manager.getWidth() - 170;
-
-    this.scene.addChild(this.gun);
   }
 
   setUIAmmo(value: number | string) {
