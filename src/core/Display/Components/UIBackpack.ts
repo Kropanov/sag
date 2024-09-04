@@ -64,6 +64,10 @@ export class UIBackpack implements UIComponent {
     return [this.cellsContainer];
   }
 
+  add(_component: UIComponent): void {
+    throw new Error('Method not implemented.');
+  }
+
   // FIXME: It's not good to use the way of backpack rendering, I'll rewrite draw() and clear() in the future
   clear() {
     for (let cell of this.cells) {

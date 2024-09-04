@@ -1,19 +1,15 @@
 import { IScene } from '@/interfaces';
-import { Graphics, Container, Text, Sprite } from 'pixi.js';
-import { GameManager } from '../Manager';
+import { Graphics, Container, Text } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item } from '../Entities';
 import { UICurrentItem } from './Components/UICurrentItem';
 
 class HUDClient {
   private static _instance: HUDClient;
-  private manager = GameManager.getInstance();
 
   private uiBackpack!: UIBackpack;
   private uiCurrentItem!: UICurrentItem;
 
-  private ammo!: Text;
-  private gun!: Sprite;
   private HPText!: Text;
   private scene!: IScene;
   private username!: Text;
@@ -35,7 +31,6 @@ class HUDClient {
   }
 
   #drawUI() {
-    this.#drawUIAmmo();
     this.#drawUIHPBar();
     this.#drawUIHPText();
     this.#drawUIPlanet();
@@ -49,24 +44,6 @@ class HUDClient {
     for (let item of components) {
       this.scene.addChild(item);
     }
-  }
-
-  #drawUIAmmo() {
-    this.ammo = new Text({
-      text: 'Some text',
-      style: {
-        fontFamily: 'Consolas',
-        fontSize: 35,
-        fill: '#ADADAD',
-      },
-    });
-
-    this.ammo.x = this.manager.getWidth() - 50;
-    this.ammo.y = this.manager.getHeight() - this.ammo.height - 6;
-
-    this.ammo.zIndex = 1;
-
-    this.scene.addChild(this.ammo);
   }
 
   #drawUIHPBar() {
@@ -197,8 +174,8 @@ class HUDClient {
     this.#addComponents(this.uiBackpack.draw());
   }
 
-  setUIAmmo(value: number | string) {
-    this.ammo.text = value;
+  setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.uiCurrentItem.setAmmo(currentValue, maxAmmo);
   }
 
   setUIUsername(value: string) {
@@ -210,11 +187,6 @@ class HUDClient {
   }
 
   resize(screenWidth: number, screenHeight: number) {
-    this.ammo.x = screenWidth - 50;
-    this.ammo.y = screenHeight - this.ammo.height - 6;
-
-    this.gun.x = this.manager.getWidth() - 170;
-
     this.uiBackpack.resize(screenWidth, screenHeight);
   }
 }

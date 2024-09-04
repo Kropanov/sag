@@ -76,7 +76,8 @@ class Gun extends Item {
     ammo.setSpritePosition(x0, y0);
 
     const currentAmmo = this.cartridge.shoot();
-    this.hud.setUIAmmo(currentAmmo);
+    const maxAmmo = this.cartridge.getMaxAmmo();
+    this.hud.setUIAmmo(currentAmmo, maxAmmo);
 
     const scene = this.manager.getCurrentScene();
     scene.addChild(ammoSprite);

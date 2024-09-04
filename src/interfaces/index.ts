@@ -36,6 +36,7 @@ export interface ItemProps {
 }
 
 export interface UIComponent {
-  draw(): Array<any>;
+  draw(): Array<ContainerChild>;
+  add(component: UIComponent): void;
   resize(screenWidth: number, screenHeight: number): void;
 }

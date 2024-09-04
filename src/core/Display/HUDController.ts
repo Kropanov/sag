@@ -18,8 +18,8 @@ class HUDController {
     this.hudService.init(scene);
   }
 
-  setUIAmmo(value: number | string) {
-    this.hudService.setUIAmmo(value);
+  setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.hudService.setUIAmmo(currentValue, maxAmmo);
   }
 
   setUIUsername(value: string) {

@@ -20,7 +20,7 @@ export class Cartridge {
     this.reloadTime = reloadTime;
 
     this.fill();
-    this.hud.setUIAmmo(this.bullets.length);
+    this.hud.setUIAmmo(this.bullets.length, this.maxAmmo);
   }
 
   getBullets() {
@@ -61,11 +61,15 @@ export class Cartridge {
       this.bullets.push(ammo);
     }
 
-    this.hud.setUIAmmo(this.bullets.length);
+    this.hud.setUIAmmo(this.bullets.length, this.maxAmmo);
     this.isReloading = false;
   }
 
   getCurrentAmmo() {
     return this.bullets.length;
+  }
+
+  getMaxAmmo() {
+    return this.maxAmmo;
   }
 }

@@ -18,8 +18,8 @@ export class HUDService {
     this.hudClient.initHUD(scene);
   }
 
-  setUIAmmo(value: number | string) {
-    this.hudClient.setUIAmmo(value);
+  setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.hudClient.setUIAmmo(currentValue, maxAmmo);
   }
 
   setUIUsername(value: string) {
