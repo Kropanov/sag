@@ -1,5 +1,6 @@
 import { IScene } from '@/interfaces';
 import { HUDClient } from './HUDClient';
+import { Item } from '../Entities';
 
 export class HUDService {
   private static _instance: HUDService;
@@ -17,12 +18,16 @@ export class HUDService {
     this.hudClient.initHUD(scene);
   }
 
-  setUIAmmo(value: number | string) {
-    this.hudClient.setUIAmmo(value);
+  setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.hudClient.setUIAmmo(currentValue, maxAmmo);
   }
 
   setUIUsername(value: string) {
     this.hudClient.setUIUsername(value);
+  }
+
+  setUIBackpack(backpack: Array<Item> | undefined) {
+    this.hudClient.setUIBackpack(backpack);
   }
 
   resize(screenWidth: number, screenHeight: number) {

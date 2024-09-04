@@ -1,23 +1,20 @@
 import { IScene } from '@/interfaces';
-import { Graphics, Container, Text, Sprite } from 'pixi.js';
-import { GameManager } from '../Manager';
+import { Graphics, Container, Text } from 'pixi.js';
+import { UIBackpack } from './Components/UIBackpack';
+import { Item } from '../Entities';
+import { UICurrentItem } from './Components/UICurrentItem';
 
 class HUDClient {
   private static _instance: HUDClient;
 
-  private manager = GameManager.getInstance();
+  private uiBackpack!: UIBackpack;
+  private uiCurrentItem!: UICurrentItem;
 
-  private ammo!: Text;
-  private scene!: IScene;
-  private HPBar!: Graphics;
   private HPText!: Text;
-  private planet!: Graphics;
+  private scene!: IScene;
   private username!: Text;
-  private gun!: Sprite;
-
-  private cells: any = [];
-
-  private cellsContainer!: Container;
+  private HPBar!: Graphics;
+  private planet!: Graphics;
   private hpBarsContainer!: Container;
 
   constructor() {
@@ -34,32 +31,19 @@ class HUDClient {
   }
 
   #drawUI() {
-    this.#drawUIGun();
-    this.#drawUIAmmo();
     this.#drawUIHPBar();
     this.#drawUIHPText();
     this.#drawUIPlanet();
     this.#drawUIUsername();
     this.#drawUIBackpack();
     this.#drawUIOtherHPBar();
+    this.#drawUICurrentItem();
   }
 
-  #drawUIAmmo() {
-    this.ammo = new Text({
-      text: 'Some text',
-      style: {
-        fontFamily: 'Consolas',
-        fontSize: 35,
-        fill: '#ADADAD',
-      },
-    });
-
-    this.ammo.x = this.manager.getWidth() - 50;
-    this.ammo.y = this.manager.getHeight() - this.ammo.height - 6;
-
-    this.ammo.zIndex = 1;
-
-    this.scene.addChild(this.ammo);
+  #addComponents(components: any) {
+    for (let item of components) {
+      this.scene.addChild(item);
+    }
   }
 
   #drawUIHPBar() {
@@ -89,6 +73,11 @@ class HUDClient {
     this.planet.addChild(b1);
 
     this.scene.addChild(this.planet);
+  }
+
+  #drawUICurrentItem() {
+    this.uiCurrentItem = new UICurrentItem();
+    this.#addComponents(this.uiCurrentItem.draw());
   }
 
   #drawUIHPText() {
@@ -181,59 +170,24 @@ class HUDClient {
   }
 
   #drawUIBackpack() {
-    this.cellsContainer = new Container();
-    this.scene.addChild(this.cellsContainer);
-
-    const cellWidth = 50;
-    const cellSpacing = 10;
-    const cellCount = 8;
-
-    for (let i = 0; i < cellCount; i++) {
-      const cell = new Graphics()
-        .roundRect((cellWidth + cellSpacing) * i, 0, cellWidth, cellWidth, 10)
-        .fill('#202325')
-        .stroke({
-          color: '#7C838A',
-          width: 2,
-        });
-
-      cell.zIndex = 1;
-      this.cellsContainer.addChild(cell);
-      this.cells.push(cell);
-    }
-
-    this.cellsContainer.zIndex = 1;
-    this.cellsContainer.x = (this.manager.getWidth() - this.cellsContainer.width) / 2;
-    this.cellsContainer.y = 20;
+    this.uiBackpack = new UIBackpack();
+    this.#addComponents(this.uiBackpack.draw());
   }
 
-  #drawUIGun() {
-    this.gun = Sprite.from('gun');
-
-    this.gun.scale = 2;
-    this.gun.x = this.manager.getWidth() - 170;
-    this.gun.y += 10;
-
-    this.gun.zIndex = 1;
-    this.scene.addChild(this.gun);
-  }
-
-  setUIAmmo(value: number | string) {
-    this.ammo.text = value;
+  setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.uiCurrentItem.setAmmo(currentValue, maxAmmo);
   }
 
   setUIUsername(value: string) {
     this.username.text = value;
   }
 
+  setUIBackpack(backpack: Array<Item> | undefined) {
+    this.uiBackpack.setBackpack(backpack);
+  }
+
   resize(screenWidth: number, screenHeight: number) {
-    this.ammo.x = screenWidth - 50;
-    this.ammo.y = screenHeight - this.ammo.height - 6;
-
-    this.cellsContainer.x = (screenWidth - this.cellsContainer.width) / 2;
-    this.cellsContainer.y = 20;
-
-    this.gun.x = this.manager.getWidth() - 170;
+    this.uiBackpack.resize(screenWidth, screenHeight);
   }
 }
 

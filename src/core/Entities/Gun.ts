@@ -1,12 +1,13 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
-import { Player } from '@/core/Player';
+import { Item, Player } from '@/core/Entities';
 import { lerp } from '@/utils';
-import { Cartridge } from '../Cartridge/Cartridge';
+import { Cartridge } from './Cartridge';
 import { Ammo } from './Ammo';
 import { HUDController } from '@/core/Display';
+import { ItemProps } from '@/interfaces';
 
-class Gun {
+class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
@@ -20,7 +21,8 @@ class Gun {
   private mouseEvent!: MouseEvent;
   shootingInterval: any;
 
-  constructor(player: Player, cartridge: Cartridge) {
+  constructor(props: ItemProps, player: Player, cartridge: Cartridge) {
+    super(props);
     this.cartridge = cartridge;
     this.player = player;
     this.listen();
@@ -74,7 +76,8 @@ class Gun {
     ammo.setSpritePosition(x0, y0);
 
     const currentAmmo = this.cartridge.shoot();
-    this.hud.setUIAmmo(currentAmmo);
+    const maxAmmo = this.cartridge.getMaxAmmo();
+    this.hud.setUIAmmo(currentAmmo, maxAmmo);
 
     const scene = this.manager.getCurrentScene();
     scene.addChild(ammoSprite);
