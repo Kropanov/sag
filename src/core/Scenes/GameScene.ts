@@ -86,11 +86,25 @@ export class GameScene extends Container implements IScene {
 
     const itemProps1 = { cost: 120, type: ItemType.Gun, asset: 'pistol', rarity: ItemRarity.Common };
     const itemProps2 = { cost: 220, asset: 'coin', rarity: ItemRarity.Legendary };
+    const itemProps3 = { cost: 1120, type: ItemType.Gun, asset: 'angel', rarity: ItemRarity.Legendary };
+    const itemProps4 = { cost: 1120, type: ItemType.Gun, asset: 'bug', rarity: ItemRarity.Legendary };
+    const itemProps5 = { cost: 1120, type: ItemType.Gun, asset: 'coal', rarity: ItemRarity.Legendary };
+    const itemProps6 = { cost: 1120, type: ItemType.Gun, asset: 'talisman', rarity: ItemRarity.Legendary };
+
     const item1 = new Gun(itemProps1, player, cartridge);
     const item2 = new Gun(itemProps2, player, cartridge);
+    const item3 = new Gun(itemProps3, player, cartridge);
+    const item4 = new Gun(itemProps4, player, cartridge);
+    const item5 = new Gun(itemProps5, player, cartridge);
+    const item6 = new Gun(itemProps6, player, cartridge);
 
     backpack.Add(item1);
     backpack.Add(item2);
+    backpack.Add(item3);
+    backpack.Add(item4);
+    backpack.Add(item5);
+    backpack.Add(item6);
+
     this.display.setUIBackpack(backpack.Open());
   }
 }

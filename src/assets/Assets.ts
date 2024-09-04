@@ -5,37 +5,45 @@ export const manifest: AssetsManifest = {
     {
       name: 'images',
       assets: {
-        bunny: './static/images/bunny.png',
-        tile: './static/images/tile_0000.png',
+        bunny: './static/assets/bunny.png',
+        tile: './static/assets/tile_0000.png',
       },
     },
     {
       name: 'ammo',
       assets: {
-        ammo_default: './static/images/ammo/star.png',
-        ammo_energy: './static/images/ammo/energyball_1.png',
-        ammo_ice: './static/images/ammo/energyball_7.png',
-        ammo_fire: './static/images/ammo/energyball_8.png',
-        ammo_poison: './static/images/ammo/energyball_6.png',
-        ammo_treatment: './static/images/ammo/energyball_3.png',
-        ammo_wind: './static/images/ammo/energyball_2.png',
-        ammo_lightning: './static/images/ammo/energyball_10.png',
-        ammo_venom: './static/images/ammo/energyball_9.png',
-        ammo_divine: './static/images/ammo/energyball_4.png',
-        ammo_arcane: './static/images/ammo/energyball_5.png',
+        ammo_default: './static/assets/ammo/star.png',
+        ammo_energy: './static/assets/ammo/energyball_1.png',
+        ammo_ice: './static/assets/ammo/energyball_7.png',
+        ammo_fire: './static/assets/ammo/energyball_8.png',
+        ammo_poison: './static/assets/ammo/energyball_6.png',
+        ammo_treatment: './static/assets/ammo/energyball_3.png',
+        ammo_wind: './static/assets/ammo/energyball_2.png',
+        ammo_lightning: './static/assets/ammo/energyball_10.png',
+        ammo_venom: './static/assets/ammo/energyball_9.png',
+        ammo_divine: './static/assets/ammo/energyball_4.png',
+        ammo_arcane: './static/assets/ammo/energyball_5.png',
       },
     },
     {
       name: 'weapons',
       assets: {
-        gun: './static/images/SCAR-L.png',
-        pistol: './static/images/pistol.png',
+        pistol: './static/assets/weapons/pistol.png',
       },
     },
     {
-      name: 'items',
+      name: 'artifacts',
       assets: {
-        coin: './static/images/coin.png',
+        coal: './static/assets/artifacts/coal.png',
+        angel: './static/assets/artifacts/angel.png',
+        bug: './static/assets/artifacts/bug.png',
+        talisman: './static/assets/artifacts/talisman.png',
+      },
+    },
+    {
+      name: 'currency',
+      assets: {
+        coin: './static/assets/currency/coin.png',
       },
     },
     {

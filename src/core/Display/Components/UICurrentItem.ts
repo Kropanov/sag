@@ -16,6 +16,7 @@ export class UICurrentItem implements UIComponent {
     this.container.zIndex = 1;
 
     this.currentItem = Sprite.from('pistol');
+    this.currentItem.y += 8;
     this.currentItem.x = this.container.width - 150;
     this.container.addChild(this.currentItem);
 
