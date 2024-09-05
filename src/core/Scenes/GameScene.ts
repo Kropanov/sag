@@ -1,7 +1,7 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import { Coin, Player } from '@core/Entities';
+import { Artifact, Coin, Player } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music';
@@ -81,10 +81,14 @@ export class GameScene extends Container implements IScene {
   testBackpack() {
     const backpack = new Backpack();
 
-    const itemProps = { amount: 300, type: ItemType.Gun, asset: 'coin', rarity: ItemRarity.Common };
+    const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
+    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Rare };
 
-    const coin = new Coin(itemProps);
+    const coin = new Coin(itemProps1);
+    const bug = new Artifact(itemProps2);
+
     backpack.Add(coin);
+    backpack.Add(bug);
 
     console.log(backpack.Open());
 
