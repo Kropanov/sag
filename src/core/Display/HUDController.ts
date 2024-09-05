@@ -15,7 +15,7 @@ class HUDController {
   }
 
   init(scene: IScene) {
-    this.hudService.init(scene);
+    this.hudService.initHUD(scene);
   }
 
   setUIAmmo(currentValue: number | string, maxAmmo: number) {
