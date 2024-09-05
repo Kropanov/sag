@@ -8,6 +8,7 @@ export abstract class Item {
   cost: number;
   type: ItemType;
   sprite: Sprite;
+  amount: number;
   rarity: ItemRarity;
   description: string;
 
@@ -15,6 +16,7 @@ export abstract class Item {
     cost = 0,
     name = '',
     asset = '',
+    amount = 1,
     description = '',
     type = ItemType.Material,
     rarity = ItemRarity.Common,
@@ -22,6 +24,7 @@ export abstract class Item {
     this.name = name;
     this.type = type;
     this.cost = cost;
+    this.amount = amount;
     this.rarity = rarity;
     this.description = description;
     this.sprite = Sprite.from(asset);
