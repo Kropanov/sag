@@ -41,6 +41,12 @@ export const manifest: AssetsManifest = {
       },
     },
     {
+      name: 'materials',
+      assets: {
+        gasoline: './static/assets/materials/gasoline.png',
+      },
+    },
+    {
       name: 'currency',
       assets: {
         coin: './static/assets/currency/coin.png',

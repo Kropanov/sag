@@ -11,6 +11,7 @@ import { HUDController } from '@core/Display';
 import { Backpack } from '../Entities/Backpack';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
+import { Material } from '../Entities/Material';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -83,12 +84,15 @@ export class GameScene extends Container implements IScene {
 
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
     const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Rare };
+    const itemProps3 = { amount: 4, type: ItemType.Material, asset: 'gasoline', rarity: ItemRarity.Uncommon };
 
     const coin = new Coin(itemProps1);
     const bug = new Artifact(itemProps2);
+    const gasoline = new Material(itemProps3);
 
     backpack.add(coin);
     backpack.add(bug);
+    backpack.add(gasoline);
 
     console.log(backpack.open());
 
