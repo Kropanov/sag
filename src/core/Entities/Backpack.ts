@@ -7,19 +7,19 @@ export class Backpack extends ItemStorage {
     super();
   }
 
-  Open(): Array<Item> {
+  open(): Array<Item> {
     return this.storage;
   }
 
-  GetChild(index: number): Item {
+  getChild(index: number): Item {
     return this.storage[index];
   }
 
-  Add(item: Item): void {
+  add(item: Item): void {
     this.storage.push(item);
   }
 
-  Remove(item: Item): Item[] | undefined {
+  remove(item: Item): Item[] | undefined {
     if (!this.storage.includes(item)) {
       return;
     }

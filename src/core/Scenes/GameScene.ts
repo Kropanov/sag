@@ -87,11 +87,11 @@ export class GameScene extends Container implements IScene {
     const coin = new Coin(itemProps1);
     const bug = new Artifact(itemProps2);
 
-    backpack.Add(coin);
-    backpack.Add(bug);
+    backpack.add(coin);
+    backpack.add(bug);
 
-    console.log(backpack.Open());
+    console.log(backpack.open());
 
-    this.display.setUIBackpack(backpack.Open());
+    this.display.setUIBackpack(backpack.open());
   }
 }

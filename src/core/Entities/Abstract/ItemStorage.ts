@@ -1,8 +1,8 @@
 import { Item } from './Item';
 
 export abstract class ItemStorage {
-  abstract Open(): Array<Item>;
-  abstract Add(item: Item): void;
-  abstract Remove(item: Item): Item[] | undefined;
-  abstract GetChild(index: number): Item;
+  abstract open(): Array<Item>;
+  abstract add(item: Item): void;
+  abstract remove(item: Item): Item[] | undefined;
+  abstract getChild(index: number): Item;
 }
