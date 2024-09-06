@@ -1,7 +1,7 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import { Artifact, Coin, Player } from '@core/Entities';
+import { Artifact, Coin, Player, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@/core/Music';
@@ -88,7 +88,7 @@ export class GameScene extends Container implements IScene {
     const itemProps4 = { amount: 7, type: ItemType.Material, asset: 'empty_gasoline_can', rarity: ItemRarity.Common };
 
     const coin = new Coin(itemProps1);
-    const bug = new Artifact(itemProps2);
+    const bug = new Artifact(itemProps2, new ProtectiveAbility());
     const gasoline_can = new Material(itemProps3);
     const empty_gasoline_can = new Material(itemProps4);
 

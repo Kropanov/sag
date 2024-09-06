@@ -41,3 +41,7 @@ export interface UIComponent {
   add(component: UIComponent): void;
   resize(screenWidth: number, screenHeight: number): void;
 }
+
+export interface ArtifactAbility {
+  use(): void;
+}
