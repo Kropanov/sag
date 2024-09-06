@@ -84,8 +84,8 @@ export class GameScene extends Container implements IScene {
 
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
     const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Rare };
-    const itemProps3 = { amount: 4, type: ItemType.Material, asset: 'gasoline_can', rarity: ItemRarity.Uncommon };
-    const itemProps4 = { amount: 7, type: ItemType.Material, asset: 'empty_gasoline_can', rarity: ItemRarity.Uncommon };
+    const itemProps3 = { amount: 4, type: ItemType.Material, asset: 'gasoline_can', rarity: ItemRarity.Unique };
+    const itemProps4 = { amount: 7, type: ItemType.Material, asset: 'empty_gasoline_can', rarity: ItemRarity.Common };
 
     const coin = new Coin(itemProps1);
     const bug = new Artifact(itemProps2);
