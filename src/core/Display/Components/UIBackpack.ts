@@ -1,11 +1,12 @@
 import { Item } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private manager = GameManager.getInstance();
 
+  private itemAmountInCell: Text = new Text();
   private cells: Array<{ item: Item | null; graphics: Graphics }> = [];
   private cellsContainer: Container;
 
@@ -53,6 +54,22 @@ export class UIBackpack implements UIComponent {
       item.sprite.scale.set(scaleFactor);
 
       this.cellsContainer.addChild(item.sprite);
+
+      this.itemAmountInCell = new Text({
+        text: item.amount,
+        style: {
+          fontFamily: 'Consolas',
+          fontSize: 15,
+          fill: '#FFF',
+        },
+      });
+
+      this.itemAmountInCell.zIndex = 3;
+      this.itemAmountInCell.anchor.set(1, 1);
+      this.itemAmountInCell.x = (cellWidth + cellSpacing) * i + cellWidth - 5;
+      this.itemAmountInCell.y = 47;
+
+      this.cellsContainer.addChild(this.itemAmountInCell);
 
       this.cells.push({ graphics, item });
     }
