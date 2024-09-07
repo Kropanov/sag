@@ -10,17 +10,17 @@ export class Cartridge {
 
   private reloadTime: number;
   private isReloading: boolean = false;
+  private hudController: HUDController;
 
-  private hud = new HUDController();
-
-  constructor(maxAmmo: number, type: AMMO_TYPE, reloadTime: number) {
+  constructor(maxAmmo: number, type: AMMO_TYPE, reloadTime: number, hudController: HUDController) {
     this.type = type;
     this.bullets = [];
     this.maxAmmo = maxAmmo;
     this.reloadTime = reloadTime;
+    this.hudController = hudController;
 
     this.fill();
-    this.hud.setUIAmmo(this.bullets.length, this.maxAmmo);
+    this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
   }
 
   getBullets() {
@@ -61,7 +61,7 @@ export class Cartridge {
       this.bullets.push(ammo);
     }
 
-    this.hud.setUIAmmo(this.bullets.length, this.maxAmmo);
+    this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
     this.isReloading = false;
   }
 

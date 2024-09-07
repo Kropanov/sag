@@ -11,8 +11,7 @@ class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
-  private hud = new HUDController();
-
+  private hudController: HUDController;
   private keyboard = Keyboard.getInstance();
   private manager = GameManager.getInstance();
 
@@ -21,10 +20,11 @@ class Gun extends Item {
   private mouseEvent!: MouseEvent;
   shootingInterval: any;
 
-  constructor(props: ItemProps, player: Player, cartridge: Cartridge) {
+  constructor(props: ItemProps, player: Player, cartridge: Cartridge, hudController: HUDController) {
     super(props);
     this.cartridge = cartridge;
     this.player = player;
+    this.hudController = hudController;
     this.listen();
   }
 
@@ -77,7 +77,7 @@ class Gun extends Item {
 
     const currentAmmo = this.cartridge.shoot();
     const maxAmmo = this.cartridge.getMaxAmmo();
-    this.hud.setUIAmmo(currentAmmo, maxAmmo);
+    this.hudController.setUIAmmo(currentAmmo, maxAmmo);
 
     const scene = this.manager.getCurrentScene();
     scene.addChild(ammoSprite);

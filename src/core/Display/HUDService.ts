@@ -1,7 +1,7 @@
 import { IScene } from '@/interfaces';
 import { Graphics, Container, Text } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
-import { Item } from '../Entities';
+import { Item, Player } from '../Entities';
 import { UICurrentItem } from './Components/UICurrentItem';
 
 export class HUDService {
@@ -10,6 +10,7 @@ export class HUDService {
   private uiBackpack!: UIBackpack;
   private uiCurrentItem!: UICurrentItem;
 
+  private player!: Player;
   private HPText!: Text;
   private scene!: IScene;
   private username!: Text;
@@ -25,8 +26,9 @@ export class HUDService {
     HUDService._instance = this;
   }
 
-  initHUD(scene: IScene) {
+  initHUD(scene: IScene, player: Player) {
     this.scene = scene;
+    this.player = player;
     this.#drawUI();
   }
 
@@ -170,7 +172,7 @@ export class HUDService {
   }
 
   #drawUIBackpack() {
-    this.uiBackpack = new UIBackpack();
+    this.uiBackpack = new UIBackpack(this.player);
     this.#addComponents(this.uiBackpack.draw());
   }
 
