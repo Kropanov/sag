@@ -1,17 +1,19 @@
-import { Item } from '@/core/Entities';
+import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private manager = GameManager.getInstance();
-
+  private player: Player;
+  private itemAmountInCell: Text = new Text();
   private cells: Array<{ item: Item | null; graphics: Graphics }> = [];
   private cellsContainer: Container;
 
   private backpack: Array<Item> = [];
 
-  constructor() {
+  constructor(player: Player) {
+    this.player = player;
     this.cellsContainer = new Container();
     this.cellsContainer.sortableChildren = true;
   }
@@ -40,6 +42,9 @@ export class UIBackpack implements UIComponent {
       graphics.zIndex = 1;
       this.cellsContainer.addChild(graphics);
 
+      graphics.interactive = true;
+      graphics.on('pointertap', () => this.onCellClick(i));
+
       if (this.backpack.length === 0 || this.backpack.length <= i) {
         this.cells.push({ graphics, item: null });
         continue;
@@ -54,6 +59,21 @@ export class UIBackpack implements UIComponent {
 
       this.cellsContainer.addChild(item.sprite);
 
+      this.itemAmountInCell = new Text({
+        text: item.amount,
+        style: {
+          fontFamily: 'Consolas',
+          fontSize: 15,
+          fill: '#FFF',
+        },
+      });
+
+      this.itemAmountInCell.zIndex = 3;
+      this.itemAmountInCell.anchor.set(1, 1);
+      this.itemAmountInCell.x = (cellWidth + cellSpacing) * i + cellWidth - 5;
+      this.itemAmountInCell.y = 47;
+
+      graphics.addChild(this.itemAmountInCell);
       this.cells.push({ graphics, item });
     }
 
@@ -64,14 +84,33 @@ export class UIBackpack implements UIComponent {
     return [this.cellsContainer];
   }
 
+  onCellClick(index: number) {
+    const selectedCell = this.cells[index];
+    if (selectedCell.item) {
+      this.removeItemFromBackpack(selectedCell.item);
+    }
+  }
+
+  removeItemFromBackpack(item: Item) {
+    this.player.removeItemFromBackpack(item);
+    this.setBackpack(this.player.getBackpackItems());
+  }
+
+  getHUDContainer(): Container {
+    return this.cellsContainer;
+  }
+
   add(_component: UIComponent): void {
     throw new Error('Method not implemented.');
   }
 
   // FIXME: It's not good to use the way of backpack rendering, I'll rewrite draw() and clear() in the future
   clear() {
-    for (let cell of this.cells) {
-      cell.graphics.destroy();
+    this.cells.length = 0;
+
+    while (this.cellsContainer.children.length > 0) {
+      const el = this.cellsContainer.getChildAt(0);
+      this.cellsContainer.removeChild(el);
     }
   }
 

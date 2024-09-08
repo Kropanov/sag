@@ -28,9 +28,10 @@ export interface IEntity {
 
 export interface ItemProps {
   name?: string;
-  type?: ItemType;
   cost?: number;
   asset?: string;
+  type?: ItemType;
+  amount?: number;
   rarity?: ItemRarity;
   description?: string;
 }
@@ -39,4 +40,8 @@ export interface UIComponent {
   draw(): Array<ContainerChild>;
   add(component: UIComponent): void;
   resize(screenWidth: number, screenHeight: number): void;
+}
+
+export interface ArtifactAbility {
+  use(): void;
 }

@@ -1,7 +1,7 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
 import { Item, Player } from '@/core/Entities';
-import { lerp } from '@/utils';
+import { isClickInsideHUDElement, lerp } from '@/utils';
 import { Cartridge } from './Cartridge';
 import { Ammo } from './Ammo';
 import { HUDController } from '@/core/Display';
@@ -11,8 +11,7 @@ class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
-  private hud = new HUDController();
-
+  private hudController: HUDController;
   private keyboard = Keyboard.getInstance();
   private manager = GameManager.getInstance();
 
@@ -21,10 +20,11 @@ class Gun extends Item {
   private mouseEvent!: MouseEvent;
   shootingInterval: any;
 
-  constructor(props: ItemProps, player: Player, cartridge: Cartridge) {
+  constructor(props: ItemProps, player: Player, cartridge: Cartridge, hudController: HUDController) {
     super(props);
     this.cartridge = cartridge;
     this.player = player;
+    this.hudController = hudController;
     this.listen();
   }
 
@@ -35,6 +35,15 @@ class Gun extends Item {
   }
 
   startShooting(event: MouseEvent) {
+    const hudContainers = this.hudController.getHUDContainers();
+
+    for (let container of hudContainers) {
+      const hudBounds = container.getBounds();
+      if (isClickInsideHUDElement(event, hudBounds)) {
+        return;
+      }
+    }
+
     if (event.button === 0) {
       this.shoot(event);
       this.shootingInterval = setInterval(() => {
@@ -77,7 +86,7 @@ class Gun extends Item {
 
     const currentAmmo = this.cartridge.shoot();
     const maxAmmo = this.cartridge.getMaxAmmo();
-    this.hud.setUIAmmo(currentAmmo, maxAmmo);
+    this.hudController.setUIAmmo(currentAmmo, maxAmmo);
 
     const scene = this.manager.getCurrentScene();
     scene.addChild(ammoSprite);

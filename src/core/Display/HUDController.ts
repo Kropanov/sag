@@ -1,21 +1,25 @@
 import { IScene } from '@/interfaces';
 import { HUDService } from './HUDService';
-import { Item } from '../Entities';
+import { Item, Player } from '../Entities';
+import { Container } from 'pixi.js';
 
 class HUDController {
+  private player!: Player;
   private static _instance: HUDController;
   private hudService: HUDService = new HUDService();
 
-  constructor() {
+  constructor(player: Player, scene: IScene) {
     if (HUDController._instance) {
       return HUDController._instance;
     }
 
     HUDController._instance = this;
+    this.player = player;
+    this.hudService.initHUD(scene, player);
   }
 
-  init(scene: IScene) {
-    this.hudService.init(scene);
+  getHUDContainers(): Container[] {
+    return this.hudService.getHUDContainers();
   }
 
   setUIAmmo(currentValue: number | string, maxAmmo: number) {
@@ -28,6 +32,10 @@ class HUDController {
 
   setUIBackpack(backpack: Array<Item> | undefined) {
     this.hudService.setUIBackpack(backpack);
+  }
+
+  updateUIBackpack() {
+    this.hudService.setUIBackpack(this.player.getBackpackItems());
   }
 
   resize(screenWidth: number, screenHeight: number) {

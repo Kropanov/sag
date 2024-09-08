@@ -1,16 +1,32 @@
 import { rectIntersect } from '@/utils';
-import { Creature } from '@/core/Entities';
+import { Creature, Item } from '@/core/Entities';
+import { Backpack } from './Backpack';
 
 export class Character extends Creature {
   health: number;
   attackPower: number;
   defensePower: number;
 
-  constructor(texture: string, x: any, y: any) {
+  private backpack: Backpack;
+
+  constructor(texture: string, x: any, y: any, backpack: Backpack) {
     super(texture, x, y);
     this.health = 100;
     this.attackPower = 10;
     this.defensePower = 5;
+    this.backpack = backpack;
+  }
+
+  addItemToBackpack(item: Item) {
+    this.backpack.add(item);
+  }
+
+  removeItemFromBackpack(item: Item) {
+    this.backpack.remove(item);
+  }
+
+  getBackpackItems(): Array<Item> {
+    return this.backpack.open();
   }
 
   move(dx: number, dy: number) {

@@ -4,4 +4,5 @@ export enum ItemRarity {
   Rare = 'Rare',
   Epic = 'Epic',
   Legendary = 'Legendary',
+  Unique = 'Unique',
 }

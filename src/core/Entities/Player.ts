@@ -1,5 +1,6 @@
 import { Keyboard } from '@core/Keyboard';
 import { Character } from '@core/Entities';
+import { Backpack } from './Backpack';
 
 export class Player extends Character {
   controls: Keyboard = Keyboard.getInstance();
@@ -9,8 +10,8 @@ export class Player extends Character {
 
   velocity: number = 4;
 
-  constructor(texture: string, x: number, y: number) {
-    super(texture, x, y);
+  constructor(texture: string, x: number, y: number, backpack: Backpack) {
+    super(texture, x, y, backpack);
     this.prevX = x;
     this.prevY = y;
   }

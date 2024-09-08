@@ -27,9 +27,13 @@ export class UICurrentItem implements UIComponent {
   }
 
   add(component: UIComponent): void {
-    for (let part of component.draw()) {
-      this.container.addChild(part);
+    for (let _ of component.draw()) {
+      this.container.addChild(_);
     }
+  }
+
+  getHUDContainer() {
+    return this.container;
   }
 
   setAmmo(currentValue: number | string, maxAmmo: number) {
