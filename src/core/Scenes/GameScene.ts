@@ -1,7 +1,7 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import { Cartridge, Coin, Player, Gun } from '@core/Entities';
+import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@core/Music';
@@ -42,8 +42,14 @@ export class GameScene extends Container implements IScene {
     this.display = new HUDController(this.player, this);
 
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
+    const itemProps2 = { amount: 3, type: ItemType.Artifact, asset: 'angel', rarity: ItemRarity.Legendary };
+    const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Legendary };
     const coin = new Coin(itemProps1);
+    const angel = new Artifact(itemProps2, new ReincarnationAbility());
+    const bug = new Artifact(itemProps3, new ProtectiveAbility());
     this.player.addItemToBackpack(coin);
+    this.player.addItemToBackpack(angel);
+    this.player.addItemToBackpack(bug);
     this.display.updateUIBackpack();
 
     this.cartridge = new Cartridge(70, AMMO_TYPE.ENERGY, 3, this.display);

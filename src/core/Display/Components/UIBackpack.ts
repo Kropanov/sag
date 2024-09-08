@@ -103,12 +103,10 @@ export class UIBackpack implements UIComponent {
   // FIXME: It's not good to use the way of backpack rendering, I'll rewrite draw() and clear() in the future
   clear() {
     this.cells.length = 0;
-    for (let cell of this.cells) {
-      cell.graphics.destroy();
-    }
 
-    for (let el of this.cellsContainer.children) {
-      el.destroy();
+    while (this.cellsContainer.children.length > 0) {
+      const el = this.cellsContainer.getChildAt(0);
+      this.cellsContainer.removeChild(el);
     }
   }
 
