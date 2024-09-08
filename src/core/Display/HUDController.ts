@@ -1,6 +1,7 @@
 import { IScene } from '@/interfaces';
 import { HUDService } from './HUDService';
 import { Item, Player } from '../Entities';
+import { Container } from 'pixi.js';
 
 class HUDController {
   private player!: Player;
@@ -15,6 +16,10 @@ class HUDController {
     HUDController._instance = this;
     this.player = player;
     this.hudService.initHUD(scene, player);
+  }
+
+  getHUDContainers(): Container[] {
+    return this.hudService.getHUDContainers();
   }
 
   setUIAmmo(currentValue: number | string, maxAmmo: number) {

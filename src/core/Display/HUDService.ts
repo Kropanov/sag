@@ -176,6 +176,10 @@ export class HUDService {
     this.#addComponents(this.uiBackpack.draw());
   }
 
+  getHUDContainers(): Container[] {
+    return [this.uiBackpack.getHUDContainer(), this.uiCurrentItem.getHUDContainer()];
+  }
+
   setUIAmmo(currentValue: number | string, maxAmmo: number) {
     this.uiCurrentItem.setAmmo(currentValue, maxAmmo);
   }

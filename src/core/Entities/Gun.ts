@@ -1,7 +1,7 @@
 import { Keyboard } from '@/core/Keyboard';
 import { GameManager } from '@/core/Manager';
 import { Item, Player } from '@/core/Entities';
-import { lerp } from '@/utils';
+import { isClickInsideHUDElement, lerp } from '@/utils';
 import { Cartridge } from './Cartridge';
 import { Ammo } from './Ammo';
 import { HUDController } from '@/core/Display';
@@ -35,6 +35,15 @@ class Gun extends Item {
   }
 
   startShooting(event: MouseEvent) {
+    const hudContainers = this.hudController.getHUDContainers();
+
+    for (let container of hudContainers) {
+      const hudBounds = container.getBounds();
+      if (isClickInsideHUDElement(event, hudBounds)) {
+        return;
+      }
+    }
+
     if (event.button === 0) {
       this.shoot(event);
       this.shootingInterval = setInterval(() => {

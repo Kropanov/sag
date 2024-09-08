@@ -32,6 +32,10 @@ export class UICurrentItem implements UIComponent {
     }
   }
 
+  getHUDContainer() {
+    return this.container;
+  }
+
   setAmmo(currentValue: number | string, maxAmmo: number) {
     this.uiAmmo.setAmmo(currentValue, maxAmmo);
   }
