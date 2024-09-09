@@ -1,4 +1,4 @@
-import { ContainerChild } from 'pixi.js';
+import { Container, ContainerChild } from 'pixi.js';
 import { vCollisionNormType } from '@/types';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
@@ -40,6 +40,7 @@ export interface UIComponent {
   draw(): Array<ContainerChild>;
   add(component: UIComponent): void;
   resize(screenWidth: number, screenHeight: number): void;
+  getContainer(): Container;
 }
 
 export interface ArtifactAbility {

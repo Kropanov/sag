@@ -96,7 +96,7 @@ export class UIBackpack implements UIComponent {
     this.setBackpack(this.player.getBackpackItems());
   }
 
-  getHUDContainer(): Container {
+  getContainer(): Container {
     return this.cellsContainer;
   }
 

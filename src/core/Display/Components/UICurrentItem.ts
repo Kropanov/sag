@@ -32,7 +32,7 @@ export class UICurrentItem implements UIComponent {
     }
   }
 
-  getHUDContainer() {
+  getContainer() {
     return this.container;
   }
 

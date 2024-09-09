@@ -1,5 +1,5 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Text } from 'pixi.js';
+import { Container, ContainerChild, Text } from 'pixi.js';
 
 export class UIAmmo implements UIComponent {
   private ammo!: Text;
@@ -31,5 +31,9 @@ export class UIAmmo implements UIComponent {
 
   setAmmo(currentValue: number | string, maxAmmo: number) {
     this.ammo.text = `${currentValue}/${maxAmmo}`;
+  }
+
+  getContainer(): Container {
+    throw new Error('Method not implemented.');
   }
 }
