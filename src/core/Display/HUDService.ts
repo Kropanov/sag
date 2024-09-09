@@ -173,7 +173,7 @@ export class HUDService {
 
   #drawUIBackpack() {
     this.uiBackpack = new UIBackpack(this.player);
-    this.#addComponents(this.uiBackpack.draw());
+    this.#addComponents(this.uiBackpack.renderBackpackSlots());
   }
 
   getHUDContainers(): Container[] {
@@ -189,7 +189,7 @@ export class HUDService {
   }
 
   setUIBackpack(backpack: Array<Item> | undefined) {
-    this.uiBackpack.setBackpack(backpack);
+    this.uiBackpack.updateBackpack(backpack);
   }
 
   resize(screenWidth: number, screenHeight: number) {
