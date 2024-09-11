@@ -35,6 +35,10 @@ class HUDController {
   public resize(screenWidth: number, screenHeight: number) {
     this.hudService.resize(screenWidth, screenHeight);
   }
+
+  public setCurrentItem(index: number) {
+    this.hudService.setCurrentItem(index);
+  }
 }
 
 export { HUDController };

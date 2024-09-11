@@ -14,6 +14,8 @@ export class UIBackpack implements UIComponent {
   private player: Player;
   private manager = GameManager.getInstance();
 
+  private currentHoldingSlotIndex: number | undefined;
+
   constructor(player: Player) {
     this.player = player;
     this.slotsContainer = new Container();
@@ -41,6 +43,7 @@ export class UIBackpack implements UIComponent {
       } else {
         this.renderItemInSlot(item, graphics, i);
         this.appendSlot(graphics, item);
+        this.setCurrentItem(0);
       }
     }
 
@@ -67,6 +70,17 @@ export class UIBackpack implements UIComponent {
     this.slotsContainer.addChild(graphics);
 
     return graphics;
+  }
+
+  private updateSlotGraphics(graphics: Graphics, index: number, strokeColor: string) {
+    graphics.clear();
+    graphics
+      .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
+      .fill('#202325')
+      .stroke({
+        color: strokeColor,
+        width: 2,
+      });
   }
 
   private renderItemInSlot(item: Item, graphics: Graphics, index: number) {
@@ -123,6 +137,22 @@ export class UIBackpack implements UIComponent {
 
   public addComponent(_component: UIComponent): void {
     throw new Error('Method not implemented.');
+  }
+
+  public setCurrentItem(index: number) {
+    if (this.currentHoldingSlotIndex === index) {
+      return;
+    }
+
+    if (this.currentHoldingSlotIndex !== undefined) {
+      const graphics = this.slots[this.currentHoldingSlotIndex].graphics;
+      this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, '#7C838A');
+    }
+
+    this.currentHoldingSlotIndex = index;
+
+    const graphics = this.slots[index].graphics;
+    this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, '#31FF6D');
   }
 
   private resetBackpackSlots() {

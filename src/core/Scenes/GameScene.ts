@@ -65,6 +65,36 @@ export class GameScene extends Container implements IScene {
     if (this.keyboard.state.get('Escape')) {
       this.manager.changeScene(new MenuScene());
     }
+    if (this.keyboard.state.get('Digit1')) {
+      this.display.setCurrentItem(0);
+    }
+    if (this.keyboard.state.get('Digit2')) {
+      this.display.setCurrentItem(1);
+    }
+    if (this.keyboard.state.get('Digit3')) {
+      this.display.setCurrentItem(2);
+    }
+    if (this.keyboard.state.get('Digit4')) {
+      this.display.setCurrentItem(3);
+    }
+    if (this.keyboard.state.get('Digit5')) {
+      this.display.setCurrentItem(4);
+    }
+    if (this.keyboard.state.get('Digit6')) {
+      this.display.setCurrentItem(5);
+    }
+    if (this.keyboard.state.get('Digit7')) {
+      this.display.setCurrentItem(6);
+    }
+    if (this.keyboard.state.get('Digit8')) {
+      this.display.setCurrentItem(7);
+    }
+    if (this.keyboard.state.get('Digit9')) {
+      this.display.setCurrentItem(8);
+    }
+    if (this.keyboard.state.get('Digit0')) {
+      this.display.setCurrentItem(9);
+    }
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {

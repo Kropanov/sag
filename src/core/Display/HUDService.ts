@@ -183,6 +183,10 @@ class HUDService {
     this.uiBackpack.updateBackpack(backpack);
   }
 
+  public setCurrentItem(index: number) {
+    this.uiBackpack.setCurrentItem(index);
+  }
+
   public resize(screenWidth: number, screenHeight: number) {
     this.uiBackpack.resize(screenWidth, screenHeight);
   }
