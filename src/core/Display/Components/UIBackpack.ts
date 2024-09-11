@@ -84,13 +84,19 @@ export class UIBackpack implements UIComponent {
         fontFamily: 'Consolas',
         fontSize: 15,
         fill: '#FFF',
+        dropShadow: {
+          alpha: 1,
+          angle: 1,
+          blur: 1,
+          distance: 2,
+        },
       },
     });
 
     itemAmountInCell.zIndex = 3;
     itemAmountInCell.anchor.set(1, 1);
-    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index + STORAGE_SLOT_WIDTH - 5;
-    itemAmountInCell.y = 47;
+    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index + STORAGE_SLOT_WIDTH - 3;
+    itemAmountInCell.y = 50;
 
     graphics.addChild(itemAmountInCell);
   }
