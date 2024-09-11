@@ -1,16 +1,18 @@
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
-import { Graphics, Sprite } from 'pixi.js';
+import { ContainerChild, Graphics, Sprite } from 'pixi.js';
 import { UIAmmo } from './UIAmmo';
 
-export class UICurrentItem implements UIComponent {
+export class UICurrentItemDisplay implements UIComponent {
   private manager = GameManager.getInstance();
 
   private uiAmmo!: UIAmmo;
   private container!: Graphics;
   private currentItem!: Sprite;
 
-  draw(): Array<any> {
+  // TODO: Current item sprite
+
+  public render(): Array<ContainerChild> {
     this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: '#0d1117f2' });
     this.container.x = this.manager.getWidth() - 300;
     this.container.zIndex = 1;
@@ -21,26 +23,24 @@ export class UICurrentItem implements UIComponent {
     this.container.addChild(this.currentItem);
 
     this.uiAmmo = new UIAmmo();
-    this.add(this.uiAmmo);
+    this.addComponent(this.uiAmmo);
 
     return [this.container];
   }
 
-  add(component: UIComponent): void {
-    for (let _ of component.draw()) {
+  public addComponent(component: UIComponent): void {
+    for (let _ of component.render()) {
       this.container.addChild(_);
     }
   }
 
-  getContainer() {
+  public getContainer() {
     return this.container;
   }
 
-  setAmmo(currentValue: number | string, maxAmmo: number) {
+  public setAmmo(currentValue: number | string, maxAmmo: number) {
     this.uiAmmo.setAmmo(currentValue, maxAmmo);
   }
 
-  resize(_screenWidth: number, _screenHeight: number): void {
-    return;
-  }
+  public resize(_screenWidth: number, _screenHeight: number): void {}
 }

@@ -21,13 +21,17 @@ export class UIBackpack implements UIComponent {
     this.slotsContainer.zIndex = 1;
   }
 
-  updateBackpack(newBackpack: Array<Item> | undefined) {
+  public render(): Array<ContainerChild> {
+    return this.renderBackpackSlots();
+  }
+
+  public updateBackpack(newBackpack: Array<Item> | undefined) {
     this.backpack = newBackpack ?? [];
     this.resetBackpackSlots();
     this.renderBackpackSlots();
   }
 
-  renderBackpackSlots(): Array<ContainerChild> {
+  private renderBackpackSlots(): Array<ContainerChild> {
     for (let i = 0; i < this.backpack.length; i++) {
       const item = this.backpack[i];
       const graphics = this.createSlotGraphics(i);
@@ -47,7 +51,7 @@ export class UIBackpack implements UIComponent {
     return [this.slotsContainer];
   }
 
-  createSlotGraphics(index: number): Graphics {
+  private createSlotGraphics(index: number): Graphics {
     const graphics = new Graphics()
       .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
       .fill('#202325')
@@ -65,7 +69,7 @@ export class UIBackpack implements UIComponent {
     return graphics;
   }
 
-  renderItemInSlot(item: Item, graphics: Graphics, index: number) {
+  private renderItemInSlot(item: Item, graphics: Graphics, index: number) {
     const scaleFactor = 50 / 128;
 
     item.sprite.zIndex = 2;
@@ -91,35 +95,31 @@ export class UIBackpack implements UIComponent {
     graphics.addChild(itemAmountInCell);
   }
 
-  appendSlot(graphics: Graphics, item: Item | null = null) {
+  private appendSlot(graphics: Graphics, item: Item | null = null) {
     this.slots.push({ graphics, item });
   }
 
-  onSlotClick(index: number) {
+  private onSlotClick(index: number) {
     const selectedCell = this.slots[index];
     if (selectedCell.item) {
       this.removeItemFromBackpack(selectedCell.item);
     }
   }
 
-  removeItemFromBackpack(item: Item) {
+  private removeItemFromBackpack(item: Item) {
     this.player.removeItemFromBackpack(item);
     this.updateBackpack(this.player.getBackpackItems());
   }
 
-  getContainer(): Container {
+  public getContainer(): Container {
     return this.slotsContainer;
   }
 
-  draw(): Array<ContainerChild> {
+  public addComponent(_component: UIComponent): void {
     throw new Error('Method not implemented.');
   }
 
-  add(_component: UIComponent): void {
-    throw new Error('Method not implemented.');
-  }
-
-  resetBackpackSlots() {
+  private resetBackpackSlots() {
     this.slots.length = 0;
     while (this.slotsContainer.children.length > 0) {
       const el = this.slotsContainer.getChildAt(0);
@@ -127,12 +127,12 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
+  private resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
     this.slotsContainer.x = (screenWidth - this.slotsContainer.width) / 2;
     this.slotsContainer.y = 20;
   }
 
-  resize(screenWidth: number, screenHeight: number): void {
+  public resize(screenWidth: number, screenHeight: number): void {
     this.resizeSlotsContainer(screenWidth, screenHeight);
   }
 }

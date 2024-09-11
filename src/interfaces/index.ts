@@ -37,10 +37,10 @@ export interface ItemProps {
 }
 
 export interface UIComponent {
-  draw(): Array<ContainerChild>;
-  add(component: UIComponent): void;
-  resize(screenWidth: number, screenHeight: number): void;
+  render(): Array<ContainerChild>;
   getContainer(): Container;
+  addComponent(component: UIComponent): void;
+  resize(screenWidth: number, screenHeight: number): void;
 }
 
 export interface ArtifactAbility {
