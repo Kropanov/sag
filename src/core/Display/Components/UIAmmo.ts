@@ -14,7 +14,7 @@ export class UIAmmo implements UIComponent {
 
   private createAmmoDisplay() {
     this.ammo = new Text({
-      text: '',
+      text: '0 / 20',
       style: {
         fontFamily: 'Consolas',
         fontSize: 27,
@@ -27,6 +27,14 @@ export class UIAmmo implements UIComponent {
     this.ammo.zIndex = 1;
 
     return [this.ammo];
+  }
+
+  public showAmmo() {
+    this.ammo.visible = true;
+  }
+
+  public hideAmmo() {
+    this.ammo.visible = false;
   }
 
   public getContainer(): Container {

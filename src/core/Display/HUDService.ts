@@ -20,6 +20,13 @@ class HUDService {
   constructor(scene: IScene, player: Player) {
     this.scene = scene;
     this.player = player;
+
+    this.uiBackpack = new UIBackpack(this.player);
+    this.addComponentsToScene(this.uiBackpack.render());
+
+    this.uiCurrentItemDisplay = new UICurrentItemDisplay();
+    this.addComponentsToScene(this.uiCurrentItemDisplay.render());
+
     this.render();
   }
 
@@ -28,9 +35,7 @@ class HUDService {
     this.renderPlayerHPText();
     this.renderPlayerPlanet();
     this.renderPlayerUsername();
-    this.renderPlayerBackpack();
     this.renderOtherPlayersHPBars();
-    this.renderSelectedItemDisplay();
   }
 
   private addComponentsToScene(components: any) {
@@ -66,11 +71,6 @@ class HUDService {
     this.planet.addChild(b1);
 
     this.scene.addChild(this.planet);
-  }
-
-  private renderSelectedItemDisplay() {
-    this.uiCurrentItemDisplay = new UICurrentItemDisplay();
-    this.addComponentsToScene(this.uiCurrentItemDisplay.render());
   }
 
   private renderPlayerHPText() {
@@ -162,11 +162,6 @@ class HUDService {
     }
   }
 
-  private renderPlayerBackpack() {
-    this.uiBackpack = new UIBackpack(this.player);
-    this.addComponentsToScene(this.uiBackpack.render());
-  }
-
   public getHUDContainers(): Container[] {
     return [this.uiBackpack.getContainer(), this.uiCurrentItemDisplay.getContainer()];
   }
@@ -179,12 +174,14 @@ class HUDService {
     this.username.text = value;
   }
 
-  public setUIBackpack(backpack: Array<Item> | undefined) {
+  public setUIBackpack(backpack: Array<Item | null> | undefined) {
     this.uiBackpack.updateBackpack(backpack);
   }
 
   public setCurrentItem(index: number) {
     this.uiBackpack.setCurrentItem(index);
+    const selectedItem = this.uiBackpack.getCurrentItem();
+    this.uiCurrentItemDisplay.setCurrentItem(selectedItem);
   }
 
   public resize(screenWidth: number, screenHeight: number) {

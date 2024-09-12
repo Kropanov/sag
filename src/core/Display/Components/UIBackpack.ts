@@ -6,7 +6,7 @@ import { Slots } from '@/types';
 import { Container, ContainerChild, Graphics, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
-  private backpack: Array<Item> = [];
+  private backpack: Array<Item | null> = [];
 
   private slots: Slots = [];
   private slotsContainer: Container;
@@ -15,6 +15,7 @@ export class UIBackpack implements UIComponent {
   private manager = GameManager.getInstance();
 
   private currentHoldingSlotIndex: number | undefined;
+  private currentHoldingSlotItem: Item | null = null;
 
   constructor(player: Player) {
     this.player = player;
@@ -27,7 +28,7 @@ export class UIBackpack implements UIComponent {
     return this.renderBackpackSlots();
   }
 
-  public updateBackpack(newBackpack: Array<Item> | undefined) {
+  public updateBackpack(newBackpack: Array<Item | null> | undefined) {
     this.backpack = newBackpack ?? [];
     this.resetBackpackSlots();
     this.renderBackpackSlots();
@@ -139,7 +140,7 @@ export class UIBackpack implements UIComponent {
     throw new Error('Method not implemented.');
   }
 
-  public setCurrentItem(index: number) {
+  public setCurrentItem(index: number): void {
     if (this.currentHoldingSlotIndex === index) {
       return;
     }
@@ -151,8 +152,15 @@ export class UIBackpack implements UIComponent {
 
     this.currentHoldingSlotIndex = index;
 
+    const item = this.slots[index].item;
     const graphics = this.slots[index].graphics;
     this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, '#31FF6D');
+
+    this.currentHoldingSlotItem = item;
+  }
+
+  public getCurrentItem(): Item | null {
+    return this.currentHoldingSlotItem;
   }
 
   private resetBackpackSlots() {

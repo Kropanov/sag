@@ -32,6 +32,7 @@ export interface ItemProps {
   asset?: string;
   type?: ItemType;
   amount?: number;
+  spriteId?: string;
   rarity?: ItemRarity;
   description?: string;
 }
