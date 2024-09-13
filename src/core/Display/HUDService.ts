@@ -17,6 +17,9 @@ class HUDService {
   private planet!: Graphics;
   private hpBarsContainer!: Container;
 
+  private currentItem: Item | null = null;
+  private currentItemIndex: number | null = null;
+
   constructor(scene: IScene, player: Player) {
     this.scene = scene;
     this.player = player;
@@ -176,12 +179,17 @@ class HUDService {
 
   public setUIBackpack(backpack: Array<Item | null> | undefined) {
     this.uiBackpack.updateBackpack(backpack);
+
+    if (this.currentItemIndex === null && backpack && backpack.length) {
+      this.setCurrentItem(0);
+    }
   }
 
   public setCurrentItem(index: number) {
+    this.currentItemIndex = index;
     this.uiBackpack.setCurrentItem(index);
-    const selectedItem = this.uiBackpack.getCurrentItem();
-    this.uiCurrentItemDisplay.setCurrentItem(selectedItem);
+    this.currentItem = this.uiBackpack.getCurrentItem();
+    this.uiCurrentItemDisplay.setCurrentItem(this.currentItem);
   }
 
   public resize(screenWidth: number, screenHeight: number) {

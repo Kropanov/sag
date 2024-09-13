@@ -42,7 +42,7 @@ export class GameScene extends Container implements IScene {
     this.display = new HUDController(this.player, this);
 
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    const itemProps2 = { amount: 3, type: ItemType.Artifact, asset: 'angel', rarity: ItemRarity.Legendary };
+    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'angel', rarity: ItemRarity.Legendary };
     const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Legendary };
     const coin = new Coin(itemProps1);
     const angel = new Artifact(itemProps2, new ReincarnationAbility());
