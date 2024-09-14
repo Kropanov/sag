@@ -66,16 +66,24 @@ export class UICurrentItemDisplay implements UIComponent {
   }
 
   renderCurrentItemAmount(amount: number) {
+    const qty = Sprite.from('qty');
+    qty.scale.set(0.45);
+    qty.x += 35;
+    qty.y += 75;
+    qty.zIndex = 1;
+
+    this.container.addChild(qty);
+
     const itemAmount = new Text({
-      text: amount,
+      text: ` ${amount}`,
       style: {
         fontFamily: 'Consolas',
-        fontSize: 27,
+        fontSize: 20,
         fill: '#ADADAD',
       },
     });
 
-    itemAmount.x += 60;
+    itemAmount.x += 90;
     itemAmount.y += 95;
     itemAmount.zIndex = 1;
 

@@ -38,11 +38,14 @@ export const manifest: AssetsManifest = {
         angel: './static/assets/artifacts/angel.png',
         bug: './static/assets/artifacts/bug.png',
         talisman: './static/assets/artifacts/talisman.png',
+        map: './static/assets/artifacts/map.png',
+        talisman_2: './static/assets/artifacts/talisman_2.png',
       },
     },
     {
       name: 'materials',
       assets: {
+        gasoline: './static/assets/materials/gasoline.png',
         gasoline_can: './static/assets/materials/gasoline_can.png',
         empty_gasoline_can: './static/assets/materials/empty_gasoline_can.png',
       },
@@ -51,6 +54,12 @@ export const manifest: AssetsManifest = {
       name: 'currency',
       assets: {
         coin: './static/assets/currency/coin.png',
+      },
+    },
+    {
+      name: 'ui',
+      assets: {
+        qty: './static/assets/ui/qty.png',
       },
     },
     {
