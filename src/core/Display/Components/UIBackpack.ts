@@ -1,12 +1,14 @@
 import { STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
 import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
-import { UIComponent } from '@/interfaces';
+import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slots } from '@/types';
+import mitt, { Emitter } from 'mitt';
 import { Container, ContainerChild, Graphics, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
+  private emitter: Emitter<BackpackEvents>;
 
   private slots: Slots = [];
   private slotsContainer: Container;
@@ -18,6 +20,7 @@ export class UIBackpack implements UIComponent {
   private currentHoldingSlotItem: Item | null = null;
 
   constructor(player: Player) {
+    this.emitter = mitt<BackpackEvents>();
     this.player = player;
     this.slotsContainer = new Container();
     this.slotsContainer.sortableChildren = true;
@@ -121,7 +124,11 @@ export class UIBackpack implements UIComponent {
   }
 
   private onSlotClick(index: number) {
-    this.setCurrentItem(index);
+    this.emitter.emit('slotSelected', index);
+  }
+
+  public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
+    this.emitter.on(event, handler);
   }
 
   // @ts-ignore

@@ -47,3 +47,9 @@ export interface UIComponent {
 export interface ArtifactAbility {
   use(): void;
 }
+
+export interface BackpackEvents {
+  [event: string]: unknown;
+  [event: symbol]: unknown;
+  slotSelected: number;
+}
