@@ -42,8 +42,8 @@ export class GameScene extends Container implements IScene {
     this.display = new HUDController(this.player, this);
 
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    const itemProps2 = { amount: 3, type: ItemType.Artifact, asset: 'angel', rarity: ItemRarity.Legendary };
-    const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Legendary };
+    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Legendary };
+    const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'talisman_2', rarity: ItemRarity.Legendary };
     const coin = new Coin(itemProps1);
     const angel = new Artifact(itemProps2, new ReincarnationAbility());
     const bug = new Artifact(itemProps3, new ProtectiveAbility());
@@ -64,6 +64,36 @@ export class GameScene extends Container implements IScene {
   handleInput() {
     if (this.keyboard.state.get('Escape')) {
       this.manager.changeScene(new MenuScene());
+    }
+    if (this.keyboard.state.get('Digit1')) {
+      this.display.setCurrentItem(0);
+    }
+    if (this.keyboard.state.get('Digit2')) {
+      this.display.setCurrentItem(1);
+    }
+    if (this.keyboard.state.get('Digit3')) {
+      this.display.setCurrentItem(2);
+    }
+    if (this.keyboard.state.get('Digit4')) {
+      this.display.setCurrentItem(3);
+    }
+    if (this.keyboard.state.get('Digit5')) {
+      this.display.setCurrentItem(4);
+    }
+    if (this.keyboard.state.get('Digit6')) {
+      this.display.setCurrentItem(5);
+    }
+    if (this.keyboard.state.get('Digit7')) {
+      this.display.setCurrentItem(6);
+    }
+    if (this.keyboard.state.get('Digit8')) {
+      this.display.setCurrentItem(7);
+    }
+    if (this.keyboard.state.get('Digit9')) {
+      this.display.setCurrentItem(8);
+    }
+    if (this.keyboard.state.get('Digit0')) {
+      this.display.setCurrentItem(9);
     }
   }
 

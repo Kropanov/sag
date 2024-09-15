@@ -1,4 +1,4 @@
-import { ContainerChild } from 'pixi.js';
+import { Container, ContainerChild } from 'pixi.js';
 import { vCollisionNormType } from '@/types';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
@@ -32,16 +32,24 @@ export interface ItemProps {
   asset?: string;
   type?: ItemType;
   amount?: number;
+  spriteId?: string;
   rarity?: ItemRarity;
   description?: string;
 }
 
 export interface UIComponent {
-  draw(): Array<ContainerChild>;
-  add(component: UIComponent): void;
+  render(): Array<ContainerChild>;
+  getContainer(): Container;
+  addComponent(component: UIComponent): void;
   resize(screenWidth: number, screenHeight: number): void;
 }
 
 export interface ArtifactAbility {
   use(): void;
+}
+
+export interface BackpackEvents {
+  [event: string]: unknown;
+  [event: symbol]: unknown;
+  slotSelected: number;
 }

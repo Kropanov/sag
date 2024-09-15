@@ -25,7 +25,7 @@ export class Character extends Creature {
     this.backpack.remove(item);
   }
 
-  getBackpackItems(): Array<Item> {
+  getBackpackItems(): Array<Item | null> {
     return this.backpack.open();
   }
 

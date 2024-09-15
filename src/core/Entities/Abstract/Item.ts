@@ -9,6 +9,7 @@ export abstract class Item {
   type: ItemType;
   sprite: Sprite;
   amount: number;
+  spriteId: string;
   rarity: ItemRarity;
   description: string;
 
@@ -28,5 +29,6 @@ export abstract class Item {
     this.rarity = rarity;
     this.description = description;
     this.sprite = Sprite.from(asset);
+    this.spriteId = asset;
   }
 }

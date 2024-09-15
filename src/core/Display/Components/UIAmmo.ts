@@ -1,12 +1,20 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Text } from 'pixi.js';
+import { Container, ContainerChild, Text } from 'pixi.js';
 
 export class UIAmmo implements UIComponent {
-  private ammo!: Text;
+  private ammo: Text;
 
-  draw(): Array<ContainerChild> {
+  constructor() {
+    this.ammo = new Text();
+  }
+
+  public render(): Array<ContainerChild> {
+    return this.createAmmoDisplay();
+  }
+
+  private createAmmoDisplay() {
     this.ammo = new Text({
-      text: '',
+      text: '0 / 20',
       style: {
         fontFamily: 'Consolas',
         fontSize: 27,
@@ -21,15 +29,27 @@ export class UIAmmo implements UIComponent {
     return [this.ammo];
   }
 
-  add(_component: UIComponent): void {
+  public showAmmo() {
+    this.ammo.visible = true;
+  }
+
+  public hideAmmo() {
+    this.ammo.visible = false;
+  }
+
+  public getContainer(): Container {
     throw new Error('Method not implemented.');
   }
 
-  resize(_screenWidth: number, _screenHeight: number): void {
+  public addComponent(_component: UIComponent): void {
     throw new Error('Method not implemented.');
   }
 
-  setAmmo(currentValue: number | string, maxAmmo: number) {
+  public resize(_screenWidth: number, _screenHeight: number): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public setAmmo(currentValue: number | string, maxAmmo: number) {
     this.ammo.text = `${currentValue}/${maxAmmo}`;
   }
 }

@@ -2,53 +2,56 @@ import { IScene } from '@/interfaces';
 import { Graphics, Container, Text } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item, Player } from '../Entities';
-import { UICurrentItem } from './Components/UICurrentItem';
+import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
 
-export class HUDService {
-  private static _instance: HUDService;
+class HUDService {
+  private scene: IScene;
+  private player: Player;
 
   private uiBackpack!: UIBackpack;
-  private uiCurrentItem!: UICurrentItem;
+  private uiCurrentItemDisplay!: UICurrentItemDisplay;
 
-  private player!: Player;
-  private HPText!: Text;
-  private scene!: IScene;
   private username!: Text;
   private HPBar!: Graphics;
+  private HPText!: Text;
   private planet!: Graphics;
   private hpBarsContainer!: Container;
 
-  constructor() {
-    if (HUDService._instance) {
-      return HUDService._instance;
-    }
+  private currentItem: Item | null = null;
+  private currentItemIndex: number | null = null;
 
-    HUDService._instance = this;
-  }
-
-  initHUD(scene: IScene, player: Player) {
+  constructor(scene: IScene, player: Player) {
     this.scene = scene;
     this.player = player;
-    this.#drawUI();
+
+    this.uiBackpack = new UIBackpack(this.player);
+    this.addComponentsToScene(this.uiBackpack.render());
+
+    this.uiBackpack.on('slotSelected', (index: number) => {
+      this.setCurrentItem(index);
+    });
+
+    this.uiCurrentItemDisplay = new UICurrentItemDisplay();
+    this.addComponentsToScene(this.uiCurrentItemDisplay.render());
+
+    this.render();
   }
 
-  #drawUI() {
-    this.#drawUIHPBar();
-    this.#drawUIHPText();
-    this.#drawUIPlanet();
-    this.#drawUIUsername();
-    this.#drawUIBackpack();
-    this.#drawUIOtherHPBar();
-    this.#drawUICurrentItem();
+  private render() {
+    this.renderPlayerHPBar();
+    this.renderPlayerHPText();
+    this.renderPlayerPlanet();
+    this.renderPlayerUsername();
+    this.renderOtherPlayersHPBars();
   }
 
-  #addComponents(components: any) {
-    for (let item of components) {
-      this.scene.addChild(item);
+  private addComponentsToScene(components: any) {
+    for (let element of components) {
+      this.scene.addChild(element);
     }
   }
 
-  #drawUIHPBar() {
+  private renderPlayerHPBar() {
     this.HPBar = new Graphics().roundRect(40, 90, 350, 28, 10).fill('#FF8481').stroke({
       color: '#7C838A',
       width: 5,
@@ -58,7 +61,7 @@ export class HUDService {
     this.scene.addChild(this.HPBar);
   }
 
-  #drawUIPlanet() {
+  private renderPlayerPlanet() {
     this.planet = new Graphics().circle(85, 48, 30).fill('#3BBEFF');
     this.planet.zIndex = 1;
 
@@ -77,12 +80,7 @@ export class HUDService {
     this.scene.addChild(this.planet);
   }
 
-  #drawUICurrentItem() {
-    this.uiCurrentItem = new UICurrentItem();
-    this.#addComponents(this.uiCurrentItem.draw());
-  }
-
-  #drawUIHPText() {
+  private renderPlayerHPText() {
     this.HPText = new Text({
       text: '100',
       style: {
@@ -100,7 +98,7 @@ export class HUDService {
     this.scene.addChild(this.HPText);
   }
 
-  #drawUIUsername() {
+  private renderPlayerUsername() {
     this.username = new Text({
       text: 'Sagf1889',
       style: {
@@ -118,7 +116,7 @@ export class HUDService {
     this.scene.addChild(this.username);
   }
 
-  #drawUIOtherHPBar() {
+  private renderOtherPlayersHPBars() {
     const names = ['Brave_', '(❁´◡`❁)', 'pkwr300'];
 
     this.hpBarsContainer = new Container();
@@ -171,28 +169,36 @@ export class HUDService {
     }
   }
 
-  #drawUIBackpack() {
-    this.uiBackpack = new UIBackpack(this.player);
-    this.#addComponents(this.uiBackpack.draw());
+  public getHUDContainers(): Container[] {
+    return [this.uiBackpack.getContainer(), this.uiCurrentItemDisplay.getContainer()];
   }
 
-  getHUDContainers(): Container[] {
-    return [this.uiBackpack.getHUDContainer(), this.uiCurrentItem.getHUDContainer()];
+  public setUIAmmo(currentValue: number | string, maxAmmo: number) {
+    this.uiCurrentItemDisplay.setAmmo(currentValue, maxAmmo);
   }
 
-  setUIAmmo(currentValue: number | string, maxAmmo: number) {
-    this.uiCurrentItem.setAmmo(currentValue, maxAmmo);
-  }
-
-  setUIUsername(value: string) {
+  public setUIUsername(value: string) {
     this.username.text = value;
   }
 
-  setUIBackpack(backpack: Array<Item> | undefined) {
-    this.uiBackpack.setBackpack(backpack);
+  public setUIBackpack(backpack: Array<Item | null> | undefined) {
+    this.uiBackpack.updateBackpack(backpack);
+
+    if (this.currentItemIndex === null && backpack && backpack.length) {
+      this.setCurrentItem(0);
+    }
   }
 
-  resize(screenWidth: number, screenHeight: number) {
+  public setCurrentItem(index: number) {
+    this.currentItemIndex = index;
+    this.uiBackpack.setCurrentItem(index);
+    this.currentItem = this.uiBackpack.getCurrentItem();
+    this.uiCurrentItemDisplay.setCurrentItem(this.currentItem);
+  }
+
+  public resize(screenWidth: number, screenHeight: number) {
     this.uiBackpack.resize(screenWidth, screenHeight);
   }
 }
+
+export { HUDService };
