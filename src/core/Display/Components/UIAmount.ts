@@ -18,8 +18,8 @@ export class UIAmount implements UIComponent {
       },
     });
 
-    itemAmount.x += 90;
-    itemAmount.y += 95;
+    itemAmount.x += 85;
+    itemAmount.y += 97;
     itemAmount.zIndex = 1;
 
     const qty = Sprite.from('qty');
