@@ -1,5 +1,5 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Container, Text, Sprite } from 'pixi.js';
+import { ContainerChild, Container, Text } from 'pixi.js';
 
 export class UIAmount implements UIComponent {
   private amount: number = 0;
@@ -10,7 +10,7 @@ export class UIAmount implements UIComponent {
 
   private createAmountDisplay() {
     const itemAmount = new Text({
-      text: ` ${this.amount}`,
+      text: `qty: ${this.amount}`,
       style: {
         fontFamily: 'Consolas',
         fontSize: 20,
@@ -18,17 +18,17 @@ export class UIAmount implements UIComponent {
       },
     });
 
-    itemAmount.x += 85;
+    itemAmount.x += 47;
     itemAmount.y += 97;
     itemAmount.zIndex = 1;
 
-    const qty = Sprite.from('qty');
-    qty.scale.set(0.45);
-    qty.x += 35;
-    qty.y += 75;
-    qty.zIndex = 1;
+    // const qty = Sprite.from('qty_v4');
+    // qty.scale.set(0.45);
+    // qty.x += 35;
+    // qty.y += 75;
+    // qty.zIndex = 1;
 
-    return [itemAmount, qty];
+    return [itemAmount];
   }
 
   public setItemAmount(value: number) {

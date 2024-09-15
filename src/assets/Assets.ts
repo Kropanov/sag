@@ -59,7 +59,12 @@ export const manifest: AssetsManifest = {
     {
       name: 'ui',
       assets: {
-        qty: './static/assets/ui/qty.png',
+        qty_v1: './static/assets/ui/qty_v1.png',
+        qty_v2: './static/assets/ui/qty_v2.png',
+        qty_v3: './static/assets/ui/qty_v3.png',
+        qty_v4: './static/assets/ui/qty_v4.png',
+        no_item_v1: './static/assets/ui/no_item_v1.png',
+        empty: './static/assets/ui/empty.png',
       },
     },
     {

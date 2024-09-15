@@ -33,10 +33,10 @@ export class UICurrentItemDisplay implements UIComponent {
     if (selectedItem === null) {
       this.currentItem = null;
       this.resetContainer();
+      this.renderCurrentItemSprite('empty');
       return;
     }
 
-    console.log(this.currentItem === selectedItem);
     if (this.currentItem === selectedItem) {
       return;
     }
@@ -44,11 +44,7 @@ export class UICurrentItemDisplay implements UIComponent {
     this.currentItem = selectedItem;
 
     this.resetContainer();
-
-    this.currentItemSprite = Sprite.from(selectedItem.spriteId);
-    this.currentItemSprite.y += 8;
-    this.currentItemSprite.x = this.container.width - 150;
-    this.container.addChild(this.currentItemSprite);
+    this.renderCurrentItemSprite(selectedItem.spriteId);
 
     switch (selectedItem.type) {
       case ItemType.Gun:
@@ -64,6 +60,13 @@ export class UICurrentItemDisplay implements UIComponent {
       default:
         break;
     }
+  }
+
+  renderCurrentItemSprite(spriteId: string) {
+    this.currentItemSprite = Sprite.from(spriteId);
+    this.currentItemSprite.y += 8;
+    this.currentItemSprite.x = this.container.width - 150;
+    this.container.addChild(this.currentItemSprite);
   }
 
   renderCurrentItemAmount(amount: number) {
