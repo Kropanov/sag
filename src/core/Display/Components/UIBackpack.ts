@@ -121,12 +121,10 @@ export class UIBackpack implements UIComponent {
   }
 
   private onSlotClick(index: number) {
-    const selectedCell = this.slots[index];
-    if (selectedCell.item) {
-      this.removeItemFromBackpack(selectedCell.item);
-    }
+    this.setCurrentItem(index);
   }
 
+  // @ts-ignore
   private removeItemFromBackpack(item: Item) {
     this.player.removeItemFromBackpack(item);
     this.updateBackpack(this.player.getBackpackItems());
