@@ -1,9 +1,10 @@
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Graphics, Sprite, Text } from 'pixi.js';
+import { ContainerChild, Graphics, Sprite } from 'pixi.js';
 import { UIAmmo } from './UIAmmo';
 import { Item } from '@/core/Entities';
 import { ItemType } from '@/types/item-type.enum';
+import { UIAmount } from './UIAmount';
 
 export class UICurrentItemDisplay implements UIComponent {
   private manager = GameManager.getInstance();
@@ -66,28 +67,9 @@ export class UICurrentItemDisplay implements UIComponent {
   }
 
   renderCurrentItemAmount(amount: number) {
-    const qty = Sprite.from('qty');
-    qty.scale.set(0.45);
-    qty.x += 35;
-    qty.y += 75;
-    qty.zIndex = 1;
-
-    this.container.addChild(qty);
-
-    const itemAmount = new Text({
-      text: ` ${amount}`,
-      style: {
-        fontFamily: 'Consolas',
-        fontSize: 20,
-        fill: '#ADADAD',
-      },
-    });
-
-    itemAmount.x += 90;
-    itemAmount.y += 95;
-    itemAmount.zIndex = 1;
-
-    this.container.addChild(itemAmount);
+    const uiAmount = new UIAmount();
+    uiAmount.setItemAmount(amount);
+    this.addComponent(uiAmount);
   }
 
   resetContainer() {
