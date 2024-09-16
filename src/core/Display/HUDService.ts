@@ -169,6 +169,10 @@ class HUDService {
     }
   }
 
+  public showFullInventoryWithSettings() {
+    console.log('Show full inventory');
+  }
+
   public getHUDContainers(): Container[] {
     return [this.uiBackpack.getContainer(), this.uiCurrentItemDisplay.getContainer()];
   }

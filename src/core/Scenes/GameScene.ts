@@ -3,7 +3,6 @@ import { IScene } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
-import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@core/Music';
 import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@core/Display';
@@ -62,9 +61,10 @@ export class GameScene extends Container implements IScene {
   }
 
   handleInput() {
-    if (this.keyboard.state.get('Escape')) {
-      this.manager.changeScene(new MenuScene());
+    if (this.keyboard.isKeyJustPressed('Escape')) {
+      this.display.showFullInventoryWithSettings();
     }
+
     if (this.keyboard.state.get('Digit1')) {
       this.display.setCurrentItem(0);
     }

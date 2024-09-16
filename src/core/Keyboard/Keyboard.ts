@@ -1,6 +1,7 @@
 export class Keyboard {
   private static _instance: Keyboard;
   public readonly state: Map<string, boolean> = new Map();
+  private justPressedState: Map<string, boolean> = new Map();
 
   private constructor() {}
 
@@ -24,10 +25,23 @@ export class Keyboard {
   }
 
   private keyDown(e: KeyboardEvent): void {
+    if (!this.state.get(e.code)) {
+      this.justPressedState.set(e.code, true);
+    }
     this.state.set(e.code, true);
   }
 
   private keyUp(e: KeyboardEvent): void {
     this.state.set(e.code, false);
+    this.justPressedState.set(e.code, false);
+  }
+
+  public isKeyJustPressed(keyCode: string): boolean {
+    const isJustPressed = this.justPressedState.get(keyCode) || false;
+    if (isJustPressed) {
+      this.justPressedState.set(keyCode, false);
+    }
+
+    return isJustPressed;
   }
 }
