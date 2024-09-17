@@ -3,10 +3,17 @@ import { Graphics, Container, Text } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item, Player } from '../Entities';
 import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
+import { FancyButton } from '@pixi/ui';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { GameManager } from '../Manager';
+import { MenuScene } from '../Scenes';
+import { sound } from '@pixi/sound';
 
 class HUDService {
   private scene: IScene;
   private player: Player;
+
+  private manager = GameManager.getInstance();
 
   private uiBackpack!: UIBackpack;
   private uiCurrentItemDisplay!: UICurrentItemDisplay;
@@ -19,6 +26,9 @@ class HUDService {
 
   private currentItem: Item | null = null;
   private currentItemIndex: number | null = null;
+
+  private isInventoryExpanded: boolean = false;
+  private settingsButton!: FancyButton;
 
   constructor(scene: IScene, player: Player) {
     this.scene = scene;
@@ -42,6 +52,7 @@ class HUDService {
     this.renderPlayerHPText();
     this.renderPlayerPlanet();
     this.renderPlayerUsername();
+    this.renderSettingsButton();
     this.renderOtherPlayersHPBars();
   }
 
@@ -170,7 +181,40 @@ class HUDService {
   }
 
   public showFullInventoryWithSettings() {
+    this.isInventoryExpanded = !this.isInventoryExpanded;
+    this.settingsButton.visible = !this.settingsButton.visible;
     console.log('Show full inventory');
+  }
+
+  public renderSettingsButton() {
+    const buttonText = new Text({
+      text: 'Settings',
+      style: {
+        fontSize: 30,
+        fontFamily: 'Consolas',
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
+    this.settingsButton = new FancyButton({
+      text: buttonText,
+      animations: FANCY_BUTTON_BASE_ANIMATION,
+    });
+
+    this.settingsButton.eventMode = 'dynamic';
+    this.settingsButton.onHover.connect(() => sound.play('auth_hover'));
+
+    this.settingsButton.on('click', () => {
+      sound.play('auth_click');
+      this.manager.changeScene(new MenuScene());
+    });
+
+    this.settingsButton.x = this.manager.getWidth() - 100;
+    this.settingsButton.y = this.manager.getHeight() - 50;
+    this.settingsButton.visible = false;
+
+    this.scene.addChild(this.settingsButton);
   }
 
   public getHUDContainers(): Container[] {
