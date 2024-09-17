@@ -1,4 +1,4 @@
-import { STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
+import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
 import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
@@ -18,6 +18,8 @@ export class UIBackpack implements UIComponent {
 
   private currentHoldingSlotIndex: number | undefined;
   private currentHoldingSlotItem: Item | null = null;
+
+  private isInventoryExpanded: boolean = false;
 
   constructor(player: Player) {
     this.emitter = mitt<BackpackEvents>();
@@ -39,16 +41,22 @@ export class UIBackpack implements UIComponent {
 
   private renderBackpackSlots(): Array<ContainerChild> {
     for (let i = 0; i < this.backpack.length; i++) {
+      const row = Math.floor(i / BACKPACK_SLOT_INCREMENT);
+      const slotIndex = i % BACKPACK_SLOT_INCREMENT;
       const item = this.backpack[i];
-      const graphics = this.createSlotGraphics(i);
+      const graphics = this.createSlotGraphics(row, slotIndex, i);
 
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        this.renderItemInSlot(item, graphics, i);
+        this.renderItemInSlot(item, graphics, row, slotIndex);
         this.appendSlot(graphics, item);
-        this.setCurrentItem(0);
       }
+    }
+
+    if (this.backpack && this.backpack.length !== 0) {
+      this.updateSlotVisibility();
+      this.setCurrentItem(0);
     }
 
     const width = this.manager.getWidth();
@@ -58,9 +66,15 @@ export class UIBackpack implements UIComponent {
     return [this.slotsContainer];
   }
 
-  private createSlotGraphics(index: number): Graphics {
+  private createSlotGraphics(row: number, slotIndex: number, i: number): Graphics {
     const graphics = new Graphics()
-      .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
+      .roundRect(
+        (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex,
+        row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING),
+        STORAGE_SLOT_WIDTH,
+        STORAGE_SLOT_WIDTH,
+        10,
+      )
       .fill('#202325')
       .stroke({
         color: '#7C838A',
@@ -69,7 +83,11 @@ export class UIBackpack implements UIComponent {
 
     graphics.zIndex = 1;
     graphics.interactive = true;
-    graphics.on('pointertap', () => this.onSlotClick(index));
+    graphics.on('pointertap', () => {
+      if (i <= BACKPACK_SLOT_INCREMENT) {
+        this.onSlotClick(slotIndex);
+      }
+    });
 
     this.slotsContainer.addChild(graphics);
 
@@ -87,11 +105,12 @@ export class UIBackpack implements UIComponent {
       });
   }
 
-  private renderItemInSlot(item: Item, graphics: Graphics, index: number) {
+  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number) {
     const scaleFactor = 50 / 128;
 
     item.sprite.zIndex = 2;
-    item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index;
+    item.sprite.y = row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
+    item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
 
     this.slotsContainer.addChild(item.sprite);
@@ -113,10 +132,28 @@ export class UIBackpack implements UIComponent {
 
     itemAmountInCell.zIndex = 3;
     itemAmountInCell.anchor.set(1, 1);
-    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index + STORAGE_SLOT_WIDTH - 3;
+    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex + STORAGE_SLOT_WIDTH - 3;
     itemAmountInCell.y = 50;
 
     graphics.addChild(itemAmountInCell);
+  }
+
+  public updateSlotVisibility() {
+    if (this.backpack && this.backpack.length === 0) {
+      return;
+    }
+
+    for (let i = 0; i < this.backpack.length; i++) {
+      if (i >= BACKPACK_SLOT_INCREMENT) {
+        const graphics = this.slots[i].graphics;
+        const item = this.slots[i].item;
+
+        graphics.visible = this.isInventoryExpanded;
+        if (item && item !== null) {
+          item.sprite.visible = this.isInventoryExpanded;
+        }
+      }
+    }
   }
 
   private appendSlot(graphics: Graphics, item: Item | null = null) {
@@ -166,6 +203,15 @@ export class UIBackpack implements UIComponent {
 
   public getCurrentItem(): Item | null {
     return this.currentHoldingSlotItem;
+  }
+
+  public checkInventoryExpanded() {
+    return this.isInventoryExpanded;
+  }
+
+  public toggleInventoryExpanded() {
+    this.isInventoryExpanded = !this.isInventoryExpanded;
+    this.updateSlotVisibility();
   }
 
   private resetBackpackSlots() {

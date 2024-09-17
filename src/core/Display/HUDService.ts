@@ -27,7 +27,6 @@ class HUDService {
   private currentItem: Item | null = null;
   private currentItemIndex: number | null = null;
 
-  private isInventoryExpanded: boolean = false;
   private settingsButton!: FancyButton;
 
   constructor(scene: IScene, player: Player) {
@@ -181,8 +180,8 @@ class HUDService {
   }
 
   public showFullInventoryWithSettings() {
-    this.isInventoryExpanded = !this.isInventoryExpanded;
     this.settingsButton.visible = !this.settingsButton.visible;
+    this.uiBackpack.toggleInventoryExpanded();
     console.log('Show full inventory');
   }
 
@@ -211,7 +210,7 @@ class HUDService {
     });
 
     this.settingsButton.x = this.manager.getWidth() - 100;
-    this.settingsButton.y = this.manager.getHeight() - 50;
+    this.settingsButton.y = this.manager.getHeight() - 40;
     this.settingsButton.visible = false;
 
     this.scene.addChild(this.settingsButton);
