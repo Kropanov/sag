@@ -182,7 +182,6 @@ class HUDService {
   public showFullInventoryWithSettings() {
     this.settingsButton.visible = !this.settingsButton.visible;
     this.uiBackpack.toggleInventoryExpanded();
-    console.log('Show full inventory');
   }
 
   public renderSettingsButton() {
@@ -209,11 +208,16 @@ class HUDService {
       this.manager.changeScene(new MenuScene());
     });
 
-    this.settingsButton.x = this.manager.getWidth() - 100;
-    this.settingsButton.y = this.manager.getHeight() - 40;
+    this.resizeSettingsButton(this.manager.getWidth(), this.manager.getHeight());
+
     this.settingsButton.visible = false;
 
     this.scene.addChild(this.settingsButton);
+  }
+
+  private resizeSettingsButton(screenWidth: number, screenHeight: number) {
+    this.settingsButton.x = screenWidth - 100;
+    this.settingsButton.y = screenHeight - 40;
   }
 
   public getHUDContainers(): Container[] {
@@ -245,6 +249,7 @@ class HUDService {
 
   public resize(screenWidth: number, screenHeight: number) {
     this.uiBackpack.resize(screenWidth, screenHeight);
+    this.resizeSettingsButton(screenWidth, screenHeight);
   }
 }
 

@@ -65,34 +65,34 @@ export class GameScene extends Container implements IScene {
       this.display.showFullInventoryWithSettings();
     }
 
-    if (this.keyboard.state.get('Digit1')) {
+    if (this.keyboard.isKeyJustPressed('Digit1')) {
       this.display.setCurrentItem(0);
     }
-    if (this.keyboard.state.get('Digit2')) {
+    if (this.keyboard.isKeyJustPressed('Digit2')) {
       this.display.setCurrentItem(1);
     }
-    if (this.keyboard.state.get('Digit3')) {
+    if (this.keyboard.isKeyJustPressed('Digit3')) {
       this.display.setCurrentItem(2);
     }
-    if (this.keyboard.state.get('Digit4')) {
+    if (this.keyboard.isKeyJustPressed('Digit4')) {
       this.display.setCurrentItem(3);
     }
-    if (this.keyboard.state.get('Digit5')) {
+    if (this.keyboard.isKeyJustPressed('Digit5')) {
       this.display.setCurrentItem(4);
     }
-    if (this.keyboard.state.get('Digit6')) {
+    if (this.keyboard.isKeyJustPressed('Digit6')) {
       this.display.setCurrentItem(5);
     }
-    if (this.keyboard.state.get('Digit7')) {
+    if (this.keyboard.isKeyJustPressed('Digit7')) {
       this.display.setCurrentItem(6);
     }
-    if (this.keyboard.state.get('Digit8')) {
+    if (this.keyboard.isKeyJustPressed('Digit8')) {
       this.display.setCurrentItem(7);
     }
-    if (this.keyboard.state.get('Digit9')) {
+    if (this.keyboard.isKeyJustPressed('Digit9')) {
       this.display.setCurrentItem(8);
     }
-    if (this.keyboard.state.get('Digit0')) {
+    if (this.keyboard.isKeyJustPressed('Digit0')) {
       this.display.setCurrentItem(9);
     }
   }
