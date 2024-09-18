@@ -78,8 +78,8 @@ export const manifest: AssetsManifest = {
     {
       name: 'sounds',
       assets: {
-        auth_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
-        auth_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
+        main_click_sound: './static/audio/sounds/FUI Holographic Button Press-1.wav',
+        main_hover_sound: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
         recharge_cartridge: './static/audio/sounds/High-Tech Gadget Activate.wav',
       },
     },

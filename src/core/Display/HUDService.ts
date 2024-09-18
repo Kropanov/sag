@@ -200,11 +200,12 @@ class HUDService {
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
 
+    this.settingsButton.zIndex = 5;
     this.settingsButton.eventMode = 'dynamic';
-    this.settingsButton.onHover.connect(() => sound.play('auth_hover'));
+    this.settingsButton.onHover.connect(() => sound.play('main_hover_sound'));
 
     this.settingsButton.on('click', () => {
-      sound.play('auth_click');
+      sound.play('main_click_sound');
       this.manager.changeScene(new MenuScene());
     });
 
