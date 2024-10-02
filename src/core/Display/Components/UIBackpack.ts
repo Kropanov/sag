@@ -4,7 +4,7 @@ import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slots } from '@/types';
 import mitt, { Emitter } from 'mitt';
-import { Container, ContainerChild, Graphics, Text } from 'pixi.js';
+import { Container, ContainerChild, FederatedPointerEvent, Graphics, Point, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
@@ -20,6 +20,12 @@ export class UIBackpack implements UIComponent {
   private currentHoldingSlotItem: Item | null = null;
 
   private isInventoryExpanded: boolean = false;
+
+  private dragTarget: Item | null = null;
+  private initialHoldingItemPosition: Point = new Point();
+
+  private dragData: any = null;
+  private offset: Point | null = null;
 
   constructor(player: Player) {
     this.emitter = mitt<BackpackEvents>();
@@ -49,7 +55,7 @@ export class UIBackpack implements UIComponent {
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        this.renderItemInSlot(item, graphics, row, slotIndex);
+        this.renderItemInSlot(item, graphics, row, slotIndex, i);
         this.appendSlot(graphics, item);
       }
     }
@@ -83,11 +89,7 @@ export class UIBackpack implements UIComponent {
 
     graphics.zIndex = 1;
     graphics.interactive = true;
-    graphics.on('pointertap', () => {
-      if (i <= BACKPACK_SLOT_INCREMENT) {
-        this.onSlotClick(slotIndex);
-      }
-    });
+    graphics.on('pointertap', () => this.onSlotClick(slotIndex, i));
 
     this.slotsContainer.addChild(graphics);
 
@@ -105,13 +107,18 @@ export class UIBackpack implements UIComponent {
       });
   }
 
-  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number) {
+  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number, i: number) {
     const scaleFactor = 50 / 128;
 
     item.sprite.zIndex = 2;
     item.sprite.y = row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
     item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
+
+    // FIXME: using sprite directly is not a good thing... so we need to fix this
+    item.sprite.on('pointerdown', (event) => this.onDragStart(event, item, slotIndex, i));
+    item.sprite.on('pointermove', () => this.onDragMove(item));
+    item.sprite.on('pointerup', (event) => this.onDragEnd(event, item));
 
     this.slotsContainer.addChild(item.sprite);
 
@@ -138,6 +145,59 @@ export class UIBackpack implements UIComponent {
     graphics.addChild(itemAmountInCell);
   }
 
+  private onDragStart(event: any, item: Item, slotIndex: number, i: number) {
+    this.onSlotClick(slotIndex, i);
+
+    item.sprite.alpha = 0.5;
+
+    if (!this.dragTarget) {
+      this.initialHoldingItemPosition.set(item.sprite.x, item.sprite.y);
+    }
+
+    this.dragTarget = item;
+    this.dragData = event.data;
+
+    const newPosition = this.dragData.getLocalPosition(item.sprite.parent);
+
+    if (!this.offset) {
+      this.offset = new Point();
+    }
+
+    this.offset.set(newPosition.x - item.sprite.x, newPosition.y - item.sprite.y);
+  }
+
+  private onDragMove(item: Item) {
+    if (this.dragTarget && this.dragData && this.offset) {
+      const newPosition = this.dragData.getLocalPosition(item.sprite.parent);
+
+      item.sprite.position.x = newPosition.x - this.offset.x;
+      item.sprite.position.y = newPosition.y - this.offset.y;
+    }
+  }
+
+  private onDragEnd(event: FederatedPointerEvent, item: Item) {
+    item.sprite.alpha = 1;
+
+    if (this.dragTarget) {
+      this.dragTarget = null;
+      this.dragData = null;
+      this.offset = null;
+    }
+
+    const globalPoint = new Point(event.clientX, event.clientY);
+    const localPoint = this.slotsContainer.toLocal(globalPoint);
+
+    this.slots.forEach((slot) => {
+      const slotIsfound = slot.graphics.containsPoint(localPoint);
+      if (slotIsfound) {
+        return; // FIXME: it is not working correctly
+      }
+    });
+
+    item.sprite.x = this.initialHoldingItemPosition.x;
+    item.sprite.y = this.initialHoldingItemPosition.y;
+  }
+
   public updateSlotVisibility() {
     if (this.backpack && this.backpack.length === 0) {
       return;
@@ -160,8 +220,10 @@ export class UIBackpack implements UIComponent {
     this.slots.push({ graphics, item });
   }
 
-  private onSlotClick(index: number) {
-    this.emitter.emit('slotSelected', index);
+  private onSlotClick(slotIndex: number, i: number) {
+    if (i <= BACKPACK_SLOT_INCREMENT) {
+      this.emitter.emit('slotSelected', slotIndex);
+    }
   }
 
   public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
