@@ -40,6 +40,10 @@ class HUDService {
       this.setCurrentItem(index);
     });
 
+    this.uiBackpack.on('updateUIBackpack', () => {
+      this.setUIBackpack(this.player.getBackpackItems());
+    });
+
     this.uiCurrentItemDisplay = new UICurrentItemDisplay();
     this.addComponentsToScene(this.uiCurrentItemDisplay.render());
 

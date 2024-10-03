@@ -187,12 +187,16 @@ export class UIBackpack implements UIComponent {
     const globalPoint = new Point(event.clientX, event.clientY);
     const localPoint = this.slotsContainer.toLocal(globalPoint);
 
-    this.slots.forEach((slot) => {
-      const slotIsfound = slot.graphics.containsPoint(localPoint);
-      if (slotIsfound) {
-        return; // FIXME: it is not working correctly
+    for (let index = 0; index < this.slots.length; index++) {
+      const slotContainsPoint = this.slots[index].graphics.containsPoint(localPoint);
+
+      if (slotContainsPoint) {
+        this.player.reassignItemAt(item, index);
+        this.emitter.emit('updateUIBackpack');
+        this.emitter.emit('slotSelected', index);
+        return;
       }
-    });
+    }
 
     item.sprite.x = this.initialHoldingItemPosition.x;
     item.sprite.y = this.initialHoldingItemPosition.y;

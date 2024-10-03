@@ -17,35 +17,39 @@ export class Character extends Creature {
     this.backpack = backpack;
   }
 
-  addItemToBackpack(item: Item) {
-    this.backpack.add(item);
+  public addItemToBackpack(item: Item) {
+    this.backpack.push(item);
   }
 
-  removeItemFromBackpack(item: Item) {
+  public reassignItemAt(item: Item, index: number) {
+    this.backpack.moveItemTo(item, index);
+  }
+
+  public removeItemFromBackpack(item: Item) {
     this.backpack.remove(item);
   }
 
-  getBackpackItems(): Array<Item | null> {
+  public getBackpackItems(): Array<Item | null> {
     return this.backpack.open();
   }
 
-  move(dx: number, dy: number) {
+  public move(dx: number, dy: number) {
     this.vx = dx;
     this.vy = dy;
   }
 
-  attack(target: { takeDamage: (arg0: any) => void }) {
+  public attack(target: { takeDamage: (arg0: any) => void }) {
     target.takeDamage(this.attackPower);
   }
 
-  takeDamage(amount: number) {
+  public takeDamage(amount: number) {
     this.health -= amount;
     if (this.health <= 0) {
       this.die();
     }
   }
 
-  die() {
+  public die() {
     this.sprite.visible = false;
   }
 
