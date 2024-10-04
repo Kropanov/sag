@@ -122,9 +122,9 @@ export class UIBackpack implements UIComponent {
     item.sprite.off('pointerup');
 
     // FIXME: using sprite directly is not a good thing... so we need to fix this
-    item.sprite.on('pointerdown', (event) => this.onDragStart(event, item, slotIndex, i));
+    item.sprite.on('pointerdown', (event) => this.onDragStart(event, item, slotIndex, i, graphics));
     item.sprite.on('pointermove', () => this.onDragMove(item));
-    item.sprite.on('pointerup', (event) => this.onDragEnd(event, item));
+    item.sprite.on('pointerup', (event) => this.onDragEnd(event, item, graphics));
 
     this.slotsContainer.addChild(item.sprite);
 
@@ -151,10 +151,11 @@ export class UIBackpack implements UIComponent {
     graphics.addChild(itemAmountInCell);
   }
 
-  private onDragStart(event: any, item: Item, slotIndex: number, i: number) {
-    this.onSlotClick(slotIndex, i);
-
+  private onDragStart(event: any, item: Item, slotIndex: number, i: number, graphics: Graphics) {
     item.sprite.alpha = 0.5;
+
+    this.onSlotClick(slotIndex, i);
+    this.hideItemAmounLabel(graphics);
 
     if (!this.dragTarget) {
       this.initialHoldingItemPosition.set(item.sprite.x, item.sprite.y);
@@ -181,7 +182,7 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  private onDragEnd(event: FederatedPointerEvent, item: Item) {
+  private onDragEnd(event: FederatedPointerEvent, item: Item, graphics: Graphics) {
     item.sprite.alpha = 1;
 
     if (this.dragTarget) {
@@ -189,6 +190,8 @@ export class UIBackpack implements UIComponent {
       this.dragData = null;
       this.offset = null;
     }
+
+    this.showItemAmounLabel(graphics);
 
     const globalPoint = new Point(event.clientX, event.clientY);
     const localPoint = this.slotsContainer.toLocal(globalPoint);
@@ -235,6 +238,16 @@ export class UIBackpack implements UIComponent {
       this.selectedSlotIndex = slotIndex;
       this.emitter.emit('slotSelected', slotIndex);
     }
+  }
+
+  private showItemAmounLabel(graphics: Graphics) {
+    const itemAmountLabel = graphics.getChildAt(0);
+    itemAmountLabel.visible = true;
+  }
+
+  private hideItemAmounLabel(graphics: Graphics) {
+    const itemAmountLabel = graphics.getChildAt(0);
+    itemAmountLabel.visible = false;
   }
 
   public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
