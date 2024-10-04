@@ -27,6 +27,8 @@ export class UIBackpack implements UIComponent {
   private dragData: any = null;
   private offset: Point | null = null;
 
+  private selectedSlotIndex = 0;
+
   constructor(player: Player) {
     this.emitter = mitt<BackpackEvents>();
     this.player = player;
@@ -114,6 +116,10 @@ export class UIBackpack implements UIComponent {
     item.sprite.y = row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
     item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
+
+    item.sprite.off('pointerdown');
+    item.sprite.off('pointermove');
+    item.sprite.off('pointerup');
 
     // FIXME: using sprite directly is not a good thing... so we need to fix this
     item.sprite.on('pointerdown', (event) => this.onDragStart(event, item, slotIndex, i));
@@ -225,7 +231,8 @@ export class UIBackpack implements UIComponent {
   }
 
   private onSlotClick(slotIndex: number, i: number) {
-    if (i <= BACKPACK_SLOT_INCREMENT) {
+    if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
+      this.selectedSlotIndex = slotIndex;
       this.emitter.emit('slotSelected', slotIndex);
     }
   }
