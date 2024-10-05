@@ -4,7 +4,7 @@ import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slots } from '@/types';
 import mitt, { Emitter } from 'mitt';
-import { Container, ContainerChild, FederatedPointerEvent, Graphics, Point, Text } from 'pixi.js';
+import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
@@ -21,11 +21,12 @@ export class UIBackpack implements UIComponent {
 
   private isInventoryExpanded: boolean = false;
 
-  private dragTarget: Item | null = null;
   private initialHoldingItemPosition: Point = new Point();
 
-  private dragData: any = null;
+  private isDragging = false;
   private offset: Point | null = null;
+  private draggedItem: Item | null = null;
+  private draggedSlot: Graphics | null = null;
 
   private selectedSlotIndex = 0;
 
@@ -35,6 +36,10 @@ export class UIBackpack implements UIComponent {
     this.slotsContainer = new Container();
     this.slotsContainer.sortableChildren = true;
     this.slotsContainer.zIndex = 1;
+
+    document.addEventListener('mousedown', this.onGlobalMouseDown.bind(this));
+    document.addEventListener('mousemove', this.onGlobalMouseMove.bind(this));
+    document.addEventListener('mouseup', this.onGlobalMouseUp.bind(this));
   }
 
   public render(): Array<ContainerChild> {
@@ -57,7 +62,7 @@ export class UIBackpack implements UIComponent {
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        this.renderItemInSlot(item, graphics, row, slotIndex, i);
+        this.renderItemInSlot(item, graphics, row, slotIndex);
         this.appendSlot(graphics, item);
       }
     }
@@ -109,22 +114,13 @@ export class UIBackpack implements UIComponent {
       });
   }
 
-  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number, i: number) {
+  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number) {
     const scaleFactor = 50 / 128;
 
     item.sprite.zIndex = 2;
     item.sprite.y = row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
     item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
-
-    item.sprite.off('pointerdown');
-    item.sprite.off('pointermove');
-    item.sprite.off('pointerup');
-
-    // FIXME: using sprite directly is not a good thing... so we need to fix this
-    item.sprite.on('pointerdown', (event) => this.onDragStart(event, item, slotIndex, i, graphics));
-    item.sprite.on('pointermove', () => this.onDragMove(item));
-    item.sprite.on('pointerup', (event) => this.onDragEnd(event, item, graphics));
 
     this.slotsContainer.addChild(item.sprite);
 
@@ -151,64 +147,64 @@ export class UIBackpack implements UIComponent {
     graphics.addChild(itemAmountInCell);
   }
 
-  private onDragStart(event: any, item: Item, slotIndex: number, i: number, graphics: Graphics) {
-    item.sprite.alpha = 0.5;
-
-    this.onSlotClick(slotIndex, i);
-    this.hideItemAmounLabel(graphics);
-
-    if (!this.dragTarget) {
-      this.initialHoldingItemPosition.set(item.sprite.x, item.sprite.y);
-    }
-
-    this.dragTarget = item;
-    this.dragData = event.data;
-
-    const newPosition = this.dragData.getLocalPosition(item.sprite.parent);
-
-    if (!this.offset) {
-      this.offset = new Point();
-    }
-
-    this.offset.set(newPosition.x - item.sprite.x, newPosition.y - item.sprite.y);
-  }
-
-  private onDragMove(item: Item) {
-    if (this.dragTarget && this.dragData && this.offset) {
-      const newPosition = this.dragData.getLocalPosition(item.sprite.parent);
-
-      item.sprite.position.x = newPosition.x - this.offset.x;
-      item.sprite.position.y = newPosition.y - this.offset.y;
-    }
-  }
-
-  private onDragEnd(event: FederatedPointerEvent, item: Item, graphics: Graphics) {
-    item.sprite.alpha = 1;
-
-    if (this.dragTarget) {
-      this.dragTarget = null;
-      this.dragData = null;
-      this.offset = null;
-    }
-
-    this.showItemAmounLabel(graphics);
-
-    const globalPoint = new Point(event.clientX, event.clientY);
-    const localPoint = this.slotsContainer.toLocal(globalPoint);
+  private onGlobalMouseDown(event: MouseEvent) {
+    const localPoint = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
 
     for (let index = 0; index < this.slots.length; index++) {
-      const slotContainsPoint = this.slots[index].graphics.containsPoint(localPoint);
+      const slot = this.slots[index];
+      if (slot.item && slot.graphics.containsPoint(localPoint)) {
+        slot.item.sprite.alpha = 0.5;
 
-      if (slotContainsPoint) {
-        this.player.reassignItemAt(item, index);
-        this.emitter.emit('updateUIBackpack');
-        this.emitter.emit('slotSelected', index);
+        this.isDragging = true;
+        this.draggedItem = slot.item;
+        this.draggedSlot = slot.graphics;
+        this.hideItemAmounLabel(this.draggedSlot);
+        this.initialHoldingItemPosition.set(slot.item.sprite.x, slot.item.sprite.y);
+
+        const spriteLocalPosition = this.slotsContainer.toLocal(slot.item.sprite.getGlobalPosition());
+        this.offset = new Point(localPoint.x - spriteLocalPosition.x, localPoint.y - spriteLocalPosition.y);
         return;
       }
     }
+  }
 
-    item.sprite.x = this.initialHoldingItemPosition.x;
-    item.sprite.y = this.initialHoldingItemPosition.y;
+  private onGlobalMouseMove(event: MouseEvent) {
+    if (this.isDragging && this.draggedItem) {
+      const localMousePosition = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
+
+      this.draggedItem.sprite.position.x = localMousePosition.x - this.offset!.x;
+      this.draggedItem.sprite.position.y = localMousePosition.y - this.offset!.y;
+    }
+  }
+
+  private onGlobalMouseUp(event: MouseEvent) {
+    if (this.isDragging && this.draggedItem && this.draggedSlot) {
+      this.draggedItem.sprite.alpha = 1;
+      this.isDragging = false;
+
+      const globalPoint = new Point(event.clientX, event.clientY);
+      const localPoint = this.slotsContainer.toLocal(globalPoint);
+
+      for (let index = 0; index < this.slots.length; index++) {
+        const graphics = this.slots[index].graphics;
+        const slotContainsPoint = graphics.containsPoint(localPoint);
+
+        if (slotContainsPoint) {
+          this.player.reassignItemAt(this.draggedItem, index);
+          this.emitter.emit('updateUIBackpack');
+          this.emitter.emit('slotSelected', index);
+          return;
+        }
+      }
+
+      this.draggedItem.sprite.position.x = this.initialHoldingItemPosition.x;
+      this.draggedItem.sprite.position.y = this.initialHoldingItemPosition.y;
+
+      this.showItemAmounLabel(this.draggedSlot);
+
+      this.draggedItem = null;
+      this.offset = null;
+    }
   }
 
   public updateSlotVisibility() {
