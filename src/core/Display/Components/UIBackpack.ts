@@ -37,9 +37,9 @@ export class UIBackpack implements UIComponent {
     this.slotsContainer.sortableChildren = true;
     this.slotsContainer.zIndex = 1;
 
-    document.addEventListener('mousedown', this.onGlobalMouseDown.bind(this));
-    document.addEventListener('mousemove', this.onGlobalMouseMove.bind(this));
-    document.addEventListener('mouseup', this.onGlobalMouseUp.bind(this));
+    document.addEventListener('mousedown', this.onDragStart.bind(this));
+    document.addEventListener('mousemove', this.onDragMoving.bind(this));
+    document.addEventListener('mouseup', this.onDragEnd.bind(this));
   }
 
   public render(): Array<ContainerChild> {
@@ -147,7 +147,7 @@ export class UIBackpack implements UIComponent {
     graphics.addChild(itemAmountInCell);
   }
 
-  private onGlobalMouseDown(event: MouseEvent) {
+  private onDragStart(event: MouseEvent) {
     const localPoint = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
 
     for (let index = 0; index < this.slots.length; index++) {
@@ -158,8 +158,9 @@ export class UIBackpack implements UIComponent {
         this.isDragging = true;
         this.draggedItem = slot.item;
         this.draggedSlot = slot.graphics;
-        this.hideItemAmounLabel(this.draggedSlot);
         this.initialHoldingItemPosition.set(slot.item.sprite.x, slot.item.sprite.y);
+
+        this.hideItemAmounLabel(this.draggedSlot);
 
         const spriteLocalPosition = this.slotsContainer.toLocal(slot.item.sprite.getGlobalPosition());
         this.offset = new Point(localPoint.x - spriteLocalPosition.x, localPoint.y - spriteLocalPosition.y);
@@ -168,7 +169,7 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  private onGlobalMouseMove(event: MouseEvent) {
+  private onDragMoving(event: MouseEvent) {
     if (this.isDragging && this.draggedItem) {
       const localMousePosition = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
 
@@ -177,7 +178,7 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  private onGlobalMouseUp(event: MouseEvent) {
+  private onDragEnd(event: MouseEvent) {
     if (this.isDragging && this.draggedItem && this.draggedSlot) {
       this.draggedItem.sprite.alpha = 1;
       this.isDragging = false;
@@ -188,8 +189,9 @@ export class UIBackpack implements UIComponent {
       for (let index = 0; index < this.slots.length; index++) {
         const graphics = this.slots[index].graphics;
         const slotContainsPoint = graphics.containsPoint(localPoint);
+        const slotVisible = graphics.visible;
 
-        if (slotContainsPoint) {
+        if (slotContainsPoint && slotVisible) {
           this.player.reassignItemAt(this.draggedItem, index);
           this.emitter.emit('updateUIBackpack');
           this.emitter.emit('slotSelected', index);
@@ -214,8 +216,8 @@ export class UIBackpack implements UIComponent {
 
     for (let i = 0; i < this.backpack.length; i++) {
       if (i >= BACKPACK_SLOT_INCREMENT) {
-        const graphics = this.slots[i].graphics;
         const item = this.slots[i].item;
+        const graphics = this.slots[i].graphics;
 
         graphics.visible = this.isInventoryExpanded;
         if (item && item !== null) {
