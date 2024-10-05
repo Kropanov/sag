@@ -124,7 +124,7 @@ export class UIBackpack implements UIComponent {
 
     this.slotsContainer.addChild(item.sprite);
 
-    const itemAmountInCell = new Text({
+    const itemAmountLabel = new Text({
       text: item.amount,
       style: {
         fontFamily: 'Consolas',
@@ -139,12 +139,12 @@ export class UIBackpack implements UIComponent {
       },
     });
 
-    itemAmountInCell.zIndex = 3;
-    itemAmountInCell.anchor.set(1, 1);
-    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex + STORAGE_SLOT_WIDTH - 3;
-    itemAmountInCell.y = 50;
+    itemAmountLabel.zIndex = 3;
+    itemAmountLabel.anchor.set(1, 1);
+    itemAmountLabel.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex + STORAGE_SLOT_WIDTH - 3;
+    itemAmountLabel.y = STORAGE_SLOT_WIDTH + row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
 
-    graphics.addChild(itemAmountInCell);
+    graphics.addChild(itemAmountLabel);
   }
 
   private onDragStart(event: MouseEvent) {
@@ -194,7 +194,8 @@ export class UIBackpack implements UIComponent {
         if (slotContainsPoint && slotVisible) {
           this.player.reassignItemAt(this.draggedItem, index);
           this.emitter.emit('updateUIBackpack');
-          this.emitter.emit('slotSelected', index);
+          this.emitter.emit('updateCurrentItem', index);
+
           return;
         }
       }
@@ -234,7 +235,7 @@ export class UIBackpack implements UIComponent {
   private onSlotClick(slotIndex: number, i: number) {
     if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
       this.selectedSlotIndex = slotIndex;
-      this.emitter.emit('slotSelected', slotIndex);
+      this.emitter.emit('updateCurrentItem', slotIndex);
     }
   }
 
@@ -267,7 +268,7 @@ export class UIBackpack implements UIComponent {
   }
 
   public setCurrentItem(index: number): void {
-    if (this.currentHoldingSlotIndex === index) {
+    if (this.currentHoldingSlotIndex === index || BACKPACK_SLOT_INCREMENT <= index) {
       return;
     }
 

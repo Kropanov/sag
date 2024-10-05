@@ -36,7 +36,7 @@ class HUDService {
     this.uiBackpack = new UIBackpack(this.player);
     this.addComponentsToScene(this.uiBackpack.render());
 
-    this.uiBackpack.on('slotSelected', (index: number) => {
+    this.uiBackpack.on('updateCurrentItem', (index: number) => {
       this.setCurrentItem(index);
     });
 
