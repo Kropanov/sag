@@ -1,5 +1,5 @@
 import { Container, Sprite } from 'pixi.js';
-import { IScene } from '@/interfaces';
+import { IScene, ItemProps } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
@@ -43,9 +43,33 @@ export class GameScene extends Container implements IScene {
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
     const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Legendary };
     const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'talisman_2', rarity: ItemRarity.Legendary };
+
     const coin = new Coin(itemProps1);
     const angel = new Artifact(itemProps2, new ReincarnationAbility());
     const bug = new Artifact(itemProps3, new ProtectiveAbility());
+
+    const bookProps: ItemProps = { amount: 1, type: ItemType.Artifact, asset: 'book', rarity: ItemRarity.Unique };
+    const book = new Artifact(bookProps, new ReincarnationAbility());
+
+    const book1Props = { amount: 1, type: ItemType.Artifact, asset: 'book_2', rarity: ItemRarity.Unique };
+    const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
+    const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
+    const book4Props = { amount: 2, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };
+    const book5Props = { amount: 1, type: ItemType.Artifact, asset: 'book_5', rarity: ItemRarity.Unique };
+
+    const book_1 = new Artifact(book1Props, new ReincarnationAbility());
+    const book_2 = new Artifact(book2Props, new ReincarnationAbility());
+    const book_3 = new Artifact(book3Props, new ReincarnationAbility());
+    const book_4 = new Artifact(book4Props, new ReincarnationAbility());
+    const book_5 = new Artifact(book5Props, new ReincarnationAbility());
+
+    this.player.addItemToBackpack(book);
+    this.player.addItemToBackpack(book_1);
+    this.player.addItemToBackpack(book_2);
+    this.player.addItemToBackpack(book_3);
+    this.player.addItemToBackpack(book_4);
+    this.player.addItemToBackpack(book_5);
+
     this.player.addItemToBackpack(coin);
     this.player.addItemToBackpack(angel);
     this.player.addItemToBackpack(bug);
