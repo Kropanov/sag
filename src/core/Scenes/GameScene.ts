@@ -56,8 +56,6 @@ export class GameScene extends Container implements IScene {
 
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
-
-    this.testBackpack();
   }
 
   handleInput() {
@@ -118,22 +116,5 @@ export class GameScene extends Container implements IScene {
       top: 0,
       bottom: screenHeight,
     };
-  }
-
-  testBackpack() {
-    // const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    // const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Rare };
-    // const itemProps3 = { amount: 4, type: ItemType.Material, asset: 'gasoline_can', rarity: ItemRarity.Unique };
-    // const itemProps4 = { amount: 7, type: ItemType.Material, asset: 'empty_gasoline_can', rarity: ItemRarity.Common };
-    // const coin = new Coin(itemProps1);
-    // const bug = new Artifact(itemProps2, new ProtectiveAbility());
-    // const gasoline_can = new Material(itemProps3);
-    // const empty_gasoline_can = new Material(itemProps4);
-    // backpack.add(coin);
-    // backpack.add(bug);
-    // backpack.add(gasoline_can);
-    // backpack.add(empty_gasoline_can);
-    // console.log(backpack.open());
-    // this.display.setUIBackpack(backpack.open());
   }
 }

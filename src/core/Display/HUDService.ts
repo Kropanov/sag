@@ -6,8 +6,8 @@ import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
 import { FancyButton } from '@pixi/ui';
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '../Manager';
-import { MenuScene } from '../Scenes';
 import { sound } from '@pixi/sound';
+import { UISettings } from './Components/UISettings';
 
 class HUDService {
   private scene: IScene;
@@ -15,8 +15,9 @@ class HUDService {
 
   private manager = GameManager.getInstance();
 
-  private uiBackpack!: UIBackpack;
-  private uiCurrentItemDisplay!: UICurrentItemDisplay;
+  private uiBackpack: UIBackpack;
+  private uiCurrentItemDisplay: UICurrentItemDisplay;
+  private uiSettings: UISettings;
 
   private username!: Text;
   private HPBar!: Graphics;
@@ -46,6 +47,9 @@ class HUDService {
 
     this.uiCurrentItemDisplay = new UICurrentItemDisplay();
     this.addComponentsToScene(this.uiCurrentItemDisplay.render());
+
+    this.uiSettings = new UISettings();
+    this.addComponentsToScene(this.uiSettings.render());
 
     this.render();
   }
@@ -184,6 +188,11 @@ class HUDService {
   }
 
   public showFullInventoryWithSettings() {
+    if (this.uiSettings.isWindowOpen()) {
+      this.uiSettings.close();
+      return;
+    }
+
     this.settingsButton.visible = !this.settingsButton.visible;
     this.uiBackpack.toggleInventoryExpanded();
   }
@@ -210,7 +219,7 @@ class HUDService {
 
     this.settingsButton.on('click', () => {
       sound.play('main_click_sound');
-      this.manager.changeScene(new MenuScene());
+      this.uiSettings.open();
     });
 
     this.resizeSettingsButton(this.manager.getWidth(), this.manager.getHeight());
