@@ -39,6 +39,10 @@ class HUDController {
   public setCurrentItem(index: number) {
     this.hudService.setCurrentItem(index);
   }
+
+  public showFullInventoryWithSettings() {
+    this.hudService.showFullInventoryWithSettings();
+  }
 }
 
 export { HUDController };

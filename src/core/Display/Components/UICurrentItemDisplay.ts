@@ -25,11 +25,7 @@ export class UICurrentItemDisplay implements UIComponent {
     return [this.container];
   }
 
-  public setCurrentItem(selectedItem: Item | null | undefined) {
-    if (selectedItem === undefined) {
-      return;
-    }
-
+  public setCurrentItem(selectedItem: Item | null) {
     if (selectedItem === null) {
       this.currentItem = null;
       this.resetContainer();

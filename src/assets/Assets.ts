@@ -40,6 +40,12 @@ export const manifest: AssetsManifest = {
         talisman: './static/assets/artifacts/talisman.png',
         map: './static/assets/artifacts/map.png',
         talisman_2: './static/assets/artifacts/talisman_2.png',
+        book: './static/assets/artifacts/book.png',
+        book_1: './static/assets/artifacts/book_1.png',
+        book_3: './static/assets/artifacts/book_2.png',
+        book_4: './static/assets/artifacts/book_3.png',
+        book_2: './static/assets/artifacts/book_4.png',
+        book_5: './static/assets/artifacts/book_5.png',
       },
     },
     {
@@ -78,8 +84,8 @@ export const manifest: AssetsManifest = {
     {
       name: 'sounds',
       assets: {
-        auth_click: './static/audio/sounds/FUI Holographic Button Press-1.wav',
-        auth_hover: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
+        main_click_sound: './static/audio/sounds/FUI Holographic Button Press-1.wav',
+        main_hover_sound: './static/audio/sounds/FUI Holographic Interaction Radiate.wav',
         recharge_cartridge: './static/audio/sounds/High-Tech Gadget Activate.wav',
       },
     },

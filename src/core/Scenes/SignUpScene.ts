@@ -185,7 +185,7 @@ export class SignUpScene extends Container implements IScene {
     this.logInActionButton.eventMode = 'dynamic';
 
     this.logInActionButton.onPress.connect(() => {
-      sound.play('auth_click');
+      sound.play('main_click_sound');
       this.manager.changeScene(new LogInScene());
     });
 
@@ -235,14 +235,14 @@ export class SignUpScene extends Container implements IScene {
     this.submitSignUpButton.y = this.container.height / 2 + 15;
     this.submitSignUpButton.x = this.container.width / 2 - 100;
 
-    this.submitSignUpButton.onHover.connect(() => sound.play('auth_hover'));
+    this.submitSignUpButton.onHover.connect(() => sound.play('main_hover_sound'));
     this.submitSignUpButton.onPress.connect(() => this.handleSignUpClick());
 
     this.container.addChild(this.submitSignUpButton);
   }
 
   handleSignUpClick() {
-    sound.play('auth_click');
+    sound.play('main_click_sound');
     this.manager.changeScene(new MenuScene());
   }
 

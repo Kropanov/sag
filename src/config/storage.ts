@@ -1,5 +1,5 @@
-export const INITIAL_BACKPACK_CAPACITY = 10;
-export const BACKPACK_SLOT_INCREMENT = 8;
+export const INITIAL_BACKPACK_CAPACITY = 40;
+export const BACKPACK_SLOT_INCREMENT = 10;
 
 export const STORAGE_SLOT_WIDTH = 50;
 export const STORAGE_SLOT_SPACING = 10;

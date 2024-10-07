@@ -28,7 +28,9 @@ export abstract class Item {
     this.amount = amount;
     this.rarity = rarity;
     this.description = description;
-    this.sprite = Sprite.from(asset);
     this.spriteId = asset;
+    this.sprite = Sprite.from(asset);
+    this.sprite.interactive = true;
+    this.sprite.eventMode = 'static';
   }
 }

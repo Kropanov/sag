@@ -1,9 +1,8 @@
 import { Container, Sprite } from 'pixi.js';
-import { IScene } from '@/interfaces';
+import { IScene, ItemProps } from '@/interfaces';
 import { GameManager } from '@core/Manager';
 import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
-import { MenuScene } from '@core/Scenes';
 import { MusicController } from '@core/Music';
 import { AMMO_TYPE } from '@/types/ammo.enum';
 import { HUDController } from '@core/Display';
@@ -44,9 +43,33 @@ export class GameScene extends Container implements IScene {
     const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
     const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Legendary };
     const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'talisman_2', rarity: ItemRarity.Legendary };
+
     const coin = new Coin(itemProps1);
     const angel = new Artifact(itemProps2, new ReincarnationAbility());
     const bug = new Artifact(itemProps3, new ProtectiveAbility());
+
+    const bookProps: ItemProps = { amount: 1, type: ItemType.Artifact, asset: 'book', rarity: ItemRarity.Unique };
+    const book = new Artifact(bookProps, new ReincarnationAbility());
+
+    const book1Props = { amount: 1, type: ItemType.Artifact, asset: 'book_2', rarity: ItemRarity.Unique };
+    const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
+    const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
+    const book4Props = { amount: 2, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };
+    const book5Props = { amount: 1, type: ItemType.Artifact, asset: 'book_5', rarity: ItemRarity.Unique };
+
+    const book_1 = new Artifact(book1Props, new ReincarnationAbility());
+    const book_2 = new Artifact(book2Props, new ReincarnationAbility());
+    const book_3 = new Artifact(book3Props, new ReincarnationAbility());
+    const book_4 = new Artifact(book4Props, new ReincarnationAbility());
+    const book_5 = new Artifact(book5Props, new ReincarnationAbility());
+
+    this.player.addItemToBackpack(book);
+    this.player.addItemToBackpack(book_1);
+    this.player.addItemToBackpack(book_2);
+    this.player.addItemToBackpack(book_3);
+    this.player.addItemToBackpack(book_4);
+    this.player.addItemToBackpack(book_5);
+
     this.player.addItemToBackpack(coin);
     this.player.addItemToBackpack(angel);
     this.player.addItemToBackpack(bug);
@@ -57,42 +80,41 @@ export class GameScene extends Container implements IScene {
 
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
-
-    this.testBackpack();
   }
 
   handleInput() {
-    if (this.keyboard.state.get('Escape')) {
-      this.manager.changeScene(new MenuScene());
+    if (this.keyboard.isKeyJustPressed('Escape')) {
+      this.display.showFullInventoryWithSettings();
     }
-    if (this.keyboard.state.get('Digit1')) {
+
+    if (this.keyboard.isKeyJustPressed('Digit1')) {
       this.display.setCurrentItem(0);
     }
-    if (this.keyboard.state.get('Digit2')) {
+    if (this.keyboard.isKeyJustPressed('Digit2')) {
       this.display.setCurrentItem(1);
     }
-    if (this.keyboard.state.get('Digit3')) {
+    if (this.keyboard.isKeyJustPressed('Digit3')) {
       this.display.setCurrentItem(2);
     }
-    if (this.keyboard.state.get('Digit4')) {
+    if (this.keyboard.isKeyJustPressed('Digit4')) {
       this.display.setCurrentItem(3);
     }
-    if (this.keyboard.state.get('Digit5')) {
+    if (this.keyboard.isKeyJustPressed('Digit5')) {
       this.display.setCurrentItem(4);
     }
-    if (this.keyboard.state.get('Digit6')) {
+    if (this.keyboard.isKeyJustPressed('Digit6')) {
       this.display.setCurrentItem(5);
     }
-    if (this.keyboard.state.get('Digit7')) {
+    if (this.keyboard.isKeyJustPressed('Digit7')) {
       this.display.setCurrentItem(6);
     }
-    if (this.keyboard.state.get('Digit8')) {
+    if (this.keyboard.isKeyJustPressed('Digit8')) {
       this.display.setCurrentItem(7);
     }
-    if (this.keyboard.state.get('Digit9')) {
+    if (this.keyboard.isKeyJustPressed('Digit9')) {
       this.display.setCurrentItem(8);
     }
-    if (this.keyboard.state.get('Digit0')) {
+    if (this.keyboard.isKeyJustPressed('Digit0')) {
       this.display.setCurrentItem(9);
     }
   }
@@ -118,22 +140,5 @@ export class GameScene extends Container implements IScene {
       top: 0,
       bottom: screenHeight,
     };
-  }
-
-  testBackpack() {
-    // const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    // const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'bug', rarity: ItemRarity.Rare };
-    // const itemProps3 = { amount: 4, type: ItemType.Material, asset: 'gasoline_can', rarity: ItemRarity.Unique };
-    // const itemProps4 = { amount: 7, type: ItemType.Material, asset: 'empty_gasoline_can', rarity: ItemRarity.Common };
-    // const coin = new Coin(itemProps1);
-    // const bug = new Artifact(itemProps2, new ProtectiveAbility());
-    // const gasoline_can = new Material(itemProps3);
-    // const empty_gasoline_can = new Material(itemProps4);
-    // backpack.add(coin);
-    // backpack.add(bug);
-    // backpack.add(gasoline_can);
-    // backpack.add(empty_gasoline_can);
-    // console.log(backpack.open());
-    // this.display.setUIBackpack(backpack.open());
   }
 }

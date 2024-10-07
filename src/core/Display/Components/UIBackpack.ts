@@ -1,10 +1,10 @@
-import { STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
+import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
 import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slots } from '@/types';
 import mitt, { Emitter } from 'mitt';
-import { Container, ContainerChild, Graphics, Text } from 'pixi.js';
+import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
 
 export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
@@ -19,12 +19,27 @@ export class UIBackpack implements UIComponent {
   private currentHoldingSlotIndex: number | undefined;
   private currentHoldingSlotItem: Item | null = null;
 
+  private isInventoryExpanded: boolean = false;
+
+  private initialHoldingItemPosition: Point = new Point();
+
+  private isDragging = false;
+  private offset: Point | null = null;
+  private draggedItem: Item | null = null;
+  private draggedSlot: Graphics | null = null;
+
+  private selectedSlotIndex = 0;
+
   constructor(player: Player) {
     this.emitter = mitt<BackpackEvents>();
     this.player = player;
     this.slotsContainer = new Container();
     this.slotsContainer.sortableChildren = true;
     this.slotsContainer.zIndex = 1;
+
+    document.addEventListener('mousedown', this.onDragStart.bind(this));
+    document.addEventListener('mousemove', this.onDragMoving.bind(this));
+    document.addEventListener('mouseup', this.onDragEnd.bind(this));
   }
 
   public render(): Array<ContainerChild> {
@@ -39,16 +54,22 @@ export class UIBackpack implements UIComponent {
 
   private renderBackpackSlots(): Array<ContainerChild> {
     for (let i = 0; i < this.backpack.length; i++) {
+      const row = Math.floor(i / BACKPACK_SLOT_INCREMENT);
+      const slotIndex = i % BACKPACK_SLOT_INCREMENT;
       const item = this.backpack[i];
-      const graphics = this.createSlotGraphics(i);
+      const graphics = this.createSlotGraphics(row, slotIndex, i);
 
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        this.renderItemInSlot(item, graphics, i);
+        this.renderItemInSlot(item, graphics, row, slotIndex);
         this.appendSlot(graphics, item);
-        this.setCurrentItem(0);
       }
+    }
+
+    if (this.backpack && this.backpack.length !== 0) {
+      this.updateSlotVisibility();
+      this.setCurrentItem(0);
     }
 
     const width = this.manager.getWidth();
@@ -58,9 +79,15 @@ export class UIBackpack implements UIComponent {
     return [this.slotsContainer];
   }
 
-  private createSlotGraphics(index: number): Graphics {
+  private createSlotGraphics(row: number, slotIndex: number, i: number): Graphics {
     const graphics = new Graphics()
-      .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
+      .roundRect(
+        (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex,
+        row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING),
+        STORAGE_SLOT_WIDTH,
+        STORAGE_SLOT_WIDTH,
+        10,
+      )
       .fill('#202325')
       .stroke({
         color: '#7C838A',
@@ -69,7 +96,7 @@ export class UIBackpack implements UIComponent {
 
     graphics.zIndex = 1;
     graphics.interactive = true;
-    graphics.on('pointertap', () => this.onSlotClick(index));
+    graphics.on('pointertap', () => this.onSlotClick(slotIndex, i));
 
     this.slotsContainer.addChild(graphics);
 
@@ -87,16 +114,17 @@ export class UIBackpack implements UIComponent {
       });
   }
 
-  private renderItemInSlot(item: Item, graphics: Graphics, index: number) {
+  private renderItemInSlot(item: Item, graphics: Graphics, row: number, slotIndex: number) {
     const scaleFactor = 50 / 128;
 
     item.sprite.zIndex = 2;
-    item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index;
+    item.sprite.y = row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
+    item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
 
     this.slotsContainer.addChild(item.sprite);
 
-    const itemAmountInCell = new Text({
+    const itemAmountLabel = new Text({
       text: item.amount,
       style: {
         fontFamily: 'Consolas',
@@ -111,20 +139,114 @@ export class UIBackpack implements UIComponent {
       },
     });
 
-    itemAmountInCell.zIndex = 3;
-    itemAmountInCell.anchor.set(1, 1);
-    itemAmountInCell.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index + STORAGE_SLOT_WIDTH - 3;
-    itemAmountInCell.y = 50;
+    itemAmountLabel.zIndex = 3;
+    itemAmountLabel.anchor.set(1, 1);
+    itemAmountLabel.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex + STORAGE_SLOT_WIDTH - 3;
+    itemAmountLabel.y = STORAGE_SLOT_WIDTH + row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
 
-    graphics.addChild(itemAmountInCell);
+    graphics.addChild(itemAmountLabel);
+  }
+
+  private onDragStart(event: MouseEvent) {
+    const localPoint = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
+
+    for (let index = 0; index < this.slots.length; index++) {
+      const slot = this.slots[index];
+      if (slot.item && slot.graphics.containsPoint(localPoint)) {
+        slot.item.sprite.alpha = 0.5;
+
+        this.isDragging = true;
+        this.draggedItem = slot.item;
+        this.draggedSlot = slot.graphics;
+        this.initialHoldingItemPosition.set(slot.item.sprite.x, slot.item.sprite.y);
+
+        this.hideItemAmounLabel(this.draggedSlot);
+
+        const spriteLocalPosition = this.slotsContainer.toLocal(slot.item.sprite.getGlobalPosition());
+        this.offset = new Point(localPoint.x - spriteLocalPosition.x, localPoint.y - spriteLocalPosition.y);
+        return;
+      }
+    }
+  }
+
+  private onDragMoving(event: MouseEvent) {
+    if (this.isDragging && this.draggedItem) {
+      const localMousePosition = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
+
+      this.draggedItem.sprite.position.x = localMousePosition.x - this.offset!.x;
+      this.draggedItem.sprite.position.y = localMousePosition.y - this.offset!.y;
+    }
+  }
+
+  private onDragEnd(event: MouseEvent) {
+    if (this.isDragging && this.draggedItem && this.draggedSlot) {
+      this.draggedItem.sprite.alpha = 1;
+      this.isDragging = false;
+
+      const globalPoint = new Point(event.clientX, event.clientY);
+      const localPoint = this.slotsContainer.toLocal(globalPoint);
+
+      for (let index = 0; index < this.slots.length; index++) {
+        const graphics = this.slots[index].graphics;
+        const slotContainsPoint = graphics.containsPoint(localPoint);
+        const slotVisible = graphics.visible;
+
+        if (slotContainsPoint && slotVisible) {
+          this.player.reassignItemAt(this.draggedItem, index);
+          this.emitter.emit('updateUIBackpack');
+          this.emitter.emit('updateCurrentItem', index);
+
+          return;
+        }
+      }
+
+      this.draggedItem.sprite.position.x = this.initialHoldingItemPosition.x;
+      this.draggedItem.sprite.position.y = this.initialHoldingItemPosition.y;
+
+      this.showItemAmounLabel(this.draggedSlot);
+
+      this.draggedItem = null;
+      this.offset = null;
+    }
+  }
+
+  public updateSlotVisibility() {
+    if (this.backpack && this.backpack.length === 0) {
+      return;
+    }
+
+    for (let i = 0; i < this.backpack.length; i++) {
+      if (i >= BACKPACK_SLOT_INCREMENT) {
+        const item = this.slots[i].item;
+        const graphics = this.slots[i].graphics;
+
+        graphics.visible = this.isInventoryExpanded;
+        if (item && item !== null) {
+          item.sprite.visible = this.isInventoryExpanded;
+        }
+      }
+    }
   }
 
   private appendSlot(graphics: Graphics, item: Item | null = null) {
     this.slots.push({ graphics, item });
   }
 
-  private onSlotClick(index: number) {
-    this.emitter.emit('slotSelected', index);
+  private onSlotClick(slotIndex: number, i: number) {
+    if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
+      this.selectedSlotIndex = slotIndex;
+      this.emitter.emit('updateCurrentItem', slotIndex);
+    }
+  }
+
+  private showItemAmounLabel(graphics: Graphics) {
+    const itemAmountLabel = graphics.getChildAt(0);
+    itemAmountLabel.visible = true;
+  }
+
+  private hideItemAmounLabel(graphics: Graphics) {
+    const itemAmountLabel = graphics.getChildAt(0);
+    itemAmountLabel.visible = false;
   }
 
   public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
@@ -146,7 +268,7 @@ export class UIBackpack implements UIComponent {
   }
 
   public setCurrentItem(index: number): void {
-    if (this.currentHoldingSlotIndex === index) {
+    if (this.currentHoldingSlotIndex === index || BACKPACK_SLOT_INCREMENT <= index) {
       return;
     }
 
@@ -166,6 +288,15 @@ export class UIBackpack implements UIComponent {
 
   public getCurrentItem(): Item | null {
     return this.currentHoldingSlotItem;
+  }
+
+  public checkInventoryExpanded() {
+    return this.isInventoryExpanded;
+  }
+
+  public toggleInventoryExpanded() {
+    this.isInventoryExpanded = !this.isInventoryExpanded;
+    this.updateSlotVisibility();
   }
 
   private resetBackpackSlots() {

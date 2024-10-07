@@ -3,13 +3,21 @@ import { Graphics, Container, Text } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item, Player } from '../Entities';
 import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
+import { FancyButton } from '@pixi/ui';
+import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { GameManager } from '../Manager';
+import { sound } from '@pixi/sound';
+import { UISettings } from './Components/UISettings';
 
 class HUDService {
   private scene: IScene;
   private player: Player;
 
-  private uiBackpack!: UIBackpack;
-  private uiCurrentItemDisplay!: UICurrentItemDisplay;
+  private manager = GameManager.getInstance();
+
+  private uiBackpack: UIBackpack;
+  private uiCurrentItemDisplay: UICurrentItemDisplay;
+  private uiSettings: UISettings;
 
   private username!: Text;
   private HPBar!: Graphics;
@@ -20,6 +28,8 @@ class HUDService {
   private currentItem: Item | null = null;
   private currentItemIndex: number | null = null;
 
+  private settingsButton!: FancyButton;
+
   constructor(scene: IScene, player: Player) {
     this.scene = scene;
     this.player = player;
@@ -27,12 +37,19 @@ class HUDService {
     this.uiBackpack = new UIBackpack(this.player);
     this.addComponentsToScene(this.uiBackpack.render());
 
-    this.uiBackpack.on('slotSelected', (index: number) => {
+    this.uiBackpack.on('updateCurrentItem', (index: number) => {
       this.setCurrentItem(index);
+    });
+
+    this.uiBackpack.on('updateUIBackpack', () => {
+      this.setUIBackpack(this.player.getBackpackItems());
     });
 
     this.uiCurrentItemDisplay = new UICurrentItemDisplay();
     this.addComponentsToScene(this.uiCurrentItemDisplay.render());
+
+    this.uiSettings = new UISettings();
+    this.addComponentsToScene(this.uiSettings.render());
 
     this.render();
   }
@@ -42,6 +59,7 @@ class HUDService {
     this.renderPlayerHPText();
     this.renderPlayerPlanet();
     this.renderPlayerUsername();
+    this.renderSettingsButton();
     this.renderOtherPlayersHPBars();
   }
 
@@ -169,8 +187,60 @@ class HUDService {
     }
   }
 
+  public showFullInventoryWithSettings() {
+    if (this.uiSettings.isWindowOpen()) {
+      this.uiSettings.close();
+      return;
+    }
+
+    this.settingsButton.visible = !this.settingsButton.visible;
+    this.uiBackpack.toggleInventoryExpanded();
+  }
+
+  public renderSettingsButton() {
+    const buttonText = new Text({
+      text: 'Settings',
+      style: {
+        fontSize: 30,
+        fontFamily: 'Consolas',
+        fill: '#FFFFFF',
+        textBaseline: 'bottom',
+      },
+    });
+
+    this.settingsButton = new FancyButton({
+      text: buttonText,
+      animations: FANCY_BUTTON_BASE_ANIMATION,
+    });
+
+    this.settingsButton.zIndex = 5;
+    this.settingsButton.eventMode = 'dynamic';
+    this.settingsButton.onHover.connect(() => sound.play('main_hover_sound'));
+
+    this.settingsButton.on('click', () => {
+      sound.play('main_click_sound');
+      this.uiSettings.open();
+    });
+
+    this.resizeSettingsButton(this.manager.getWidth(), this.manager.getHeight());
+
+    this.settingsButton.visible = false;
+
+    this.scene.addChild(this.settingsButton);
+  }
+
+  private resizeSettingsButton(screenWidth: number, screenHeight: number) {
+    this.settingsButton.x = screenWidth - 100;
+    this.settingsButton.y = screenHeight - 40;
+  }
+
   public getHUDContainers(): Container[] {
-    return [this.uiBackpack.getContainer(), this.uiCurrentItemDisplay.getContainer()];
+    return [
+      this.uiBackpack.getContainer(),
+      this.uiCurrentItemDisplay.getContainer(),
+      this.uiSettings.getContainer(),
+      this.settingsButton,
+    ];
   }
 
   public setUIAmmo(currentValue: number | string, maxAmmo: number) {
@@ -198,6 +268,7 @@ class HUDService {
 
   public resize(screenWidth: number, screenHeight: number) {
     this.uiBackpack.resize(screenWidth, screenHeight);
+    this.resizeSettingsButton(screenWidth, screenHeight);
   }
 }
 
