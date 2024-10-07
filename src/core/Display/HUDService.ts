@@ -235,7 +235,12 @@ class HUDService {
   }
 
   public getHUDContainers(): Container[] {
-    return [this.uiBackpack.getContainer(), this.uiCurrentItemDisplay.getContainer()];
+    return [
+      this.uiBackpack.getContainer(),
+      this.uiCurrentItemDisplay.getContainer(),
+      this.uiSettings.getContainer(),
+      this.settingsButton,
+    ];
   }
 
   public setUIAmmo(currentValue: number | string, maxAmmo: number) {

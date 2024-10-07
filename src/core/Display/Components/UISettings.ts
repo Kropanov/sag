@@ -39,7 +39,7 @@ class UISettings implements UIComponent {
   }
 
   public getContainer(): Container {
-    throw new Error('Method not implemented.');
+    return this.container;
   }
 
   public addComponent(_component: UIComponent): void {}
