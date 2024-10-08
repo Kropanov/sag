@@ -1,29 +1,44 @@
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
-
-// FIXME:
-const OFFSET = 1.4;
+import { UISettingsMenu } from './UISettingsMenu';
 
 class UISettings implements UIComponent {
   private manager: GameManager = GameManager.getInstance();
+
   private container!: Graphics;
+  private containerWidth: number = 600;
+  private containerHeight: number = 400;
+
+  private menu!: UIComponent;
 
   public render(): Array<ContainerChild> {
-    return this.renderSettingsContainer();
+    return this.renderSettings();
+  }
+
+  private renderSettings() {
+    this.renderSettingsContainer();
+    this.renderSettingsMenu();
+
+    return [this.container];
   }
 
   private renderSettingsContainer() {
     this.container = new Graphics();
     this.container.zIndex = 5;
     this.container
-      .filletRect(0, 0, this.manager.getWidth() / OFFSET, this.manager.getHeight() / OFFSET, 10)
-      .fill('#36393B');
-
-    this.close();
+      .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
+      .fill('#0d1117f2')
+      .stroke({ color: '#7C838A', width: 3 });
     this.resize(this.manager.getWidth(), this.manager.getHeight());
+    this.close();
 
     return [this.container];
+  }
+
+  private renderSettingsMenu() {
+    this.menu = new UISettingsMenu();
+    this.addComponent(this.menu);
   }
 
   public isWindowOpen() {
@@ -42,16 +57,15 @@ class UISettings implements UIComponent {
     return this.container;
   }
 
-  public addComponent(_component: UIComponent): void {}
+  public addComponent(component: UIComponent): void {
+    for (let _ of component.render()) {
+      this.container.addChild(_);
+    }
+  }
 
-  public resize(_screenWidth: number, _screenHeight: number): void {
-    const containerWidth = _screenWidth / OFFSET;
-    const containerHeight = _screenHeight / OFFSET;
-
-    this.container.x = (_screenWidth - containerWidth) / 2;
-    this.container.y = (_screenHeight - containerHeight) / 2;
-    this.container.width = containerWidth;
-    this.container.height = containerHeight;
+  public resize(screenWidth: number, screenHeight: number): void {
+    this.container.x = screenWidth / 2 - this.containerWidth / 2;
+    this.container.y = screenHeight / 2 - this.containerHeight / 2;
   }
 }
 

@@ -269,6 +269,7 @@ class HUDService {
   public resize(screenWidth: number, screenHeight: number) {
     this.uiBackpack.resize(screenWidth, screenHeight);
     this.resizeSettingsButton(screenWidth, screenHeight);
+    this.uiSettings.resize(screenWidth, screenHeight);
   }
 }
 
