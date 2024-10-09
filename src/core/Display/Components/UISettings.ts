@@ -11,6 +11,7 @@ class UISettings implements UIComponent {
   private containerHeight: number = 400;
 
   private menu!: UIComponent;
+  private sectionSeparator!: Graphics;
 
   public render(): Array<ContainerChild> {
     return this.renderSettings();
@@ -18,6 +19,7 @@ class UISettings implements UIComponent {
 
   private renderSettings() {
     this.renderSettingsContainer();
+    this.renderSectionSeparator();
     this.renderSettingsMenu();
 
     return [this.container];
@@ -39,6 +41,13 @@ class UISettings implements UIComponent {
   private renderSettingsMenu() {
     this.menu = new UISettingsMenu();
     this.addComponent(this.menu);
+  }
+
+  private renderSectionSeparator() {
+    this.sectionSeparator = new Graphics();
+    this.sectionSeparator.zIndex = 6;
+    this.container.filletRect(this.containerWidth / 2, 0, 2, this.containerHeight, 10).fill('#7C838A');
+    this.container.addChild(this.sectionSeparator);
   }
 
   public isWindowOpen() {
