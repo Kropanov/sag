@@ -9,6 +9,7 @@ import { HUDController } from '@core/Display';
 import { Backpack } from '../Entities/Backpack';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
+import { Material } from '../Entities/Material';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -94,7 +95,7 @@ export class GameScene extends Container implements IScene {
     const magazine6 = new Artifact(magazine6Props, new ReincarnationAbility());
     this.player.addItemToBackpack(magazine6);
 
-    const magazine7Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_7', rarity: ItemRarity.Common };
+    const magazine7Props = { amount: 122, type: ItemType.Artifact, asset: 'magazine_7', rarity: ItemRarity.Common };
     const magazine7 = new Artifact(magazine7Props, new ReincarnationAbility());
     this.player.addItemToBackpack(magazine7);
 
@@ -113,6 +114,14 @@ export class GameScene extends Container implements IScene {
     const magazine11Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_11', rarity: ItemRarity.Common };
     const magazine11 = new Artifact(magazine11Props, new ReincarnationAbility());
     this.player.addItemToBackpack(magazine11);
+
+    const mineralProps = { amount: 21, type: ItemType.Material, asset: 'mineral', rarity: ItemRarity.Rare };
+    const mineral = new Material(mineralProps);
+    this.player.addItemToBackpack(mineral);
+
+    const gas = { amount: 21, type: ItemType.Material, asset: 'gasoline', rarity: ItemRarity.Unique };
+    const gas_ = new Material(gas);
+    this.player.addItemToBackpack(gas_);
 
     this.player.addItemToBackpack(coin);
     this.player.addItemToBackpack(angel);

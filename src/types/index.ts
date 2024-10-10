@@ -1,5 +1,5 @@
 import { Item } from '@/core/Entities';
-import { Graphics } from 'pixi.js';
+import { Graphics, Text } from 'pixi.js';
 
 export type vCollisionNormType = {
   x: number;
@@ -24,6 +24,7 @@ export type DirectionType = {
 export type Slot = {
   item: Item | null;
   graphics: Graphics;
+  text: Text | null;
 };
 
 export type Slots = Slot[];
