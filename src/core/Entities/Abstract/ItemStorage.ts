@@ -10,4 +10,8 @@ export abstract class ItemStorage {
   abstract hasItem(item: Item): boolean;
   abstract isPlaceAvailable(index: number): boolean;
   abstract moveItemTo(item: Item, index: number): void;
+  abstract swapItems(item: Item, targetIndex: number): void;
+  abstract placeItem(item: Item, index: number): void;
+  abstract getIndex(item: Item | null): number;
+  abstract itemIsNotNull(item: Item): boolean;
 }
