@@ -11,7 +11,7 @@ export class UIBackpack implements UIComponent {
   private emitter: Emitter<BackpackEvents>;
 
   private slots: Slots = [];
-  private slotsContainer: Container;
+  private readonly slotsContainer: Container;
 
   private player: Player;
   private manager = GameManager.getInstance();
@@ -159,11 +159,11 @@ export class UIBackpack implements UIComponent {
     for (let index = 0; index < this.slots.length; index++) {
       const slot = this.slots[index];
       if (slot.item && slot.graphics.containsPoint(localPoint)) {
-        slot.item.sprite.alpha = 0.5;
-
         this.isDragging = true;
         this.draggedSlot = slot;
         this.draggedItem = slot.item;
+        this.draggedItem.sprite.alpha = 0.5;
+        this.draggedItem.sprite.cursor = 'grabbing';
         this.initialHoldingItemPosition.set(slot.item.sprite.x, slot.item.sprite.y);
 
         this.hideItemAmounLabel();
@@ -186,8 +186,9 @@ export class UIBackpack implements UIComponent {
 
   private onDragEnd(event: MouseEvent) {
     if (this.isDragging && this.draggedItem && this.draggedSlot) {
-      this.draggedItem.sprite.alpha = 1;
       this.isDragging = false;
+      this.draggedItem.sprite.alpha = 1;
+      this.draggedItem.sprite.cursor = 'default';
 
       const globalPoint = new Point(event.clientX, event.clientY);
       const localPoint = this.slotsContainer.toLocal(globalPoint);
