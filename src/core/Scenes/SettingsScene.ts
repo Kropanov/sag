@@ -9,6 +9,7 @@ import { Settings } from '@core/Settings';
 
 const OFFSET = 1.4;
 
+// TODO: delete settings scene
 export class SettingsScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
   private settings: Settings = Settings.getInstance();

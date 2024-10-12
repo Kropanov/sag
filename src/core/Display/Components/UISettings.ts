@@ -1,7 +1,8 @@
 import { GameManager } from '@/core/Manager';
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
-import { UISettingsMenu } from './UISettingsMenu';
+import { UISettingsMenu } from '@core/Display';
+import { UISettingsItemDisplay } from '@core/Display';
 
 class UISettings implements UIComponent {
   private manager: GameManager = GameManager.getInstance();
@@ -11,6 +12,7 @@ class UISettings implements UIComponent {
   private containerHeight: number = 400;
 
   private menu!: UIComponent;
+  private itemDisplay!: UIComponent;
   private sectionSeparator!: Graphics;
 
   public render(): Array<ContainerChild> {
@@ -21,6 +23,7 @@ class UISettings implements UIComponent {
     this.renderSettingsContainer();
     this.renderSectionSeparator();
     this.renderSettingsMenu();
+    this.renderSettingsItemDisplay();
 
     return [this.container];
   }
@@ -41,6 +44,11 @@ class UISettings implements UIComponent {
   private renderSettingsMenu() {
     this.menu = new UISettingsMenu();
     this.addComponent(this.menu);
+  }
+
+  private renderSettingsItemDisplay() {
+    this.itemDisplay = new UISettingsItemDisplay();
+    this.addComponent(this.itemDisplay);
   }
 
   private renderSectionSeparator() {

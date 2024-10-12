@@ -6,6 +6,7 @@ export class Settings {
 
   private constructor() {}
 
+  // FIXME: MusicController should contain all sound and music logic
   public static getInstance() {
     if (!Settings.instance) {
       sound.volumeAll = INITIAL_SOUND_VOLUME;
