@@ -223,9 +223,21 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  private onSlotMouseOver(_event: MouseEvent) {
+  private onSlotMouseOver(event: MouseEvent) {
+    const { clientX, clientY } = event;
+
     this.timer = setTimeout(() => {
-      console.log('2 seconds');
+      const globalPoint = new Point(clientX, clientY);
+      const localPoint = this.slotsContainer.toLocal(globalPoint);
+
+      for (let index = 0; index < this.slots.length; index++) {
+        const { graphics, item } = this.slots[index];
+        const slotContainsPoint = graphics.containsPoint(localPoint);
+
+        if (slotContainsPoint) {
+          console.log(item);
+        }
+      }
     }, 2000);
   }
 
