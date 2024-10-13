@@ -166,7 +166,7 @@ export class UIBackpack implements UIComponent {
         this.draggedItem.sprite.cursor = 'grabbing';
         this.initialHoldingItemPosition.set(slot.item.sprite.x, slot.item.sprite.y);
 
-        this.hideItemAmounLabel();
+        this.hideItemAmountLabel();
 
         const spriteLocalPosition = this.slotsContainer.toLocal(slot.item.sprite.getGlobalPosition());
         this.offset = new Point(localPoint.x - spriteLocalPosition.x, localPoint.y - spriteLocalPosition.y);
@@ -210,7 +210,7 @@ export class UIBackpack implements UIComponent {
       this.draggedItem.sprite.position.x = this.initialHoldingItemPosition.x;
       this.draggedItem.sprite.position.y = this.initialHoldingItemPosition.y;
 
-      this.showItemAmounLabel();
+      this.showItemAmountLabel();
 
       this.draggedItem = null;
       this.offset = null;
@@ -252,13 +252,13 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  private showItemAmounLabel() {
+  private showItemAmountLabel() {
     if (this.draggedSlot && this.draggedSlot.text) {
       this.draggedSlot.text.visible = true;
     }
   }
 
-  private hideItemAmounLabel() {
+  private hideItemAmountLabel() {
     if (this.draggedSlot && this.draggedSlot.text) {
       this.draggedSlot.text.visible = false;
     }

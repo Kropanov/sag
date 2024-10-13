@@ -1,4 +1,3 @@
-// import { sound } from '@pixi/sound';
 import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
