@@ -2,6 +2,7 @@ import { Container, ContainerChild } from 'pixi.js';
 import { vCollisionNormType } from '@/types';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
+import { Item } from '@core/Entities';
 
 export interface IScene extends ContainerChild {
   update(framesPassed: number): void;
@@ -52,4 +53,10 @@ export interface BackpackEvents {
   [event: string]: unknown;
   [event: symbol]: unknown;
   slotSelected: number;
+}
+
+export interface HoverInfo {
+  item: Item;
+  x: number;
+  y: number;
 }

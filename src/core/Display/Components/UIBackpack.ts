@@ -20,7 +20,6 @@ export class UIBackpack implements UIComponent {
   private currentHoldingSlotItem: Item | null = null;
 
   private isInventoryExpanded: boolean = false;
-
   private initialHoldingItemPosition: Point = new Point();
 
   private isDragging = false;
@@ -234,16 +233,16 @@ export class UIBackpack implements UIComponent {
         const { graphics, item } = this.slots[index];
         const slotContainsPoint = graphics.containsPoint(localPoint);
 
-        if (slotContainsPoint) {
-          console.log(item);
+        if (slotContainsPoint && item) {
+          this.emitter.emit('showHoverInfoBox', { item, x: clientX, y: clientY });
         }
       }
     }, 2000);
   }
 
   private onSlotMouseOut() {
-    console.log('Clear timer');
     clearTimeout(this.timer);
+    this.emitter.emit('hideHoverInfoBox');
   }
 
   public updateSlotVisibility() {
@@ -307,8 +306,10 @@ export class UIBackpack implements UIComponent {
     return this.slotsContainer;
   }
 
-  public addComponent(_component: UIComponent): void {
-    throw new Error('Method not implemented.');
+  public addComponent(component: UIComponent): void {
+    for (let _ of component.render()) {
+      this.slotsContainer.addChild(_);
+    }
   }
 
   public setCurrentItem(index: number): void {

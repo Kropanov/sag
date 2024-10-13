@@ -5,5 +5,6 @@ export * from './Components/UISettings.ts';
 export * from './Components/UISettingsMenu.ts';
 export * from './Components/UISettingsItemDisplay.ts';
 export * from './Components/UICurrentItemDisplay.ts';
+export * from './Components/UIBackpackHoverInfoBox.ts';
 export * from './HUDController.ts';
 export * from './HUDService.ts';

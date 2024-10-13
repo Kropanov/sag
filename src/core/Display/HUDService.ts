@@ -1,5 +1,5 @@
-import { IScene } from '@/interfaces';
-import { Graphics, Container, Text } from 'pixi.js';
+import { HoverInfo, IScene } from '@/interfaces';
+import { Graphics, Container, Text, Point } from 'pixi.js';
 import { UIBackpack } from './Components/UIBackpack';
 import { Item, Player } from '../Entities';
 import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
@@ -8,6 +8,7 @@ import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
 import { GameManager } from '../Manager';
 import { sound } from '@pixi/sound';
 import { UISettings } from './Components/UISettings';
+import { UIBackpackHoverInfoBox } from '@core/Display/Components/UIBackpackHoverInfoBox.ts';
 
 class HUDService {
   private scene: IScene;
@@ -16,6 +17,7 @@ class HUDService {
   private manager = GameManager.getInstance();
 
   private uiBackpack: UIBackpack;
+  private uiHoverBox: UIBackpackHoverInfoBox;
   private uiCurrentItemDisplay: UICurrentItemDisplay;
   private uiSettings: UISettings;
 
@@ -36,6 +38,17 @@ class HUDService {
 
     this.uiBackpack = new UIBackpack(this.player);
     this.addComponentsToScene(this.uiBackpack.render());
+
+    this.uiHoverBox = new UIBackpackHoverInfoBox();
+    this.addComponentsToScene(this.uiHoverBox.render());
+
+    this.uiBackpack.on('showHoverInfoBox', (hoverInfo: HoverInfo) => {
+      this.showItemHoverInfo(hoverInfo);
+    });
+
+    this.uiBackpack.on('hideHoverInfoBox', () => {
+      this.uiHoverBox.hide();
+    });
 
     this.uiBackpack.on('updateCurrentItem', (index: number) => {
       this.setCurrentItem(index);
@@ -241,6 +254,15 @@ class HUDService {
       this.uiSettings.getContainer(),
       this.settingsButton,
     ];
+  }
+
+  public showItemHoverInfo(hoverInfo: HoverInfo) {
+    const { item, x, y } = hoverInfo;
+    const globalPoint = new Point(x, y);
+    const localPoint = this.scene.toLocal(globalPoint);
+    this.uiHoverBox.setPosition(localPoint.x, localPoint.y);
+    this.uiHoverBox.setItem(item);
+    this.uiHoverBox.show();
   }
 
   public setUIAmmo(currentValue: number | string, maxAmmo: number) {
