@@ -30,16 +30,22 @@ export class UIBackpack implements UIComponent {
 
   private selectedSlotIndex = 0;
 
+  private timer!: NodeJS.Timeout;
+
   constructor(player: Player) {
     this.emitter = mitt<BackpackEvents>();
     this.player = player;
     this.slotsContainer = new Container();
     this.slotsContainer.sortableChildren = true;
+    this.slotsContainer.interactive = true;
     this.slotsContainer.zIndex = 1;
 
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
     document.addEventListener('mouseup', this.onDragEnd.bind(this));
+
+    this.slotsContainer.on('pointerover', this.onSlotMouseOver.bind(this));
+    this.slotsContainer.on('pointerout', this.onSlotMouseOut.bind(this));
   }
 
   public render(): Array<ContainerChild> {
@@ -215,6 +221,17 @@ export class UIBackpack implements UIComponent {
       this.draggedItem = null;
       this.offset = null;
     }
+  }
+
+  private onSlotMouseOver(_event: MouseEvent) {
+    this.timer = setTimeout(() => {
+      console.log('2 seconds');
+    }, 2000);
+  }
+
+  private onSlotMouseOut() {
+    console.log('Clear timer');
+    clearTimeout(this.timer);
   }
 
   public updateSlotVisibility() {
