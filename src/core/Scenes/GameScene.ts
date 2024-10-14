@@ -52,7 +52,13 @@ export class GameScene extends Container implements IScene {
     const bookProps: ItemProps = { amount: 1, type: ItemType.Artifact, asset: 'book', rarity: ItemRarity.Unique };
     const book = new Artifact(bookProps, new ReincarnationAbility());
 
-    const book1Props = { amount: 1, type: ItemType.Artifact, asset: 'book_2', rarity: ItemRarity.Unique };
+    const book1Props = {
+      name: 'Magic book',
+      amount: 1,
+      type: ItemType.Artifact,
+      asset: 'book_2',
+      rarity: ItemRarity.Unique,
+    };
     const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
     const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
     const book4Props = { amount: 2, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };

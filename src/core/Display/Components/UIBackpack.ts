@@ -68,7 +68,7 @@ export class UIBackpack implements UIComponent {
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        const text = this.cteateSlotText(item, row, slotIndex);
+        const text = this.createSlotText(item, row, slotIndex);
         this.renderItemInSlot(item, row, slotIndex);
         this.appendSlot(graphics, item, text);
       }
@@ -121,7 +121,7 @@ export class UIBackpack implements UIComponent {
       });
   }
 
-  private cteateSlotText(item: Item, row: number, slotIndex: number): Text {
+  private createSlotText(item: Item, row: number, slotIndex: number): Text {
     const itemAmountText = new Text({
       text: item.amount,
       style: {
