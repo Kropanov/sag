@@ -24,11 +24,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public renderGraphics(): void {
     this.graphics = new Graphics();
-    this.graphics
-      .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
-      .fill('#0d1117f2')
-      .stroke({ color: '#7C838A', width: 3 });
-
+    this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill('#0d1117f2');
     this.container.addChild(this.graphics);
   }
 

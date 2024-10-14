@@ -234,7 +234,11 @@ export class UIBackpack implements UIComponent {
         const slotContainsPoint = graphics.containsPoint(localPoint);
 
         if (slotContainsPoint && item) {
-          this.emitter.emit('showHoverInfoBox', { item, x: clientX, y: clientY });
+          this.emitter.emit('showHoverInfoBox', {
+            targetItem: item,
+            cursorX: clientX,
+            cursorY: clientY,
+          });
         }
       }
     }, 2000);

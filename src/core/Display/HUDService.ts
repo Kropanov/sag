@@ -257,11 +257,11 @@ class HUDService {
   }
 
   public showItemHoverInfo(hoverInfo: HoverInfo) {
-    const { item, x, y } = hoverInfo;
-    const globalPoint = new Point(x, y);
+    const { targetItem, cursorX, cursorY } = hoverInfo;
+    const globalPoint = new Point(cursorX, cursorY);
     const localPoint = this.scene.toLocal(globalPoint);
     this.uiHoverBox.setPosition(localPoint.x, localPoint.y);
-    this.uiHoverBox.setItem(item);
+    this.uiHoverBox.setItem(targetItem);
     this.uiHoverBox.show();
   }
 

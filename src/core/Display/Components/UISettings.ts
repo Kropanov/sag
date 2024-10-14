@@ -54,7 +54,7 @@ class UISettings implements UIComponent {
   private renderSectionSeparator() {
     this.sectionSeparator = new Graphics();
     this.sectionSeparator.zIndex = 6;
-    this.container.filletRect(this.containerWidth / 2, 0, 2, this.containerHeight, 10).fill('#7C838A');
+    this.container.filletRect(this.containerWidth / 2, 0, 3, this.containerHeight, 10).fill('#7C838A');
     this.container.addChild(this.sectionSeparator);
   }
 

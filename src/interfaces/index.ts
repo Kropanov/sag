@@ -56,7 +56,7 @@ export interface BackpackEvents {
 }
 
 export interface HoverInfo {
-  item: Item;
-  x: number;
-  y: number;
+  targetItem: Item;
+  cursorX: number;
+  cursorY: number;
 }
