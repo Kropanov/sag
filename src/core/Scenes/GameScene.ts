@@ -41,8 +41,14 @@ export class GameScene extends Container implements IScene {
     this.player = new Player('bunny', 100, 100, this.backpack);
     this.display = new HUDController(this.player, this);
 
-    const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Legendary };
+    const itemProps1 = {
+      name: 'Currency',
+      amount: 300,
+      type: ItemType.Currency,
+      asset: 'coin',
+      rarity: ItemRarity.Rare,
+    };
+    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Epic };
     const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'talisman_2', rarity: ItemRarity.Legendary };
 
     const coin = new Coin(itemProps1);

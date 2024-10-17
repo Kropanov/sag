@@ -1,11 +1,17 @@
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
 import { Item } from '@core/Entities';
+import { ITEM_RARITY_COLORS } from '@/config/item.ts';
+import { ItemRarity } from '@/types/item-rarity.enum.ts';
 
 class UIBackpackHoverInfoBox implements UIComponent {
-  private title!: Text;
-  private graphics!: Graphics;
   private readonly container!: Container;
+
+  private graphics!: Graphics;
+  private itemRarityBox!: Graphics;
+
+  private title!: Text;
+  private itemRarityTitle!: Text;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -17,6 +23,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
     this.renderGraphicsContainer();
     this.renderItemTitle();
+
+    this.renderItemRarityBox();
+    this.renderItemRarityTitle();
   }
 
   public render(): Array<ContainerChild> {
@@ -46,6 +55,45 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.container.addChild(this.title);
   }
 
+  public renderItemRarityBox(): void {
+    this.itemRarityBox = new Graphics();
+    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill('#3399FF');
+
+    this.itemRarityBox.x = 0;
+    this.itemRarityBox.y = 42;
+
+    this.container.addChild(this.itemRarityBox);
+  }
+
+  public renderItemRarityTitle() {
+    this.itemRarityTitle = new Text({
+      text: '',
+      style: {
+        fontSize: 20,
+        fill: '#FFF',
+        fontFamily: 'Consolas',
+        align: 'center',
+        dropShadow: {
+          alpha: 2,
+          angle: Math.PI / 4,
+          blur: 5,
+          distance: 3,
+          color: 0x000000,
+        },
+      },
+    });
+
+    this.itemRarityTitle.x = 10;
+    this.itemRarityTitle.y = 8;
+
+    this.itemRarityBox.addChild(this.itemRarityTitle);
+  }
+
+  public updateItemRarityBox(rarity: ItemRarity): void {
+    this.itemRarityBox.clear();
+    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill(ITEM_RARITY_COLORS[rarity]);
+  }
+
   public show(): void {
     this.container.visible = true;
   }
@@ -65,6 +113,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public setItem(item: Item): void {
     this.title.text = item.name;
+    this.itemRarityTitle.text = item.rarity;
+
+    this.updateItemRarityBox(item.rarity);
   }
 
   public addComponent(_component: UIComponent): void {
