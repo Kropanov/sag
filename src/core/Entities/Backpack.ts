@@ -21,15 +21,34 @@ export class Backpack extends ItemStorage {
   }
 
   public push(item: Item): void {
-    const index = this.storage.indexOf(null);
+    const index = this.getIndex(null);
     this.insertAt(item, index);
   }
 
-  public moveItemTo(item: Item, index: number): void {
-    if (this.hasItem(item) && this.isPlaceAvailable(index)) {
-      this.remove(item);
-      this.insertAt(item, index);
+  public placeItem(item: Item, index: number): void {
+    this.remove(item);
+    this.insertAt(item, index);
+  }
+
+  public moveItemTo(item: Item, targetIndex: number): void {
+    if (this.isPlaceAvailable(targetIndex)) {
+      this.placeItem(item, targetIndex);
+    } else {
+      this.swapItems(item, targetIndex);
     }
+  }
+
+  public swapItems(item: Item, targetIndex: number): void {
+    const existingItem = this.getChild(targetIndex);
+    const originalIndex = this.getIndex(item);
+
+    this.remove(item);
+
+    if (this.itemIsNotNull(existingItem)) {
+      this.placeItem(existingItem, originalIndex);
+    }
+
+    this.placeItem(item, targetIndex);
   }
 
   public insertAt(item: Item, index: number): void {
@@ -42,7 +61,7 @@ export class Backpack extends ItemStorage {
 
   public remove(item: Item): Item | undefined | null {
     if (this.hasItem(item)) {
-      const index = this.storage.indexOf(item);
+      const index = this.getIndex(item);
       const removedItem = this.storage[index];
       this.storage[index] = null;
 
@@ -52,6 +71,14 @@ export class Backpack extends ItemStorage {
 
   public getChild(index: number): Item | null {
     return this.storage[index];
+  }
+
+  public getIndex(item: Item | null) {
+    return this.storage.indexOf(item);
+  }
+
+  public itemIsNotNull(item: Item | null) {
+    return item !== null;
   }
 
   public increaseCapacity() {

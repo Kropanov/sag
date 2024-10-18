@@ -1,10 +1,9 @@
-// import { sound } from '@pixi/sound';
 import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
-import { GameScene, GameSetupScene, LogInScene, SettingsScene } from '@core/Scenes';
+import { GameScene, GameSetupScene, LogInScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 import {
   getProgramVersion,
@@ -107,9 +106,7 @@ export class MenuScene extends Container implements IScene {
     this.manager.changeScene(new LogInScene());
   }
 
-  openSettings() {
-    this.manager.changeScene(new SettingsScene());
-  }
+  openSettings() {}
 
   update(_delta: number): void {}
 

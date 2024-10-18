@@ -9,6 +9,7 @@ import { HUDController } from '@core/Display';
 import { Backpack } from '../Entities/Backpack';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
+import { Material } from '../Entities/Material';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -40,8 +41,14 @@ export class GameScene extends Container implements IScene {
     this.player = new Player('bunny', 100, 100, this.backpack);
     this.display = new HUDController(this.player, this);
 
-    const itemProps1 = { amount: 300, type: ItemType.Currency, asset: 'coin', rarity: ItemRarity.Common };
-    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Legendary };
+    const itemProps1 = {
+      name: 'Currency',
+      amount: 300,
+      type: ItemType.Currency,
+      asset: 'coin',
+      rarity: ItemRarity.Rare,
+    };
+    const itemProps2 = { amount: 1, type: ItemType.Artifact, asset: 'map', rarity: ItemRarity.Epic };
     const itemProps3 = { amount: 3, type: ItemType.Artifact, asset: 'talisman_2', rarity: ItemRarity.Legendary };
 
     const coin = new Coin(itemProps1);
@@ -51,11 +58,21 @@ export class GameScene extends Container implements IScene {
     const bookProps: ItemProps = { amount: 1, type: ItemType.Artifact, asset: 'book', rarity: ItemRarity.Unique };
     const book = new Artifact(bookProps, new ReincarnationAbility());
 
-    const book1Props = { amount: 1, type: ItemType.Artifact, asset: 'book_2', rarity: ItemRarity.Unique };
+    const book1Props = {
+      name: 'Magic book',
+      amount: 1,
+      type: ItemType.Artifact,
+      asset: 'book_2',
+      rarity: ItemRarity.Unique,
+    };
     const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
     const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
     const book4Props = { amount: 2, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };
     const book5Props = { amount: 1, type: ItemType.Artifact, asset: 'book_5', rarity: ItemRarity.Unique };
+
+    const magazine1Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_1', rarity: ItemRarity.Common };
+    const magazine1 = new Artifact(magazine1Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine1);
 
     const book_1 = new Artifact(book1Props, new ReincarnationAbility());
     const book_2 = new Artifact(book2Props, new ReincarnationAbility());
@@ -69,6 +86,54 @@ export class GameScene extends Container implements IScene {
     this.player.addItemToBackpack(book_3);
     this.player.addItemToBackpack(book_4);
     this.player.addItemToBackpack(book_5);
+
+    const magazine2Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_2', rarity: ItemRarity.Common };
+    const magazine2 = new Artifact(magazine2Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine2);
+
+    const magazine3Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_3', rarity: ItemRarity.Common };
+    const magazine3 = new Artifact(magazine3Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine3);
+
+    const magazine4Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_4', rarity: ItemRarity.Common };
+    const magazine4 = new Artifact(magazine4Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine4);
+
+    const magazine5Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_5', rarity: ItemRarity.Common };
+    const magazine5 = new Artifact(magazine5Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine5);
+
+    const magazine6Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_6', rarity: ItemRarity.Common };
+    const magazine6 = new Artifact(magazine6Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine6);
+
+    const magazine7Props = { amount: 122, type: ItemType.Artifact, asset: 'magazine_7', rarity: ItemRarity.Common };
+    const magazine7 = new Artifact(magazine7Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine7);
+
+    const magazine8Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_8', rarity: ItemRarity.Common };
+    const magazine8 = new Artifact(magazine8Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine8);
+
+    const magazine9Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_9', rarity: ItemRarity.Common };
+    const magazine9 = new Artifact(magazine9Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine9);
+
+    const magazine10Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_10', rarity: ItemRarity.Common };
+    const magazine10 = new Artifact(magazine10Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine10);
+
+    const magazine11Props = { amount: 1, type: ItemType.Artifact, asset: 'magazine_11', rarity: ItemRarity.Common };
+    const magazine11 = new Artifact(magazine11Props, new ReincarnationAbility());
+    this.player.addItemToBackpack(magazine11);
+
+    const mineralProps = { amount: 21, type: ItemType.Material, asset: 'mineral', rarity: ItemRarity.Rare };
+    const mineral = new Material(mineralProps);
+    this.player.addItemToBackpack(mineral);
+
+    const gas = { amount: 21, type: ItemType.Material, asset: 'gasoline', rarity: ItemRarity.Unique };
+    const gas_ = new Material(gas);
+    this.player.addItemToBackpack(gas_);
 
     this.player.addItemToBackpack(coin);
     this.player.addItemToBackpack(angel);

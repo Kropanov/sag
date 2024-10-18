@@ -46,6 +46,17 @@ export const manifest: AssetsManifest = {
         book_4: './static/assets/artifacts/book_3.png',
         book_2: './static/assets/artifacts/book_4.png',
         book_5: './static/assets/artifacts/book_5.png',
+        magazine_1: './static/assets/artifacts/magazine_1.png',
+        magazine_2: './static/assets/artifacts/magazine_2.png',
+        magazine_3: './static/assets/artifacts/magazine_3.png',
+        magazine_4: './static/assets/artifacts/magazine_4.png',
+        magazine_5: './static/assets/artifacts/magazine_5.png',
+        magazine_6: './static/assets/artifacts/magazine_6.png',
+        magazine_7: './static/assets/artifacts/magazine_7.png',
+        magazine_8: './static/assets/artifacts/magazine_8.png',
+        magazine_9: './static/assets/artifacts/magazine_9.png',
+        magazine_10: './static/assets/artifacts/magazine_10.png',
+        magazine_11: './static/assets/artifacts/magazine_11.png',
       },
     },
     {
@@ -54,6 +65,7 @@ export const manifest: AssetsManifest = {
         gasoline: './static/assets/materials/gasoline.png',
         gasoline_can: './static/assets/materials/gasoline_can.png',
         empty_gasoline_can: './static/assets/materials/empty_gasoline_can.png',
+        mineral: './static/assets/materials/mineral_2.png',
       },
     },
     {
@@ -65,10 +77,6 @@ export const manifest: AssetsManifest = {
     {
       name: 'ui',
       assets: {
-        qty_v1: './static/assets/ui/qty_v1.png',
-        qty_v2: './static/assets/ui/qty_v2.png',
-        qty_v3: './static/assets/ui/qty_v3.png',
-        qty_v4: './static/assets/ui/qty_v4.png',
         no_item_v1: './static/assets/ui/no_item_v1.png',
         empty: './static/assets/ui/empty.png',
       },
