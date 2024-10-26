@@ -64,6 +64,8 @@ export class GameScene extends Container implements IScene {
       type: ItemType.Artifact,
       asset: 'book_2',
       rarity: ItemRarity.Unique,
+      description:
+        'An ancient relic of unknown origin, pulsing with mysterious energy. Legends say it holds the power to reshape realities, sought by explorers and feared by those who understand its true potential.',
     };
     const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
     const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };

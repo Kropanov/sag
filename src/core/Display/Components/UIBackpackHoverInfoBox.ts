@@ -10,8 +10,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
   private graphics!: Graphics;
   private itemRarityBox!: Graphics;
 
-  private title!: Text;
+  private itemName!: Text;
   private itemRarityTitle!: Text;
+  private itemDescription!: Text;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -22,10 +23,11 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.hide();
 
     this.renderGraphicsContainer();
-    this.renderItemTitle();
+    this.renderItemName();
 
     this.renderItemRarityBox();
     this.renderItemRarityTitle();
+    this.renderItemDescription();
   }
 
   public render(): Array<ContainerChild> {
@@ -38,8 +40,8 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.container.addChild(this.graphics);
   }
 
-  public renderItemTitle(): void {
-    this.title = new Text({
+  public renderItemName(): void {
+    this.itemName = new Text({
       text: '',
       style: {
         fontSize: 20,
@@ -49,10 +51,29 @@ class UIBackpackHoverInfoBox implements UIComponent {
       },
     });
 
-    this.title.x = 15;
-    this.title.y = 10;
+    this.itemName.x = 10;
+    this.itemName.y = 10;
 
-    this.container.addChild(this.title);
+    this.container.addChild(this.itemName);
+  }
+
+  public renderItemDescription(): void {
+    this.itemDescription = new Text({
+      text: '',
+      style: {
+        fontSize: 15,
+        fill: '#ADADAD',
+        fontFamily: 'Consolas',
+        align: 'left',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemDescription.x = 10;
+    this.itemDescription.y = 95;
+
+    this.container.addChild(this.itemDescription);
   }
 
   public renderItemRarityBox(): void {
@@ -112,8 +133,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
   }
 
   public setItem(item: Item): void {
-    this.title.text = item.name;
+    this.itemName.text = item.name;
     this.itemRarityTitle.text = item.rarity;
+    this.itemDescription.text = item.description;
 
     this.updateItemRarityBox(item.rarity);
   }
