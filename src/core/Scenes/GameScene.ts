@@ -58,14 +58,16 @@ export class GameScene extends Container implements IScene {
     const bookProps: ItemProps = { amount: 1, type: ItemType.Artifact, asset: 'book', rarity: ItemRarity.Unique };
     const book = new Artifact(bookProps, new ReincarnationAbility());
 
-    const book1Props = {
+    const book1Props: ItemProps = {
       name: 'Magic book',
       amount: 1,
       type: ItemType.Artifact,
       asset: 'book_2',
       rarity: ItemRarity.Unique,
+      history:
+        'An ancient relic of unknown origin, pulsing with mysterious energy. Legends say it holds the power to reshape realities, sought by explorers and feared by those who understand its true potential...',
       description:
-        'An ancient relic of unknown origin, pulsing with mysterious energy. Legends say it holds the power to reshape realities, sought by explorers and feared by those who understand its true potential.',
+        "A powerful, forbidden tome, the Book of Blood grants its wielder the ability to harness dark magic at the cost of their own vitality. When activated, it draws upon the user's blood to cast devastating spells, dealing high damage but reducing health with each use. Beware, for overuse can drain the life force completely, leaving the bearer vulnerable. Use wisely to strike a balance between power and survival.",
     };
     const book2Props = { amount: 3, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
     const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };

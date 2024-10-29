@@ -5,14 +5,15 @@ import { ITEM_RARITY_COLORS } from '@/config/item.ts';
 import { ItemRarity } from '@/types/item-rarity.enum.ts';
 
 class UIBackpackHoverInfoBox implements UIComponent {
-  private readonly container!: Container;
-
   private graphics!: Graphics;
+  private readonly container!: Container;
   private itemRarityBox!: Graphics;
 
   private itemName!: Text;
   private itemRarityTitle!: Text;
   private itemDescription!: Text;
+  private itemAbilitiesText!: Text;
+  private itemHistoryText!: Text;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -23,11 +24,15 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.hide();
 
     this.renderGraphicsContainer();
-    this.renderItemName();
 
+    this.renderItemName();
     this.renderItemRarityBox();
     this.renderItemRarityTitle();
     this.renderItemDescription();
+    this.renderItemAbilities();
+    this.renderItemHistory();
+
+    // TODO: start implementing render of resources to sell
   }
 
   public render(): Array<ContainerChild> {
@@ -110,9 +115,56 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.itemRarityBox.addChild(this.itemRarityTitle);
   }
 
+  public renderItemAbilities() {
+    // FIXME: this is just a static text
+    this.itemAbilitiesText = new Text({
+      text: 'Abilities:\n - Critical Strike: +10% to critical damage. \n - Poison: +20% poison damage over time.',
+      style: {
+        fontSize: 14,
+        fill: '#ADADAD',
+        fontFamily: 'Consolas',
+        align: 'left',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemAbilitiesText.x = 10;
+
+    this.container.addChild(this.itemAbilitiesText);
+  }
+
+  public renderItemHistory(): void {
+    this.itemHistoryText = new Text({
+      text: '',
+      style: {
+        fontSize: 13,
+        fill: 'rgba(173,173,173,0.6)',
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemHistoryText.x = 15;
+
+    this.container.addChild(this.itemHistoryText);
+  }
+
   public updateItemRarityBox(rarity: ItemRarity): void {
     this.itemRarityBox.clear();
     this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill(ITEM_RARITY_COLORS[rarity]);
+  }
+
+  public updateAbilitiesText() {
+    this.itemAbilitiesText.y = this.itemDescription.y + this.itemDescription.height + 20;
+  }
+
+  public updateHistoryText(text: string) {
+    this.itemHistoryText.text = text;
+    this.itemHistoryText.y = this.graphics.height - this.itemHistoryText.height - 10;
   }
 
   public show(): void {
@@ -137,6 +189,8 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.itemRarityTitle.text = item.rarity;
     this.itemDescription.text = item.description;
 
+    this.updateAbilitiesText();
+    this.updateHistoryText(item.history);
     this.updateItemRarityBox(item.rarity);
   }
 

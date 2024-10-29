@@ -12,12 +12,14 @@ export abstract class Item {
   spriteId: string;
   rarity: ItemRarity;
   description: string;
+  history: string;
 
   constructor({
     cost = 0,
     name = '',
     asset = '',
     amount = 1,
+    history = '',
     description = '',
     type = ItemType.Material,
     rarity = ItemRarity.Common,
@@ -27,6 +29,7 @@ export abstract class Item {
     this.cost = cost;
     this.amount = amount;
     this.rarity = rarity;
+    this.history = history;
     this.description = description;
     this.spriteId = asset;
     this.sprite = Sprite.from(asset);
