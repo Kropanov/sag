@@ -14,9 +14,11 @@ class UIBackpackHoverInfoBox implements UIComponent {
   private itemDescription!: Text;
   private itemAbilitiesText!: Text;
   private itemHistoryText!: Text;
+  private itemFuelAmountText!: Text;
   private itemCostText!: Text;
 
   private itemCostSprite!: Sprite;
+  private itemFuelAmountSprite!: Sprite;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -35,6 +37,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.renderItemAbilities();
     this.renderItemHistory();
     this.renderItemCost();
+    this.renderItemFuel();
 
     // TODO: start implementing render of resources to sell
   }
@@ -179,6 +182,36 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.graphics.addChild(this.itemCostSprite);
   }
 
+  public renderItemFuel() {
+    this.itemFuelAmountText = new Text({
+      text: '',
+      style: {
+        fontSize: 19,
+        fill: '#ADADAD',
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemFuelAmountSprite = Sprite.from('gasoline');
+    this.itemFuelAmountSprite.scale = 0.4;
+
+    this.graphics.addChild(this.itemFuelAmountText);
+    this.graphics.addChild(this.itemFuelAmountSprite);
+  }
+
+  public updateItemFuel() {
+    // FIXME: so far we did static but don't forget to do selling config for it
+    this.itemFuelAmountText.text = 0;
+    this.itemFuelAmountSprite.y = this.itemHistoryText.y - 72;
+    this.itemFuelAmountSprite.x = this.itemCostText.x + 90;
+    this.itemFuelAmountText.x = this.itemFuelAmountSprite.x + this.itemFuelAmountSprite.width + 4;
+    this.itemFuelAmountText.y = this.itemFuelAmountSprite.y + 15;
+  }
+
   public updateItemCost(cost: number) {
     this.itemCostText.text = cost;
     this.itemCostSprite.y = this.itemHistoryText.y - 70;
@@ -226,6 +259,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.updateHistoryText(item.history);
     this.updateItemRarityBox(item.rarity);
     this.updateItemCost(item.cost);
+    this.updateItemFuel();
   }
 
   public addComponent(_component: UIComponent): void {
