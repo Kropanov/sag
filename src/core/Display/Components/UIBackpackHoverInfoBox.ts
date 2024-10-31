@@ -1,5 +1,5 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
+import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
 import { Item } from '@core/Entities';
 import { ITEM_RARITY_COLORS } from '@/config/item.ts';
 import { ItemRarity } from '@/types/item-rarity.enum.ts';
@@ -14,6 +14,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
   private itemDescription!: Text;
   private itemAbilitiesText!: Text;
   private itemHistoryText!: Text;
+  private itemCostText!: Text;
+
+  private itemCostSprite!: Sprite;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -31,6 +34,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.renderItemDescription();
     this.renderItemAbilities();
     this.renderItemHistory();
+    this.renderItemCost();
 
     // TODO: start implementing render of resources to sell
   }
@@ -153,6 +157,35 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.container.addChild(this.itemHistoryText);
   }
 
+  public renderItemCost() {
+    this.itemCostText = new Text({
+      text: '',
+      style: {
+        fontSize: 19,
+        fill: 'rgba(225,209,11,0.96)',
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemCostSprite = Sprite.from('coin');
+    this.itemCostSprite.scale = 0.4;
+    this.itemCostSprite.x = 50;
+
+    this.graphics.addChild(this.itemCostText);
+    this.graphics.addChild(this.itemCostSprite);
+  }
+
+  public updateItemCost(cost: number) {
+    this.itemCostText.text = cost;
+    this.itemCostSprite.y = this.itemHistoryText.y - 70;
+    this.itemCostText.x = this.itemCostSprite.x + this.itemCostSprite.width + 4;
+    this.itemCostText.y = this.itemCostSprite.y + 14;
+  }
+
   public updateItemRarityBox(rarity: ItemRarity): void {
     this.itemRarityBox.clear();
     this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill(ITEM_RARITY_COLORS[rarity]);
@@ -192,6 +225,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.updateAbilitiesText();
     this.updateHistoryText(item.history);
     this.updateItemRarityBox(item.rarity);
+    this.updateItemCost(item.cost);
   }
 
   public addComponent(_component: UIComponent): void {

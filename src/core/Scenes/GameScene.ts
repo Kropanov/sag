@@ -62,6 +62,7 @@ export class GameScene extends Container implements IScene {
       name: 'Magic book',
       amount: 1,
       type: ItemType.Artifact,
+      cost: 200,
       asset: 'book_2',
       rarity: ItemRarity.Unique,
       history:
