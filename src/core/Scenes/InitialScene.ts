@@ -4,6 +4,7 @@ import { GameManager } from '@core/Manager';
 import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { LogInScene } from '@core/Scenes';
+import { theme } from '@/config';
 
 export class InitialScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -20,7 +21,7 @@ export class InitialScene extends Container implements IScene {
       text: 'Initial loading...',
       style: {
         fontSize: 20,
-        fill: '#00b1dd',
+        fill: theme.text.tertiary,
         align: 'center',
       },
     });
@@ -31,10 +32,10 @@ export class InitialScene extends Container implements IScene {
     this.addChild(this.text);
 
     this.loader = new CircularProgressBar({
-      backgroundColor: '#3d3d3d',
+      backgroundColor: theme.background.secondary,
       backgroundAlpha: 0.4,
       lineWidth: 12,
-      fillColor: '#00b1dd',
+      fillColor: theme.text.tertiary,
       fillAlpha: 0.7,
       radius: 40,
       value: 0,

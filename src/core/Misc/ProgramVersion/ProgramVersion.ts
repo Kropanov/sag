@@ -1,5 +1,6 @@
 import { Text } from 'pixi.js';
 import { GameManager } from '@/core/Manager';
+import { theme } from '@/config';
 
 function getProgramVersion() {
   const manager = GameManager.getInstance();
@@ -9,7 +10,7 @@ function getProgramVersion() {
     style: {
       fontFamily: 'Consolas',
       fontSize: 20,
-      fill: '#ADADAD',
+      fill: theme.text.primary,
     },
   });
 

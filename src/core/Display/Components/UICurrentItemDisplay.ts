@@ -5,6 +5,7 @@ import { UIAmmo } from './UIAmmo';
 import { Item } from '@/core/Entities';
 import { ItemType } from '@/types/item-type.enum';
 import { UIAmount } from './UIAmount';
+import { theme } from '@/config';
 
 export class UICurrentItemDisplay implements UIComponent {
   private manager = GameManager.getInstance();
@@ -15,7 +16,7 @@ export class UICurrentItemDisplay implements UIComponent {
   private currentItem!: Item | null;
 
   public render(): Array<ContainerChild> {
-    this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: '#0d1117f2' });
+    this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
     this.container.x = this.manager.getWidth() - 300;
     this.container.zIndex = 1;
 

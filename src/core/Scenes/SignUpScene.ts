@@ -1,4 +1,4 @@
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
@@ -51,10 +51,10 @@ export class SignUpScene extends Container implements IScene {
   }
 
   drawContainer() {
-    this.container.roundRect(0, 0, 550, 650, 30).fill('#ffffff12');
+    this.container.roundRect(0, 0, 550, 650, 30).fill(theme.background.tertiary);
 
     this.container.stroke({
-      color: '#FFFFFF',
+      color: theme.border.secondary,
       width: 1,
       alignment: 0.5,
     });
@@ -69,16 +69,16 @@ export class SignUpScene extends Container implements IScene {
     this.loginInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#ffffff00')
+        .fill(theme.background.transparent)
         .stroke({
-          color: '#FFFFFF',
+          color: theme.border.secondary,
           width: 1,
         }),
       placeholder: 'E-mail',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
-        fill: '#8F8F8F',
+        fill: theme.text.primary,
         fontSize: 15,
         fontWeight: 'bold',
       },
@@ -101,16 +101,16 @@ export class SignUpScene extends Container implements IScene {
     this.passwordInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#ffffff00')
+        .fill(theme.background.transparent)
         .stroke({
-          color: '#FFFFFF',
+          color: theme.border.secondary,
           width: 1,
         }),
       placeholder: 'Password',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
-        fill: '#8F8F8F',
+        fill: theme.text.primary,
         fontSize: 15,
         fontWeight: 'bold',
       },
@@ -133,16 +133,16 @@ export class SignUpScene extends Container implements IScene {
     this.passwordVerifyInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#ffffff00')
+        .fill(theme.background.transparent)
         .stroke({
-          color: '#FFFFFF',
+          color: theme.border.secondary,
           width: 1,
         }),
       placeholder: 'Repeat Password',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
-        fill: '#8F8F8F',
+        fill: theme.text.primary,
         fontSize: 15,
         fontWeight: 'bold',
       },
@@ -166,7 +166,7 @@ export class SignUpScene extends Container implements IScene {
       text: 'Already have an account? Log in',
       style: {
         fontSize: 18,
-        fill: '#FFFFFF',
+        fill: theme.neutral.white,
         textBaseline: 'bottom',
       },
     });
@@ -199,15 +199,15 @@ export class SignUpScene extends Container implements IScene {
 
   drawSubmitSignUpButton() {
     this.submitSignUpButton = new FancyButton({
-      defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill('#ffffff00').stroke({
-        color: '#FFFFFF',
+      defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill(theme.background.transparent).stroke({
+        color: theme.border.secondary,
         width: 1,
       }),
       text: new Text({
         text: 'Sign up',
         style: {
           fontSize: 20,
-          fill: '#FFFFFF',
+          fill: theme.neutral.white,
           textBaseline: 'middle',
           align: 'center',
         },

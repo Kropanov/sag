@@ -1,8 +1,9 @@
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
 import { Item } from '@core/Entities';
-import { ITEM_RARITY_COLORS } from '@/config/item.ts';
+// import { ITEM_RARITY_COLORS } from '@/config/item.ts';
 import { ItemRarity } from '@/types/item-rarity.enum.ts';
+import { theme } from '@/config';
 
 class UIBackpackHoverInfoBox implements UIComponent {
   private graphics!: Graphics;
@@ -48,7 +49,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public renderGraphicsContainer(): void {
     this.graphics = new Graphics();
-    this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill('#0d1117f2');
+    this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill(theme.background.primary);
     this.container.addChild(this.graphics);
   }
 
@@ -57,7 +58,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 20,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
         fontFamily: 'Consolas',
         align: 'center',
       },
@@ -74,7 +75,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 15,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
         fontFamily: 'Consolas',
         align: 'left',
         wordWrap: true,
@@ -90,7 +91,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public renderItemRarityBox(): void {
     this.itemRarityBox = new Graphics();
-    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill('#3399FF');
+    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0);
 
     this.itemRarityBox.x = 0;
     this.itemRarityBox.y = 42;
@@ -103,7 +104,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 20,
-        fill: '#FFF',
+        fill: theme.neutral.white,
         fontFamily: 'Consolas',
         align: 'center',
         dropShadow: {
@@ -128,7 +129,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: 'Abilities:\n - Critical Strike: +10% to critical damage. \n - Poison: +20% poison damage over time.',
       style: {
         fontSize: 14,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
         fontFamily: 'Consolas',
         align: 'left',
         wordWrap: true,
@@ -146,7 +147,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 13,
-        fill: 'rgba(173,173,173,0.6)',
+        fill: theme.text.muted,
         fontFamily: 'Consolas',
         fontStyle: 'italic',
         align: 'center',
@@ -165,7 +166,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 19,
-        fill: 'rgba(225,209,11,0.96)',
+        fill: theme.text.gold,
         fontFamily: 'Consolas',
         fontStyle: 'italic',
         align: 'center',
@@ -176,7 +177,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
     this.itemCostSprite = Sprite.from('coin');
     this.itemCostSprite.scale = 0.4;
-    this.itemCostSprite.x = 50;
+    this.itemCostSprite.x = 55;
 
     this.graphics.addChild(this.itemCostText);
     this.graphics.addChild(this.itemCostSprite);
@@ -187,7 +188,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 19,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
         fontFamily: 'Consolas',
         fontStyle: 'italic',
         align: 'center',
@@ -205,7 +206,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public updateItemFuel() {
     // FIXME: so far we did static but don't forget to do selling config for it
-    this.itemFuelAmountText.text = 0;
+    this.itemFuelAmountText.text = 10;
     this.itemFuelAmountSprite.y = this.itemHistoryText.y - 72;
     this.itemFuelAmountSprite.x = this.itemCostText.x + 90;
     this.itemFuelAmountText.x = this.itemFuelAmountSprite.x + this.itemFuelAmountSprite.width + 4;
@@ -221,7 +222,9 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public updateItemRarityBox(rarity: ItemRarity): void {
     this.itemRarityBox.clear();
-    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill(ITEM_RARITY_COLORS[rarity]);
+    this.itemRarityBox
+      .filletRect(0, 0, this.containerWidth, 40, 0)
+      .fill(theme.rarity[rarity.toLowerCase() as keyof typeof theme.rarity]);
   }
 
   public updateAbilitiesText() {

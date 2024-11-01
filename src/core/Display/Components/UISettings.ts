@@ -3,6 +3,7 @@ import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
 import { UISettingsMenu } from '@core/Display';
 import { UISettingsItemDisplay } from '@core/Display';
+import { theme } from '@/config/theme.ts';
 
 class UISettings implements UIComponent {
   private manager: GameManager = GameManager.getInstance();
@@ -33,8 +34,8 @@ class UISettings implements UIComponent {
     this.container.zIndex = 5;
     this.container
       .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
-      .fill('#0d1117f2')
-      .stroke({ color: '#7C838A', width: 3 });
+      .fill(theme.background.primary)
+      .stroke({ color: theme.border.primary, width: 3 });
     this.resize(this.manager.getWidth(), this.manager.getHeight());
     this.close();
 
@@ -54,7 +55,7 @@ class UISettings implements UIComponent {
   private renderSectionSeparator() {
     this.sectionSeparator = new Graphics();
     this.sectionSeparator.zIndex = 6;
-    this.container.filletRect(this.containerWidth / 2, 0, 3, this.containerHeight, 10).fill('#7C838A');
+    this.container.filletRect(this.containerWidth / 2, 0, 3, this.containerHeight, 10).fill(theme.border.primary);
     this.container.addChild(this.sectionSeparator);
   }
 
