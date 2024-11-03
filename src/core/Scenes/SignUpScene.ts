@@ -15,8 +15,8 @@ import { sound } from '@pixi/sound';
 
 export class SignUpScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
-  private container: Graphics;
-  private version: Text;
+  private readonly container: Graphics;
+  private readonly version: Text;
 
   private loginInput!: Input;
   private passwordInput!: Input;
@@ -25,7 +25,7 @@ export class SignUpScene extends Container implements IScene {
   private logInActionButton!: FancyButton;
   private submitSignUpButton!: FancyButton;
 
-  private socialMediaIcons: Container;
+  private readonly socialMediaIcons: Container;
 
   constructor() {
     super();
@@ -50,7 +50,7 @@ export class SignUpScene extends Container implements IScene {
     this.drawSubmitSignUpButton();
   }
 
-  drawContainer() {
+  private drawContainer() {
     this.container.roundRect(0, 0, 550, 650, 30).fill(theme.background.tertiary);
 
     this.container.stroke({
@@ -65,7 +65,7 @@ export class SignUpScene extends Container implements IScene {
     this.addChild(this.container);
   }
 
-  drawLoginInput() {
+  private drawLoginInput() {
     this.loginInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
@@ -97,7 +97,7 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.loginInput);
   }
 
-  drawPasswordInput() {
+  private drawPasswordInput() {
     this.passwordInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
@@ -129,7 +129,7 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  drawPasswordVerifyInput() {
+  private drawPasswordVerifyInput() {
     this.passwordVerifyInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
@@ -161,7 +161,7 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.passwordVerifyInput);
   }
 
-  drawLogInActionButton() {
+  private drawLogInActionButton() {
     const buttonText = new Text({
       text: 'Already have an account? Log in',
       style: {
@@ -197,7 +197,7 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.logInActionButton);
   }
 
-  drawSubmitSignUpButton() {
+  private drawSubmitSignUpButton() {
     this.submitSignUpButton = new FancyButton({
       defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill(theme.background.transparent).stroke({
         color: theme.border.secondary,
@@ -241,14 +241,14 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.submitSignUpButton);
   }
 
-  handleSignUpClick() {
+  private handleSignUpClick() {
     sound.play('main_click_sound');
     this.manager.changeScene(new MenuScene());
   }
 
-  update(_framesPassed: number): void {}
+  public update(_framesPassed: number): void {}
 
-  resize(screenWidth: number, screenHeight: number): void {
+  public resize(screenWidth: number, screenHeight: number): void {
     this.container.position.set(screenWidth / 2, screenHeight / 2);
 
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
