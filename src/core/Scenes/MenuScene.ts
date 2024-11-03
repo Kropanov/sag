@@ -2,8 +2,8 @@ import { Container, Sprite, Text } from 'pixi.js';
 import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
-import { GameScene, GameSetupScene, LogInScene } from '@core/Scenes';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
+import { GameScene, LogInScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 import {
   getProgramVersion,
@@ -63,10 +63,6 @@ export class MenuScene extends Container implements IScene {
     this.manager.changeScene(new MenuScene());
   }
 
-  gameSetup() {
-    this.manager.changeScene(new GameSetupScene());
-  }
-
   clearMenu() {
     this.items = [];
     this.menu.removeChildren();
@@ -79,7 +75,7 @@ export class MenuScene extends Container implements IScene {
           text: _.text,
           style: {
             fontSize: 25,
-            fill: '#00b1dd',
+            fill: theme.neutral.white,
             align: 'center',
           },
         }),

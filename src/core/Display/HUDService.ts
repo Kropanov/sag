@@ -4,7 +4,7 @@ import { UIBackpack } from './Components/UIBackpack';
 import { Item, Player } from '../Entities';
 import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
 import { FancyButton } from '@pixi/ui';
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
 import { GameManager } from '../Manager';
 import { sound } from '@pixi/sound';
 import { UISettings } from './Components/UISettings';
@@ -83,8 +83,8 @@ class HUDService {
   }
 
   private renderPlayerHPBar() {
-    this.HPBar = new Graphics().roundRect(40, 90, 350, 28, 10).fill('#FF8481').stroke({
-      color: '#7C838A',
+    this.HPBar = new Graphics().roundRect(40, 90, 350, 28, 10).fill(theme.player.hpBar).stroke({
+      color: theme.border.primary,
       width: 5,
     });
 
@@ -93,19 +93,19 @@ class HUDService {
   }
 
   private renderPlayerPlanet() {
-    this.planet = new Graphics().circle(85, 48, 30).fill('#3BBEFF');
+    this.planet = new Graphics().circle(85, 48, 30).fill(theme.player.planet);
     this.planet.zIndex = 1;
 
-    const p1 = new Graphics().circle(96, 60, 4).fill('#FFF');
+    const p1 = new Graphics().circle(96, 60, 4).fill(theme.neutral.white);
     this.planet.addChild(p1);
 
-    const p2 = new Graphics().circle(80, 58, 4).fill('#FFF');
+    const p2 = new Graphics().circle(80, 58, 4).fill(theme.neutral.white);
     this.planet.addChild(p2);
 
-    const p3 = new Graphics().circle(67, 50, 4).fill('#FFF');
+    const p3 = new Graphics().circle(67, 50, 4).fill(theme.neutral.white);
     this.planet.addChild(p3);
 
-    const b1 = new Graphics().circle(88, 38, 10).fill('#FFF');
+    const b1 = new Graphics().circle(88, 38, 10).fill(theme.neutral.white);
     this.planet.addChild(b1);
 
     this.scene.addChild(this.planet);
@@ -117,7 +117,7 @@ class HUDService {
       style: {
         fontFamily: 'Consolas',
         fontSize: 24,
-        fill: '#3a994c',
+        fill: theme.player.hpText,
         fontWeight: 'bold',
       },
     });
@@ -135,7 +135,7 @@ class HUDService {
       style: {
         fontFamily: 'Consolas',
         fontSize: 24,
-        fill: '#FFF',
+        fill: theme.neutral.white,
         fontWeight: 'bold',
       },
     });
@@ -156,9 +156,9 @@ class HUDService {
     for (let i = 0; i < 3; i++) {
       const hpBar = new Graphics()
         .roundRect(40, 290 + 75 * i, 270, 20, 10)
-        .fill('#FF8481')
+        .fill(theme.player.hpBar)
         .stroke({
-          color: '#7C838A',
+          color: theme.border.primary,
           width: 5,
         });
 
@@ -167,7 +167,7 @@ class HUDService {
         style: {
           fontFamily: 'Consolas',
           fontSize: 20,
-          fill: '#FFF',
+          fill: theme.text.white,
         },
       });
 
@@ -179,7 +179,7 @@ class HUDService {
         style: {
           fontFamily: 'Consolas',
           fontSize: 20,
-          fill: '#3a994c',
+          fill: theme.player.hpText,
           fontWeight: 'bold',
         },
       });
@@ -216,7 +216,7 @@ class HUDService {
       style: {
         fontSize: 30,
         fontFamily: 'Consolas',
-        fill: '#FFFFFF',
+        fill: theme.neutral.white,
         textBaseline: 'bottom',
       },
     });

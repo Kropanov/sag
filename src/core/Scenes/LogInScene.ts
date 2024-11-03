@@ -12,14 +12,15 @@ import {
 } from '@/core/Misc';
 import { MusicController } from '@/core/Music';
 import { sound } from '@pixi/sound';
+import { theme } from '@/config';
 
 export class LogInScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
-  private container: Graphics;
-  private version: Text;
+  private readonly container: Graphics;
+  private readonly version: Text;
 
   private player: MusicController;
-  private background: Sprite;
+  private readonly background: Sprite;
 
   private loginInput!: Input;
   private passwordInput!: Input;
@@ -27,7 +28,7 @@ export class LogInScene extends Container implements IScene {
   private signUpActionButton!: FancyButton;
   private submitLoginButton!: FancyButton;
 
-  private socialMediaIcons: Container;
+  private readonly socialMediaIcons: Container;
 
   constructor() {
     super();
@@ -41,6 +42,7 @@ export class LogInScene extends Container implements IScene {
     this.version = getProgramVersion();
     this.addChild(this.version);
 
+    // FIXME: rework using Container
     this.container = new Graphics();
     this.drawContainer();
 
@@ -53,11 +55,11 @@ export class LogInScene extends Container implements IScene {
     this.drawSubmitLoginButton();
   }
 
-  drawContainer() {
-    this.container.roundRect(0, 0, 550, 650, 30).fill('#ffffff12');
+  private drawContainer() {
+    this.container.roundRect(0, 0, 550, 650, 30).fill(theme.background.tertiary);
 
     this.container.stroke({
-      color: '#FFFFFF',
+      color: theme.border.secondary,
       width: 1,
       alignment: 0.5,
     });
@@ -68,20 +70,20 @@ export class LogInScene extends Container implements IScene {
     this.addChild(this.container);
   }
 
-  drawLoginInput() {
+  private drawLoginInput() {
     this.loginInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#ffffff00')
+        .fill(theme.background.transparent)
         .stroke({
-          color: '#FFFFFF',
+          color: theme.border.secondary,
           width: 1,
         }),
       placeholder: 'E-mail',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
-        fill: '#8F8F8F',
+        fill: theme.text.primary,
         fontSize: 15,
         fontWeight: 'bold',
       },
@@ -100,20 +102,20 @@ export class LogInScene extends Container implements IScene {
     this.container.addChild(this.loginInput);
   }
 
-  drawPasswordInput() {
+  private drawPasswordInput() {
     this.passwordInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
-        .fill('#ffffff00')
+        .fill(theme.background.transparent)
         .stroke({
-          color: '#FFFFFF',
+          color: theme.border.secondary,
           width: 1,
         }),
       placeholder: 'Password',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
-        fill: '#8F8F8F',
+        fill: theme.text.primary,
         fontSize: 15,
         fontWeight: 'bold',
       },
@@ -132,12 +134,12 @@ export class LogInScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  drawSignUpActionButton() {
+  private drawSignUpActionButton() {
     const buttonText = new Text({
       text: "Don't have an account? Sign up",
       style: {
         fontSize: 18,
-        fill: '#FFFFFF',
+        fill: theme.neutral.white,
         textBaseline: 'bottom',
       },
     });
@@ -166,17 +168,17 @@ export class LogInScene extends Container implements IScene {
     this.container.addChild(this.signUpActionButton);
   }
 
-  drawSubmitLoginButton() {
+  private drawSubmitLoginButton() {
     this.submitLoginButton = new FancyButton({
-      defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill('#ffffff00').stroke({
-        color: '#FFFFFF',
+      defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill(theme.background.transparent).stroke({
+        color: theme.border.secondary,
         width: 1,
       }),
       text: new Text({
         text: 'Log in',
         style: {
           fontSize: 20,
-          fill: '#FFFFFF',
+          fill: theme.neutral.white,
           textBaseline: 'middle',
           align: 'center',
         },
@@ -210,15 +212,15 @@ export class LogInScene extends Container implements IScene {
     this.container.addChild(this.submitLoginButton);
   }
 
-  handleLoginClick() {
+  private handleLoginClick() {
     sound.play('main_click_sound');
     // TODO: implement login login by getting some response form server
     // this.manager.changeScene(new MenuScene());
   }
 
-  update(_framesPassed: number): void {}
+  public update(_framesPassed: number): void {}
 
-  resize(screenWidth: number, screenHeight: number): void {
+  public resize(screenWidth: number, screenHeight: number): void {
     this.container.position.set(screenWidth / 2, screenHeight / 2);
 
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);

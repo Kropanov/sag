@@ -2,6 +2,7 @@ import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
 import { Slider } from '@pixi/ui';
 import { Settings } from '@core/Settings';
+import { theme } from '@/config';
 
 class UISettingsItemDisplay implements UIComponent {
   private settings: Settings = Settings.getInstance();
@@ -21,9 +22,9 @@ class UISettingsItemDisplay implements UIComponent {
   }
 
   private renderMusicSlider() {
-    const meshColor = '#222425';
-    const backgroundColor = '#222425';
-    const fontColor = '#FFFFFF';
+    const meshColor = theme.background.secondary;
+    const backgroundColor = theme.background.secondary;
+    const fontColor = theme.neutral.white;
     const min = 0;
     const max = 100;
     const width = 200;
@@ -36,7 +37,7 @@ class UISettingsItemDisplay implements UIComponent {
       text: 'Music',
       style: {
         fontSize: 15,
-        fill: '#FFFFFF',
+        fill: theme.neutral.white,
         align: 'center',
       },
     });

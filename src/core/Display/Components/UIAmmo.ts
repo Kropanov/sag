@@ -1,5 +1,6 @@
 import { UIComponent } from '@/interfaces';
 import { Container, ContainerChild, Text } from 'pixi.js';
+import { theme } from '@/config';
 
 export class UIAmmo implements UIComponent {
   private ammo: Text;
@@ -18,7 +19,7 @@ export class UIAmmo implements UIComponent {
       style: {
         fontFamily: 'Consolas',
         fontSize: 27,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
       },
     });
 

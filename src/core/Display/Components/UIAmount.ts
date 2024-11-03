@@ -1,5 +1,6 @@
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Text } from 'pixi.js';
+import { theme } from '@/config';
 
 export class UIAmount implements UIComponent {
   private amount: number = 0;
@@ -14,7 +15,7 @@ export class UIAmount implements UIComponent {
       style: {
         fontFamily: 'Consolas',
         fontSize: 20,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
       },
     });
 

@@ -1,4 +1,4 @@
-import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH } from '@/config';
+import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@/config';
 import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
@@ -95,9 +95,9 @@ export class UIBackpack implements UIComponent {
         STORAGE_SLOT_WIDTH,
         10,
       )
-      .fill('#202325')
+      .fill(theme.background.secondary)
       .stroke({
-        color: '#7C838A',
+        color: theme.border.primary,
         width: 2,
       });
 
@@ -114,7 +114,7 @@ export class UIBackpack implements UIComponent {
     graphics.clear();
     graphics
       .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
-      .fill('#202325')
+      .fill(theme.background.secondary)
       .stroke({
         color: strokeColor,
         width: 2,
@@ -127,7 +127,7 @@ export class UIBackpack implements UIComponent {
       style: {
         fontFamily: 'Consolas',
         fontSize: 15,
-        fill: '#FFF',
+        fill: theme.text.white,
         dropShadow: {
           alpha: 1,
           angle: 1,
@@ -323,14 +323,14 @@ export class UIBackpack implements UIComponent {
 
     if (this.currentHoldingSlotIndex !== undefined) {
       const graphics = this.slots[this.currentHoldingSlotIndex].graphics;
-      this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, '#7C838A');
+      this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, theme.border.primary);
     }
 
     this.currentHoldingSlotIndex = index;
 
     const item = this.slots[index].item;
     const graphics = this.slots[index].graphics;
-    this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, '#31FF6D');
+    this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, theme.border.highlight);
 
     this.currentHoldingSlotItem = item;
   }

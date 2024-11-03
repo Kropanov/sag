@@ -1,17 +1,25 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
+import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
 import { Item } from '@core/Entities';
-import { ITEM_RARITY_COLORS } from '@/config/item.ts';
+// import { ITEM_RARITY_COLORS } from '@/config/item.ts';
 import { ItemRarity } from '@/types/item-rarity.enum.ts';
+import { theme } from '@/config';
 
 class UIBackpackHoverInfoBox implements UIComponent {
-  private readonly container!: Container;
-
   private graphics!: Graphics;
+  private readonly container!: Container;
   private itemRarityBox!: Graphics;
 
-  private title!: Text;
+  private itemName!: Text;
   private itemRarityTitle!: Text;
+  private itemDescription!: Text;
+  private itemAbilitiesText!: Text;
+  private itemHistoryText!: Text;
+  private itemFuelAmountText!: Text;
+  private itemCostText!: Text;
+
+  private itemCostSprite!: Sprite;
+  private itemFuelAmountSprite!: Sprite;
 
   private containerWidth: number = 350;
   private containerHeight: number = 600;
@@ -22,10 +30,17 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.hide();
 
     this.renderGraphicsContainer();
-    this.renderItemTitle();
 
+    this.renderItemName();
     this.renderItemRarityBox();
     this.renderItemRarityTitle();
+    this.renderItemDescription();
+    this.renderItemAbilities();
+    this.renderItemHistory();
+    this.renderItemCost();
+    this.renderItemFuel();
+
+    // TODO: start implementing render of resources to sell
   }
 
   public render(): Array<ContainerChild> {
@@ -34,30 +49,49 @@ class UIBackpackHoverInfoBox implements UIComponent {
 
   public renderGraphicsContainer(): void {
     this.graphics = new Graphics();
-    this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill('#0d1117f2');
+    this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill(theme.background.primary);
     this.container.addChild(this.graphics);
   }
 
-  public renderItemTitle(): void {
-    this.title = new Text({
+  public renderItemName(): void {
+    this.itemName = new Text({
       text: '',
       style: {
         fontSize: 20,
-        fill: '#ADADAD',
+        fill: theme.text.primary,
         fontFamily: 'Consolas',
         align: 'center',
       },
     });
 
-    this.title.x = 15;
-    this.title.y = 10;
+    this.itemName.x = 10;
+    this.itemName.y = 10;
 
-    this.container.addChild(this.title);
+    this.container.addChild(this.itemName);
+  }
+
+  public renderItemDescription(): void {
+    this.itemDescription = new Text({
+      text: '',
+      style: {
+        fontSize: 15,
+        fill: theme.text.primary,
+        fontFamily: 'Consolas',
+        align: 'left',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemDescription.x = 10;
+    this.itemDescription.y = 95;
+
+    this.container.addChild(this.itemDescription);
   }
 
   public renderItemRarityBox(): void {
     this.itemRarityBox = new Graphics();
-    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill('#3399FF');
+    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0);
 
     this.itemRarityBox.x = 0;
     this.itemRarityBox.y = 42;
@@ -70,7 +104,7 @@ class UIBackpackHoverInfoBox implements UIComponent {
       text: '',
       style: {
         fontSize: 20,
-        fill: '#FFF',
+        fill: theme.neutral.white,
         fontFamily: 'Consolas',
         align: 'center',
         dropShadow: {
@@ -89,9 +123,117 @@ class UIBackpackHoverInfoBox implements UIComponent {
     this.itemRarityBox.addChild(this.itemRarityTitle);
   }
 
+  public renderItemAbilities() {
+    // FIXME: this is just a static text
+    this.itemAbilitiesText = new Text({
+      text: 'Abilities:\n - Critical Strike: +10% to critical damage. \n - Poison: +20% poison damage over time.',
+      style: {
+        fontSize: 14,
+        fill: theme.text.primary,
+        fontFamily: 'Consolas',
+        align: 'left',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemAbilitiesText.x = 10;
+
+    this.container.addChild(this.itemAbilitiesText);
+  }
+
+  public renderItemHistory(): void {
+    this.itemHistoryText = new Text({
+      text: '',
+      style: {
+        fontSize: 13,
+        fill: theme.text.muted,
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemHistoryText.x = 15;
+
+    this.container.addChild(this.itemHistoryText);
+  }
+
+  public renderItemCost() {
+    this.itemCostText = new Text({
+      text: '',
+      style: {
+        fontSize: 19,
+        fill: theme.text.gold,
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemCostSprite = Sprite.from('coin');
+    this.itemCostSprite.scale = 0.4;
+    this.itemCostSprite.x = 55;
+
+    this.graphics.addChild(this.itemCostText);
+    this.graphics.addChild(this.itemCostSprite);
+  }
+
+  public renderItemFuel() {
+    this.itemFuelAmountText = new Text({
+      text: '',
+      style: {
+        fontSize: 19,
+        fill: theme.text.primary,
+        fontFamily: 'Consolas',
+        fontStyle: 'italic',
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: this.containerWidth - 15,
+      },
+    });
+
+    this.itemFuelAmountSprite = Sprite.from('gasoline');
+    this.itemFuelAmountSprite.scale = 0.4;
+
+    this.graphics.addChild(this.itemFuelAmountText);
+    this.graphics.addChild(this.itemFuelAmountSprite);
+  }
+
+  public updateItemFuel() {
+    // FIXME: so far we did static but don't forget to do selling config for it
+    this.itemFuelAmountText.text = 10;
+    this.itemFuelAmountSprite.y = this.itemHistoryText.y - 72;
+    this.itemFuelAmountSprite.x = this.itemCostText.x + 90;
+    this.itemFuelAmountText.x = this.itemFuelAmountSprite.x + this.itemFuelAmountSprite.width + 4;
+    this.itemFuelAmountText.y = this.itemFuelAmountSprite.y + 15;
+  }
+
+  public updateItemCost(cost: number) {
+    this.itemCostText.text = cost;
+    this.itemCostSprite.y = this.itemHistoryText.y - 70;
+    this.itemCostText.x = this.itemCostSprite.x + this.itemCostSprite.width + 4;
+    this.itemCostText.y = this.itemCostSprite.y + 14;
+  }
+
   public updateItemRarityBox(rarity: ItemRarity): void {
     this.itemRarityBox.clear();
-    this.itemRarityBox.filletRect(0, 0, this.containerWidth, 40, 0).fill(ITEM_RARITY_COLORS[rarity]);
+    this.itemRarityBox
+      .filletRect(0, 0, this.containerWidth, 40, 0)
+      .fill(theme.rarity[rarity.toLowerCase() as keyof typeof theme.rarity]);
+  }
+
+  public updateAbilitiesText() {
+    this.itemAbilitiesText.y = this.itemDescription.y + this.itemDescription.height + 20;
+  }
+
+  public updateHistoryText(text: string) {
+    this.itemHistoryText.text = text;
+    this.itemHistoryText.y = this.graphics.height - this.itemHistoryText.height - 10;
   }
 
   public show(): void {
@@ -112,10 +254,15 @@ class UIBackpackHoverInfoBox implements UIComponent {
   }
 
   public setItem(item: Item): void {
-    this.title.text = item.name;
+    this.itemName.text = item.name;
     this.itemRarityTitle.text = item.rarity;
+    this.itemDescription.text = item.description;
 
+    this.updateAbilitiesText();
+    this.updateHistoryText(item.history);
     this.updateItemRarityBox(item.rarity);
+    this.updateItemCost(item.cost);
+    this.updateItemFuel();
   }
 
   public addComponent(_component: UIComponent): void {

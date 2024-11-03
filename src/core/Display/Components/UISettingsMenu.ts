@@ -1,4 +1,4 @@
-import { FANCY_BUTTON_BASE_ANIMATION } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
 import { GameManager } from '@/core/Manager';
 import { MenuScene } from '@/core/Scenes';
 import { UIComponent } from '@/interfaces';
@@ -41,7 +41,7 @@ class UISettingsMenu implements UIComponent {
           text: _.text,
           style: {
             fontSize: 25,
-            fill: '#FFFFFF',
+            fill: theme.neutral.white,
             align: 'center',
           },
         }),
