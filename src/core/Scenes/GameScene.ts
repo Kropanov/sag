@@ -1,7 +1,16 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene, ItemProps } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
+import {
+  Cartridge,
+  Coin,
+  Player,
+  Gun,
+  Artifact,
+  ReincarnationAbility,
+  ProtectiveAbility,
+  ItemFactory,
+} from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MusicController } from '@core/Music';
 import { AMMO_TYPE } from '@/types/ammo.enum';
@@ -150,6 +159,9 @@ export class GameScene extends Container implements IScene {
 
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
+
+    const factory = new ItemFactory();
+    factory.loadItemsData().then();
   }
 
   handleInput() {
