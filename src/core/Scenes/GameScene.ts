@@ -160,8 +160,7 @@ export class GameScene extends Container implements IScene {
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
-    const factory = new ItemFactory();
-    factory.loadItemsData().then();
+    new ItemFactory();
   }
 
   handleInput() {
