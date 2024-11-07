@@ -5,6 +5,7 @@ import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { LogInScene } from '@core/Scenes';
 import { theme } from '@/config';
+import GameFactory from '@core/Entities/Factory/GameFactory.ts';
 
 export class InitialScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -55,6 +56,8 @@ export class InitialScene extends Container implements IScene {
 
   private async initializeLoader(): Promise<void> {
     await Assets.init({ manifest: manifest });
+    const gameFactory = new GameFactory();
+    await gameFactory.loadTemplates();
     const bundleIds = manifest.bundles.map((bundle) => bundle.name);
     await Assets.loadBundle(bundleIds);
   }

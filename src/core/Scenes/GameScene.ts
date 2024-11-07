@@ -1,16 +1,7 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene, ItemProps } from '@/interfaces';
 import { GameManager } from '@core/Manager';
-import {
-  Cartridge,
-  Coin,
-  Player,
-  Gun,
-  Artifact,
-  ReincarnationAbility,
-  ProtectiveAbility,
-  ItemFactory,
-} from '@core/Entities';
+import { Cartridge, Coin, Player, Gun, Artifact, ReincarnationAbility, ProtectiveAbility } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MusicController } from '@core/Music';
 import { AMMO_TYPE } from '@/types/ammo.enum';
@@ -19,6 +10,7 @@ import { Backpack } from '../Entities/Backpack';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
 import { Material } from '../Entities/Material';
+import GameFactory from '@core/Entities/Factory/GameFactory.ts';
 
 export class GameScene extends Container implements IScene {
   private manager: GameManager = GameManager.getInstance();
@@ -160,7 +152,8 @@ export class GameScene extends Container implements IScene {
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
-    new ItemFactory();
+    const gameFactory = new GameFactory();
+    console.log(gameFactory.itemFactory.getItemTemplates());
   }
 
   handleInput() {

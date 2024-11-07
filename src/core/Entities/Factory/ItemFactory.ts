@@ -3,11 +3,7 @@ import axios from 'axios';
 import { ItemTemplate } from '@/types';
 
 export class ItemFactory {
-  itemTemplates: ItemTemplate[] | [] = [];
-
-  constructor() {
-    this.loadItemTemplates().then();
-  }
+  private itemTemplates: ItemTemplate[] | [] = [];
 
   public async loadItemTemplates() {
     const response = await axios.get('items.yml');
@@ -18,8 +14,12 @@ export class ItemFactory {
     }
   }
 
-  setItemTemplates(itemTemplates: ItemTemplate[]) {
+  private setItemTemplates(itemTemplates: ItemTemplate[]) {
     this.itemTemplates = itemTemplates;
+  }
+
+  public getItemTemplates(): ItemTemplate[] {
+    return [...this.itemTemplates];
   }
 
   public createItemById(_itemId: number) {}
