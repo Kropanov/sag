@@ -215,7 +215,9 @@ export class UIBackpack implements UIComponent {
       this.draggedItem.sprite.position.x = this.initialHoldingItemPosition.x;
       this.draggedItem.sprite.position.y = this.initialHoldingItemPosition.y;
 
-      this.showItemAmountLabel();
+      if (this.draggedSlot.graphics.visible) {
+        this.showItemAmountLabel();
+      }
 
       this.draggedItem = null;
       this.offset = null;
