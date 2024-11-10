@@ -17,8 +17,12 @@ export class Character extends Creature {
     this.backpack = backpack;
   }
 
-  public addItemToBackpack(item: Item) {
+  public pushItemToBackpack(item: Item) {
     this.backpack.push(item);
+  }
+
+  public addItemToBackpackAt(item: Item, index: number) {
+    this.backpack.placeItem(item, index);
   }
 
   public reassignItemAt(item: Item, index: number) {

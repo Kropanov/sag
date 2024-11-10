@@ -27,6 +27,7 @@ export interface IEntity {
   handleCollision(vCollisionNorm: vCollisionNormType, speed: number): void;
 }
 
+// TODO: move entity interface to different file like item.ts and classes should extend of it
 export interface ItemProps {
   name?: string;
   cost?: number;

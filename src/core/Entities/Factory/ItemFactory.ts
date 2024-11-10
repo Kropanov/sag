@@ -1,6 +1,11 @@
 import YAML from 'yaml';
 import axios from 'axios';
 import { ItemTemplate } from '@/types';
+import { ItemDTO } from '@/api/dto';
+import { ItemProps } from '@/interfaces';
+import { ItemType } from '@/types/item-type.enum.ts';
+import { Artifact, Item, Player, ReincarnationAbility } from '@core/Entities';
+import { Material } from '@core/Entities/Material.ts';
 
 export class ItemFactory {
   private itemTemplates: ItemTemplate[] | [] = [];
@@ -22,7 +27,57 @@ export class ItemFactory {
     return [...this.itemTemplates];
   }
 
-  public createItemById(_itemId: number) {}
+  // TODO: think about creating class where you can get player from, delete player from params
+  public generateItemsForPlayer(_playerId: string, player: Player, itemData: ItemDTO[] | undefined) {
+    if (itemData === undefined) {
+      return [];
+    }
+
+    for (let data of itemData) {
+      const template = this.getTemplateById(data.mappingId);
+      const item = this.createItemWithTemplate(template, data);
+      if (item) {
+        player.addItemToBackpackAt(item, data.position);
+      }
+    }
+  }
+
+  public getTemplateById(mappingId: string) {
+    return this.itemTemplates.filter((template) => mappingId === template.id)[0];
+  }
+
+  public createItemWithTemplate(template: ItemTemplate, data: ItemDTO): Item | undefined {
+    const itemProps: ItemProps = {
+      name: template.name,
+      amount: data.quantity,
+      type: template.type,
+      cost: template.cost,
+      asset: template.asset,
+      rarity: template.rarity,
+      history: template.history,
+      description: template.description,
+    };
+
+    let item: Item | undefined;
+    switch (template.type) {
+      case ItemType.Material:
+        item = new Material(itemProps);
+        break;
+      case ItemType.Artifact:
+        item = new Artifact(itemProps, new ReincarnationAbility());
+        break;
+      case ItemType.Equipment:
+        break;
+      case ItemType.Currency:
+        break;
+      case ItemType.Gun:
+        break;
+      default:
+        break;
+    }
+
+    return item;
+  }
 
   public generateItemsForVendor() {}
 }
