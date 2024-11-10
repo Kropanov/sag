@@ -3,6 +3,10 @@ export * from './Abstract/ItemStorage.ts';
 
 export * from './Strategies/ArtifactAbilities.ts';
 
+export * from './Factory/ItemFactory.ts';
+export * from './Factory/CreatureFactory.ts';
+export * from './Factory/GameFactory.ts';
+
 export * from './Coin.ts';
 export * from './Artifact.ts';
 export * from './Creature.ts';

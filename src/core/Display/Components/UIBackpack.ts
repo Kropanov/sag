@@ -5,6 +5,7 @@ import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slot, Slots } from '@/types';
 import mitt, { Emitter } from 'mitt';
 import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
+import { isStackable } from '@/utils';
 
 export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
@@ -68,7 +69,7 @@ export class UIBackpack implements UIComponent {
       if (!item) {
         this.appendSlot(graphics);
       } else {
-        const text = this.createSlotText(item, row, slotIndex);
+        const text = isStackable(item) ? this.createSlotText(item, row, slotIndex) : null;
         this.renderItemInSlot(item, row, slotIndex);
         this.appendSlot(graphics, item, text);
       }
@@ -215,7 +216,9 @@ export class UIBackpack implements UIComponent {
       this.draggedItem.sprite.position.x = this.initialHoldingItemPosition.x;
       this.draggedItem.sprite.position.y = this.initialHoldingItemPosition.y;
 
-      this.showItemAmountLabel();
+      if (this.draggedSlot.graphics.visible) {
+        this.showItemAmountLabel();
+      }
 
       this.draggedItem = null;
       this.offset = null;

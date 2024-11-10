@@ -28,3 +28,5 @@ export type Slot = {
 };
 
 export type Slots = Slot[];
+
+export * from './item-template.ts';
