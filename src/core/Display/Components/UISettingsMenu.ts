@@ -11,6 +11,7 @@ class UISettingsMenu implements UIComponent {
 
   private menu!: List;
   private items: Array<MenuItemsType> = [
+    { text: 'Save', fn: () => this.savePlayerData() },
     { text: 'General', fn: () => {} },
     { text: 'Interface', fn: () => {} },
     { text: 'Controls', fn: () => {} },
@@ -23,9 +24,9 @@ class UISettingsMenu implements UIComponent {
       type: 'vertical',
     });
 
-    this.resize(this.manager.getWidth(), this.manager.getHeight());
-
     this.populateMenuWithButtons();
+
+    this.resize(this.manager.getWidth(), this.manager.getHeight());
 
     return [this.menu];
   }
@@ -56,11 +57,14 @@ class UISettingsMenu implements UIComponent {
     });
   }
 
+  private savePlayerData() {}
+
   public addComponent(_component: UIComponent): void {}
 
+  // FIXME: I don't like this code
   public resize(_screenWidth: number, _screenHeight: number): void {
     this.menu.x = 150;
-    this.menu.y = 133;
+    this.menu.y = 420 / 2 - this.menu.height / 2;
   }
 
   public navigateToMainMenu() {

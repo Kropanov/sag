@@ -40,7 +40,6 @@ export const manifest: AssetsManifest = {
         talisman: './static/assets/artifacts/talisman.png',
         map: './static/assets/artifacts/map.png',
         talisman_2: './static/assets/artifacts/talisman_2.png',
-        book: './static/assets/artifacts/book.png',
         book_1: './static/assets/artifacts/book_1.png',
         book_3: './static/assets/artifacts/book_2.png',
         book_4: './static/assets/artifacts/book_3.png',
@@ -66,6 +65,7 @@ export const manifest: AssetsManifest = {
         gasoline_can: './static/assets/materials/gasoline_can.png',
         empty_gasoline_can: './static/assets/materials/empty_gasoline_can.png',
         mineral: './static/assets/materials/mineral_2.png',
+        book: './static/assets/materials/book.png',
       },
     },
     {
