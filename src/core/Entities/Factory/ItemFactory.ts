@@ -35,6 +35,10 @@ export class ItemFactory {
 
     for (let data of itemData) {
       const template = this.getTemplateById(data.mappingId);
+      if (!template) {
+        continue;
+      }
+
       const item = this.createItemWithTemplate(template, data);
       if (item) {
         player.addItemToBackpackAt(item, data.position);
@@ -42,8 +46,13 @@ export class ItemFactory {
     }
   }
 
-  public getTemplateById(mappingId: string) {
-    return this.itemTemplates.filter((template) => mappingId === template.id)[0];
+  public getTemplateById(mappingId: string): ItemTemplate | null {
+    const templates = this.itemTemplates.filter((template) => mappingId === template.id);
+    if (templates && templates.length > 0) {
+      return templates[0];
+    }
+
+    return null;
   }
 
   public createItemWithTemplate(template: ItemTemplate, data: ItemDTO): Item | undefined {
