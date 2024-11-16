@@ -3,7 +3,6 @@ import { GameManager } from '@/core/Manager';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
-import { LogInScene } from './LogInScene';
 import { MenuScene } from './MenuScene';
 import {
   getProgramVersion,
@@ -13,44 +12,45 @@ import {
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
 
-export class SignUpScene extends Container implements IScene {
+export class AuthScene extends Container implements IScene {
+  private container!: Graphics;
+  private authFormType: 'Login' | 'Register' = 'Login';
   private manager: GameManager = GameManager.getInstance();
-  private readonly container: Graphics;
-  private readonly version: Text;
 
-  private loginInput!: Input;
+  private emailInput!: Input;
   private passwordInput!: Input;
   private passwordVerifyInput!: Input;
+  private background: Sprite;
 
-  private logInActionButton!: FancyButton;
-  private submitSignUpButton!: FancyButton;
+  private actionButton!: FancyButton;
+  private submitButton!: FancyButton;
 
+  private readonly version: Text;
   private readonly socialMediaIcons: Container;
 
   constructor() {
     super();
 
-    const background = Sprite.from('signup_background');
-    this.addChild(background);
+    this.background = Sprite.from('login_background');
+    this.addChild(this.background);
 
     this.version = getProgramVersion();
     this.addChild(this.version);
 
-    this.container = new Graphics();
-    this.drawContainer();
-
     this.socialMediaIcons = getSocialMediaIcons();
     this.addChild(this.socialMediaIcons);
 
-    this.drawLoginInput();
-    this.drawPasswordInput();
-    this.drawPasswordVerifyInput();
-
-    this.drawLogInActionButton();
-    this.drawSubmitSignUpButton();
+    this.renderContainer();
+    this.renderEmailInput();
+    this.renderPasswordInput();
+    this.renderPasswordVerifyInput();
+    this.renderActionButton();
+    this.renderSubmitButton();
   }
 
-  private drawContainer() {
+  private renderContainer() {
+    this.container = new Graphics();
+
     this.container.roundRect(0, 0, 550, 650, 30).fill(theme.background.tertiary);
 
     this.container.stroke({
@@ -65,8 +65,8 @@ export class SignUpScene extends Container implements IScene {
     this.addChild(this.container);
   }
 
-  private drawLoginInput() {
-    this.loginInput = new Input({
+  private renderEmailInput() {
+    this.emailInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
         .fill(theme.background.transparent)
@@ -87,17 +87,17 @@ export class SignUpScene extends Container implements IScene {
       addMask: false,
     });
 
-    this.loginInput.x = 90;
-    this.loginInput.y = 100;
+    this.emailInput.x = 90;
+    this.emailInput.y = 100;
 
-    this.loginInput.onChange.connect(() => {
-      console.log(this.loginInput.value);
+    this.emailInput.onChange.connect(() => {
+      console.log(this.emailInput.value);
     });
 
-    this.container.addChild(this.loginInput);
+    this.container.addChild(this.emailInput);
   }
 
-  private drawPasswordInput() {
+  private renderPasswordInput() {
     this.passwordInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
@@ -129,7 +129,7 @@ export class SignUpScene extends Container implements IScene {
     this.container.addChild(this.passwordInput);
   }
 
-  private drawPasswordVerifyInput() {
+  private renderPasswordVerifyInput() {
     this.passwordVerifyInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
@@ -159,11 +159,12 @@ export class SignUpScene extends Container implements IScene {
     });
 
     this.container.addChild(this.passwordVerifyInput);
+    this.hidePasswordVerifyInput();
   }
 
-  private drawLogInActionButton() {
+  private renderActionButton() {
     const buttonText = new Text({
-      text: 'Already have an account? Log in',
+      text: "Don't have an account? Sign up",
       style: {
         fontSize: 18,
         fill: theme.neutral.white,
@@ -171,7 +172,7 @@ export class SignUpScene extends Container implements IScene {
       },
     });
 
-    this.logInActionButton = new FancyButton({
+    this.actionButton = new FancyButton({
       text: buttonText,
       animations: FANCY_BUTTON_BASE_ANIMATION,
     });
@@ -180,31 +181,57 @@ export class SignUpScene extends Container implements IScene {
     const width = buttonText.width + padding * 2;
     const height = buttonText.height + padding * 2;
 
-    this.logInActionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
+    this.actionButton.hitArea = new Rectangle(-width / 2, -height / 2, width, height);
 
-    this.logInActionButton.eventMode = 'dynamic';
+    this.actionButton.eventMode = 'dynamic';
 
-    this.logInActionButton.onPress.connect(() => {
+    this.actionButton.onPress.connect(() => {
       sound.play('main_click_sound');
-      this.manager.changeScene(new LogInScene());
+      this.updateAuthFormState();
     });
 
-    this.logInActionButton.onPress;
+    this.actionButton.y = this.container.height - 100;
+    this.actionButton.x = this.container.width / 2;
 
-    this.logInActionButton.y = this.container.height - 100;
-    this.logInActionButton.x = this.container.width / 2;
-
-    this.container.addChild(this.logInActionButton);
+    this.container.addChild(this.actionButton);
   }
 
-  private drawSubmitSignUpButton() {
-    this.submitSignUpButton = new FancyButton({
+  private updateAuthFormState() {
+    if (this.authFormType === 'Login') {
+      this.submitButton.text = 'Sign Up';
+      this.actionButton.text = 'Already have an account? Log in';
+      this.setBackground('signup_background');
+      this.showPasswordVerifyInput();
+      this.submitButton.y = this.container.height / 2 + 15;
+      this.submitButton.x = this.container.width / 2 - 100;
+      this.authFormType = 'Register';
+    } else {
+      this.submitButton.text = 'Log In';
+      this.setBackground('login_background');
+      this.actionButton.text = "Don't have an account? Sign up";
+      this.hidePasswordVerifyInput();
+      this.submitButton.y = this.container.height / 2 - 67;
+      this.submitButton.x = this.container.width / 2 - 100;
+      this.authFormType = 'Login';
+    }
+  }
+
+  private setBackground(textureName: string) {
+    if (this.background && this.background.parent) {
+      this.background.parent.removeChild(this.background);
+    }
+    this.background = Sprite.from(textureName);
+    this.addChildAt(this.background, 0);
+  }
+
+  private renderSubmitButton() {
+    this.submitButton = new FancyButton({
       defaultView: new Graphics().roundRect(0, 0, 200, 60, 30).fill(theme.background.transparent).stroke({
         color: theme.border.secondary,
         width: 1,
       }),
       text: new Text({
-        text: 'Sign up',
+        text: 'Log In',
         style: {
           fontSize: 20,
           fill: theme.neutral.white,
@@ -232,17 +259,28 @@ export class SignUpScene extends Container implements IScene {
       },
     });
 
-    this.submitSignUpButton.y = this.container.height / 2 + 15;
-    this.submitSignUpButton.x = this.container.width / 2 - 100;
+    this.submitButton.y = this.container.height / 2 - 67;
+    this.submitButton.x = this.container.width / 2 - 100;
 
-    this.submitSignUpButton.onHover.connect(() => sound.play('main_hover_sound'));
-    this.submitSignUpButton.onPress.connect(() => this.handleSignUpClick());
+    this.submitButton.onHover.connect(() => sound.play('main_hover_sound'));
+    this.submitButton.onPress.connect(() => this.handleSubmitButtonClick());
 
-    this.container.addChild(this.submitSignUpButton);
+    this.container.addChild(this.submitButton);
   }
 
-  private handleSignUpClick() {
+  private showPasswordVerifyInput() {
+    this.passwordVerifyInput.visible = true;
+  }
+
+  private hidePasswordVerifyInput() {
+    this.passwordVerifyInput.visible = false;
+  }
+
+  private handleSubmitButtonClick() {
     sound.play('main_click_sound');
+
+    // TODO: implement the auth logic here
+
     this.manager.changeScene(new MenuScene());
   }
 

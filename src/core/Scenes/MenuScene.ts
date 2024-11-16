@@ -3,7 +3,7 @@ import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameScene, LogInScene } from '@core/Scenes';
+import { AuthScene, GameScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 import {
   getProgramVersion,
@@ -99,7 +99,7 @@ export class MenuScene extends Container implements IScene {
   }
 
   logout() {
-    this.manager.changeScene(new LogInScene());
+    this.manager.changeScene(new AuthScene());
   }
 
   openSettings() {}

@@ -3,7 +3,7 @@ import { manifest } from '@/assets/Assets.ts';
 import { GameManager } from '@core/Manager';
 import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
-import { LogInScene } from '@core/Scenes';
+import { AuthScene } from '@core/Scenes';
 import { theme } from '@/config';
 import GameFactory from '@core/Entities/Factory/GameFactory.ts';
 
@@ -64,7 +64,7 @@ export class InitialScene extends Container implements IScene {
 
   private assetsLoaded(): void {
     const manager = GameManager.getInstance();
-    manager.changeScene(new LogInScene());
+    manager.changeScene(new AuthScene());
   }
 
   update(_framesPassed: number): void {
