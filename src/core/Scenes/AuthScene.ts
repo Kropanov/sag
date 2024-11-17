@@ -310,7 +310,7 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    // TODO: continue implementation logic...
+    localStorage.setItem('authToken', data.authToken);
 
     this.manager.changeScene(new MenuScene());
   }
