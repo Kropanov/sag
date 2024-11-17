@@ -19,7 +19,8 @@ export class AuthService {
     try {
       const response = await ApiClient.post('v1/auth/signup', body);
 
-      if (response && response.status === 200) {
+      // FIXME: handle response
+      if (response && response.status >= 200 && response.status < 300) {
         return response.data;
       }
     } catch (e) {

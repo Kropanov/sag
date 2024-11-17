@@ -12,6 +12,7 @@ import {
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
 import { AuthService } from '@/api';
+import { StorageService } from '@core/Storage';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
@@ -292,6 +293,7 @@ export class AuthScene extends Container implements IScene {
     }
   }
 
+  // TODO: do processAuthSubmit instead of processLoginSubmit and processSignupSubmit to avoid duplicate code
   private async processLoginSubmit() {
     if (!this.validateLoginData()) {
       // TODO: Add a notification instead of console log
@@ -310,7 +312,8 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    localStorage.setItem('authToken', data.authToken);
+    const storage = new StorageService();
+    storage.setItem('authToken', data.authToken);
 
     this.manager.changeScene(new MenuScene());
   }
@@ -321,6 +324,20 @@ export class AuthScene extends Container implements IScene {
       console.log('Signup data is invalid');
       return;
     }
+
+    const body = {
+      email: this.emailInput.value,
+      password: this.passwordInput.value,
+    };
+
+    const data = await this.authService.register(body);
+
+    if (!data) {
+      return;
+    }
+
+    const storage = new StorageService();
+    storage.setItem('authToken', data.authToken);
 
     this.manager.changeScene(new MenuScene());
   }
@@ -336,14 +353,15 @@ export class AuthScene extends Container implements IScene {
       this.emailInput.value !== '' &&
       this.passwordInput.value !== '' &&
       this.passwordInput.value.length > 5 &&
-      this.passwordInput === this.passwordVerifyInput
+      this.passwordInput.value === this.passwordVerifyInput.value
     );
   }
 
   public update(_framesPassed: number): void {}
 
   public resize(screenWidth: number, screenHeight: number): void {
-    this.container.position.set(screenWidth / 2, screenHeight / 2);
+    // FIXME: perhaps this is the source of style bug
+    // this.container.position.set(screenWidth / 2, screenHeight / 2);
 
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
     handleProgramVersionResize(this.version, screenWidth, screenHeight);

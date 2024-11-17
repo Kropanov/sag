@@ -11,6 +11,7 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@/core/Misc';
+import { StorageService } from '@core/Storage';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -99,6 +100,8 @@ export class MenuScene extends Container implements IScene {
   }
 
   logout() {
+    const storage = new StorageService();
+    storage.removeItem('authToken');
     this.manager.changeScene(new AuthScene());
   }
 
