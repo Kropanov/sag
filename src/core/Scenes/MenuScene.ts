@@ -3,7 +3,7 @@ import { IScene } from '@/interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameScene, LogInScene } from '@core/Scenes';
+import { AuthScene, GameScene } from '@core/Scenes';
 import { GameManager } from '@/core/Manager';
 import {
   getProgramVersion,
@@ -11,6 +11,7 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@/core/Misc';
+import { StorageService } from '@core/Storage';
 
 export class MenuScene extends Container implements IScene {
   private manager = GameManager.getInstance();
@@ -99,7 +100,9 @@ export class MenuScene extends Container implements IScene {
   }
 
   logout() {
-    this.manager.changeScene(new LogInScene());
+    const storage = new StorageService();
+    storage.removeItem('authToken');
+    this.manager.changeScene(new AuthScene());
   }
 
   openSettings() {}

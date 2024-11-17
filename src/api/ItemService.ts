@@ -4,7 +4,7 @@ import { ItemDTO } from '@/api/dto';
 export class ItemService {
   async fetchAllItems(): Promise<ItemDTO[] | undefined> {
     try {
-      const response = await ApiClient.get('/items');
+      const response = await ApiClient.get('v1/items');
 
       if (response && response.status === 200) {
         return response.data as ItemDTO[];

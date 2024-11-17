@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { StorageService } from '@core/Storage';
 
 const ApiClient = axios.create({
   // TODO: baseURL: process.env.API_BASE_URL || 'http://localhost:3000/api/',
@@ -12,10 +13,13 @@ const ApiClient = axios.create({
 
 ApiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const storage = new StorageService();
+
+    const token = storage.getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => Promise.reject(error),

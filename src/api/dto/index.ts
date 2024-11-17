@@ -8,3 +8,13 @@ export type ItemDTO = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type LoginRequestDTO = {
+  email: string;
+  password: string;
+};
+
+export type RegisterRequestDTO = {
+  email: string;
+  password: string;
+};
