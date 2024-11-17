@@ -11,8 +11,10 @@ import {
   handleSocialMediaIconsResize,
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
+import { AuthService } from '@/api';
 
 export class AuthScene extends Container implements IScene {
+  private authService: AuthService;
   private container!: Graphics;
   private authFormType: 'Login' | 'Register' = 'Login';
   private manager: GameManager = GameManager.getInstance();
@@ -30,6 +32,8 @@ export class AuthScene extends Container implements IScene {
 
   constructor() {
     super();
+
+    this.authService = new AuthService();
 
     this.background = Sprite.from('login_background');
     this.addChild(this.background);
@@ -90,9 +94,7 @@ export class AuthScene extends Container implements IScene {
     this.emailInput.x = 90;
     this.emailInput.y = 100;
 
-    this.emailInput.onChange.connect(() => {
-      console.log(this.emailInput.value);
-    });
+    this.emailInput.onChange.connect(() => {});
 
     this.container.addChild(this.emailInput);
   }
@@ -122,9 +124,7 @@ export class AuthScene extends Container implements IScene {
     this.passwordInput.x = 90;
     this.passwordInput.y = 180;
 
-    this.passwordInput.onChange.connect(() => {
-      console.log(this.passwordInput.value);
-    });
+    this.passwordInput.onChange.connect(() => {});
 
     this.container.addChild(this.passwordInput);
   }
@@ -154,9 +154,7 @@ export class AuthScene extends Container implements IScene {
     this.passwordVerifyInput.x = 90;
     this.passwordVerifyInput.y = 260;
 
-    this.passwordVerifyInput.onChange.connect(() => {
-      console.log(this.passwordVerifyInput.value);
-    });
+    this.passwordVerifyInput.onChange.connect(() => {});
 
     this.container.addChild(this.passwordVerifyInput);
     this.hidePasswordVerifyInput();
@@ -194,34 +192,6 @@ export class AuthScene extends Container implements IScene {
     this.actionButton.x = this.container.width / 2;
 
     this.container.addChild(this.actionButton);
-  }
-
-  private updateAuthFormState() {
-    if (this.authFormType === 'Login') {
-      this.submitButton.text = 'Sign Up';
-      this.actionButton.text = 'Already have an account? Log in';
-      this.setBackground('signup_background');
-      this.showPasswordVerifyInput();
-      this.submitButton.y = this.container.height / 2 + 15;
-      this.submitButton.x = this.container.width / 2 - 100;
-      this.authFormType = 'Register';
-    } else {
-      this.submitButton.text = 'Log In';
-      this.setBackground('login_background');
-      this.actionButton.text = "Don't have an account? Sign up";
-      this.hidePasswordVerifyInput();
-      this.submitButton.y = this.container.height / 2 - 67;
-      this.submitButton.x = this.container.width / 2 - 100;
-      this.authFormType = 'Login';
-    }
-  }
-
-  private setBackground(textureName: string) {
-    if (this.background && this.background.parent) {
-      this.background.parent.removeChild(this.background);
-    }
-    this.background = Sprite.from(textureName);
-    this.addChildAt(this.background, 0);
   }
 
   private renderSubmitButton() {
@@ -268,6 +238,42 @@ export class AuthScene extends Container implements IScene {
     this.container.addChild(this.submitButton);
   }
 
+  private updateAuthFormState() {
+    if (this.authFormType === 'Login') {
+      this.submitButton.text = 'Sign Up';
+      this.actionButton.text = 'Already have an account? Log in';
+      this.setBackground('signup_background');
+      this.showPasswordVerifyInput();
+      this.submitButton.y = this.container.height / 2 + 15;
+      this.submitButton.x = this.container.width / 2 - 100;
+      this.authFormType = 'Register';
+    } else {
+      this.submitButton.text = 'Log In';
+      this.setBackground('login_background');
+      this.actionButton.text = "Don't have an account? Sign up";
+      this.hidePasswordVerifyInput();
+      this.submitButton.y = this.container.height / 2 - 67;
+      this.submitButton.x = this.container.width / 2 - 100;
+      this.authFormType = 'Login';
+    }
+
+    this.clearFormInputs();
+  }
+
+  private setBackground(textureName: string) {
+    if (this.background && this.background.parent) {
+      this.background.parent.removeChild(this.background);
+    }
+    this.background = Sprite.from(textureName);
+    this.addChildAt(this.background, 0);
+  }
+
+  private clearFormInputs() {
+    this.emailInput.value = '';
+    this.passwordInput.value = '';
+    this.passwordVerifyInput.value = '';
+  }
+
   private showPasswordVerifyInput() {
     this.passwordVerifyInput.visible = true;
   }
@@ -279,9 +285,59 @@ export class AuthScene extends Container implements IScene {
   private handleSubmitButtonClick() {
     sound.play('main_click_sound');
 
-    // TODO: implement the auth logic here
+    if (this.authFormType === 'Login') {
+      this.processLoginSubmit().then();
+    } else {
+      this.processSignupSubmit().then();
+    }
+  }
+
+  private async processLoginSubmit() {
+    if (!this.validateLoginData()) {
+      // TODO: Add a notification instead of console log
+      console.log('Login data is invalid');
+      return;
+    }
+
+    const body = {
+      email: this.emailInput.value,
+      password: this.passwordInput.value,
+    };
+
+    const data = await this.authService.login(body);
+
+    if (!data) {
+      return;
+    }
+
+    // TODO: continue implementation logic...
 
     this.manager.changeScene(new MenuScene());
+  }
+
+  private async processSignupSubmit() {
+    if (!this.validateSignupData()) {
+      // TODO: Add a notification instead of console log
+      console.log('Signup data is invalid');
+      return;
+    }
+
+    this.manager.changeScene(new MenuScene());
+  }
+
+  private validateLoginData(): boolean {
+    // FIXME: add validation of email and rework this method with notifications
+    return this.emailInput.value !== '' && this.passwordInput.value !== '' && this.passwordInput.value.length > 5;
+  }
+
+  private validateSignupData(): boolean {
+    // FIXME: add validation of email and rework this method with notifications (validateUserData instead of loginData and signupData
+    return (
+      this.emailInput.value !== '' &&
+      this.passwordInput.value !== '' &&
+      this.passwordInput.value.length > 5 &&
+      this.passwordInput === this.passwordVerifyInput
+    );
   }
 
   public update(_framesPassed: number): void {}
