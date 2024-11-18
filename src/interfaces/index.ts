@@ -3,6 +3,7 @@ import { vCollisionNormType } from '@/types';
 import { ItemRarity } from '@/types/item-rarity.enum';
 import { ItemType } from '@/types/item-type.enum';
 import { Item } from '@core/Entities';
+import { NotificationTypeEnum } from '@/types/notification-type.enum.ts';
 
 export interface IScene extends ContainerChild {
   update(framesPassed: number): void;
@@ -61,4 +62,10 @@ export interface HoverInfo {
   targetItem: Item;
   cursorX: number;
   cursorY: number;
+}
+
+export interface INotification {
+  id: string;
+  message: string;
+  type: NotificationTypeEnum;
 }
