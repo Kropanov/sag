@@ -1,8 +1,7 @@
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
 import { Item } from '@core/Entities';
-// import { ITEM_RARITY_COLORS } from '@/config/item.ts';
-import { ItemRarity } from '@/types/item-rarity.enum.ts';
+import { ItemRarity } from '@/enums';
 import { theme } from '@/config';
 
 class UIBackpackHoverInfoBox implements UIComponent {

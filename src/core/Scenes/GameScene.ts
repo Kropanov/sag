@@ -4,7 +4,7 @@ import { GameManager } from '@core/Manager';
 import { Cartridge, Player, Gun } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MusicController } from '@core/Music';
-import { AMMO_TYPE } from '@/types/ammo.enum';
+import { AMMO_TYPE } from '@/enums';
 import { HUDController } from '@core/Display';
 import { Backpack } from '../Entities/Backpack';
 import GameFactory from '@core/Entities/Factory/GameFactory.ts';

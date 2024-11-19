@@ -1,6 +1,5 @@
 import { ItemProps } from '@/interfaces';
-import { ItemRarity } from '@/types/item-rarity.enum';
-import { ItemType } from '@/types/item-type.enum';
+import { ItemRarity, ItemType } from '@/enums';
 import { Sprite } from 'pixi.js';
 
 export abstract class Item {

@@ -1,9 +1,7 @@
 import { Container, ContainerChild } from 'pixi.js';
 import { vCollisionNormType } from '@/types';
-import { ItemRarity } from '@/types/item-rarity.enum';
-import { ItemType } from '@/types/item-type.enum';
+import { ItemRarity, ItemType, NotificationTypeEnum } from '@/enums';
 import { Item } from '@core/Entities';
-import { NotificationTypeEnum } from '@/types/notification-type.enum.ts';
 
 export interface IScene extends ContainerChild {
   update(framesPassed: number): void;

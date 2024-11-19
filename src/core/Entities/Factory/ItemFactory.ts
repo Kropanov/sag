@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ItemTemplate } from '@/types';
 import { ItemDTO } from '@/api/dto';
 import { ItemProps } from '@/interfaces';
-import { ItemType } from '@/types/item-type.enum.ts';
+import { ItemType } from '@/enums';
 import { Artifact, Item, Player, ReincarnationAbility } from '@core/Entities';
 import { Material } from '@core/Entities/Material.ts';
 

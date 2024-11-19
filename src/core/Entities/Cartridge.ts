@@ -1,6 +1,6 @@
 import { sound } from '@pixi/sound';
 import { Ammo } from './Ammo';
-import { AMMO_TYPE } from '@/types/ammo.enum';
+import { AMMO_TYPE } from '@/enums';
 import { HUDController } from '@/core/Display';
 
 export class Cartridge {
