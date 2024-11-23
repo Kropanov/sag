@@ -1,10 +1,9 @@
 import { Container, Assets, Text } from 'pixi.js';
-import { manifest } from '@/assets/Assets.ts';
 import { GameManager } from '@core/Manager';
 import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { AuthScene, MenuScene } from '@core/Scenes';
-import { theme } from '@/config';
+import { manifest, theme } from '@/config';
 import GameFactory from '@core/Entities/Factory/GameFactory.ts';
 import { StorageService } from '@core/Storage';
 
