@@ -2,7 +2,7 @@ import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, them
 import { Item, Player } from '@/core/Entities';
 import { GameManager } from '@/core/Manager';
 import { BackpackEvents, UIComponent } from '@/interfaces';
-import { Slot, Slots } from '@/types';
+import { Slot } from '@/types';
 import mitt, { Emitter } from 'mitt';
 import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
 import { isStackable } from '@/utils';
@@ -11,7 +11,7 @@ export class UIBackpack implements UIComponent {
   private backpack: Array<Item | null> = [];
   private emitter: Emitter<BackpackEvents>;
 
-  private slots: Slots = [];
+  private slots: Slot[] = [];
   private readonly slotsContainer: Container;
 
   private player: Player;

@@ -15,3 +15,4 @@ export * from './Player.ts';
 export * from './Ammo.ts';
 export * from './Cartridge.ts';
 export * from './Gun.ts';
+export * from './Notification.ts';

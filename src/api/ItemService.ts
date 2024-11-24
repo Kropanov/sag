@@ -1,5 +1,5 @@
 import ApiClient from './ApiClient.ts';
-import { ItemDTO } from '@/api/dto';
+import { ItemDTO } from '@/types/dto';
 
 export class ItemService {
   async fetchAllItems(): Promise<ItemDTO[] | undefined> {

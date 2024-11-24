@@ -1,6 +1,6 @@
 import { AMMO_DAMAGE } from '@/config';
 import { DirectionType } from '@/types';
-import { AMMO_TYPE } from '@/types/ammo.enum';
+import { AMMO_TYPE } from '@/enums';
 import { Sprite } from 'pixi.js';
 
 export class Ammo {

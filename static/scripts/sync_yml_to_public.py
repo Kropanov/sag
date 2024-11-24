@@ -3,8 +3,8 @@ import sys
 import shutil
 
 ENV_TYPES = ['prod', 'dev']
-PATH_TO_DATA = os.path.abspath('../src/data')
-PATH_TO_PUBLIC = os.path.abspath('../public')
+PATH_TO_DATA = os.path.abspath('../data')
+PATH_TO_PUBLIC = os.path.abspath('../../public')
 
 def main(env='dev'):
     print('Environment:', env)

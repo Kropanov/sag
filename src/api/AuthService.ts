@@ -1,5 +1,5 @@
 import ApiClient from '@/api/ApiClient.ts';
-import { LoginRequestDTO, RegisterRequestDTO } from '@/api/dto';
+import { LoginRequestDTO, RegisterRequestDTO } from '@/types/dto';
 
 export class AuthService {
   async login(body: LoginRequestDTO) {

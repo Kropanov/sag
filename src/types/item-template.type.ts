@@ -1,5 +1,4 @@
-import { ItemType } from '@/types/item-type.enum.ts';
-import { ItemRarity } from '@/types/item-rarity.enum.ts';
+import { ItemType, ItemRarity } from '@/enums';
 
 export type ItemTemplate = {
   id: string;

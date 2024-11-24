@@ -3,7 +3,7 @@ import { UIComponent } from '@/interfaces';
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
 import { UIAmmo } from './UIAmmo';
 import { Item } from '@/core/Entities';
-import { ItemType } from '@/types/item-type.enum';
+import { ItemType } from '@/enums';
 import { UIAmount } from './UIAmount';
 import { theme } from '@/config';
 

@@ -1,64 +1,9 @@
-import { Container, ContainerChild } from 'pixi.js';
-import { vCollisionNormType } from '@/types';
-import { ItemRarity } from '@/types/item-rarity.enum';
-import { ItemType } from '@/types/item-type.enum';
-import { Item } from '@core/Entities';
-
-export interface IScene extends ContainerChild {
-  update(framesPassed: number): void;
-  resize(screenWidth: number, screenHeight: number): void;
-}
-
-export interface IPlayer {
-  init(): void;
-  sync(framesPassed: number): void;
-  draw(gameScene: IScene): void;
-}
-
-export interface IEntity {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  isColliding: boolean;
-
-  moveLeft(fps: number): void;
-  moveRight(fps: number): void;
-  handleCollision(vCollisionNorm: vCollisionNormType, speed: number): void;
-}
-
-// TODO: move entity interface to different file like item.ts and classes should extend of it
-export interface ItemProps {
-  name?: string;
-  cost?: number;
-  asset?: string;
-  type?: ItemType;
-  amount?: number;
-  history?: string;
-  spriteId?: string;
-  rarity?: ItemRarity;
-  description?: string;
-}
-
-export interface UIComponent {
-  render(): Array<ContainerChild>;
-  getContainer(): Container;
-  addComponent(component: UIComponent): void;
-  resize(screenWidth: number, screenHeight: number): void;
-}
-
-export interface ArtifactAbility {
-  use(): void;
-}
-
-export interface BackpackEvents {
-  [event: string]: unknown;
-  [event: symbol]: unknown;
-  slotSelected: number;
-}
-
-export interface HoverInfo {
-  targetItem: Item;
-  cursorX: number;
-  cursorY: number;
-}
+export * from './artifact-ability.interface.ts';
+export * from './backpack-events.interface.ts';
+export * from './entity.interface.ts';
+export * from './hover-info.interface.ts';
+export * from './item-props.interface.ts';
+export * from './notification.interface.ts';
+export * from './player.interface.ts';
+export * from './scene.interface.ts';
+export * from './ui-component.interface.ts';
