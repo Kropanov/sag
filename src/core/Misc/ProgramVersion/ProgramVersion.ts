@@ -1,12 +1,13 @@
 import { Text } from 'pixi.js';
 import { GameManager } from '@/core/Manager';
 import { theme } from '@/config';
+import { version } from '../../../../package.json';
 
 function getProgramVersion() {
   const manager = GameManager.getInstance();
 
-  const version = new Text({
-    text: 'v0.0.0 beta',
+  const versionText = new Text({
+    text: `v${version} beta`,
     style: {
       fontFamily: 'Consolas',
       fontSize: 20,
@@ -14,10 +15,10 @@ function getProgramVersion() {
     },
   });
 
-  version.x = manager.getWidth() - version.width - 8;
-  version.y = manager.getHeight() - version.height - 5;
+  versionText.x = manager.getWidth() - versionText.width - 8;
+  versionText.y = manager.getHeight() - versionText.height - 5;
 
-  return version;
+  return versionText;
 }
 
 function handleProgramVersionResize(version: Text, screenWidth: number, screenHeight: number) {
