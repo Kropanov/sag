@@ -1,4 +1,4 @@
-const FANCY_BUTTON_BASE_ANIMATION = {
+export const FANCY_BUTTON_BASE_ANIMATION = {
   hover: {
     props: {
       scale: { x: 1.1, y: 1.1 },
@@ -14,5 +14,3 @@ const FANCY_BUTTON_BASE_ANIMATION = {
     duration: 100,
   },
 };
-
-export { FANCY_BUTTON_BASE_ANIMATION };

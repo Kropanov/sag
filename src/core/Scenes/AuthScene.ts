@@ -167,7 +167,6 @@ export class AuthScene extends Container implements IScene {
       style: {
         fontSize: 18,
         fill: theme.neutral.white,
-        textBaseline: 'bottom',
       },
     });
 
@@ -206,8 +205,6 @@ export class AuthScene extends Container implements IScene {
         style: {
           fontSize: 20,
           fill: theme.neutral.white,
-          textBaseline: 'middle',
-          align: 'center',
         },
       }),
       animations: {
@@ -360,8 +357,7 @@ export class AuthScene extends Container implements IScene {
   public update(_framesPassed: number): void {}
 
   public resize(screenWidth: number, screenHeight: number): void {
-    // FIXME: perhaps this is the source of style bug
-    // this.container.position.set(screenWidth / 2, screenHeight / 2);
+    this.container.position.set(screenWidth / 2, screenHeight / 2);
 
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
     handleProgramVersionResize(this.version, screenWidth, screenHeight);
