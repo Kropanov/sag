@@ -1,4 +1,4 @@
 export type LoginRequestDTO = {
-  email: string;
+  name: string;
   password: string;
 };
