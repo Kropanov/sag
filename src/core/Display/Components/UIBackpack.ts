@@ -1,6 +1,6 @@
 import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@/config';
 import { Item, Player } from '@/core/Entities';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { BackpackEvents, UIComponent } from '@/interfaces';
 import { Slot } from '@/types';
 import mitt, { Emitter } from 'mitt';

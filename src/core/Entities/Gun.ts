@@ -1,5 +1,5 @@
 import { Keyboard } from '@/core/Keyboard';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../Managers';
 import { Item, Player } from '@/core/Entities';
 import { isClickInsideHUDElement, lerp } from '@/utils';
 import { Cartridge } from './Cartridge';

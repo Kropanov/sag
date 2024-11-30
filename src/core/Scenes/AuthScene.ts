@@ -1,5 +1,5 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../Managers';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
@@ -18,7 +18,7 @@ export class AuthScene extends Container implements IScene {
   private authService: AuthService;
   private container!: Graphics;
   private authFormType: 'Login' | 'Register' = 'Login';
-  private manager: GameManager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private usernameInput!: Input;
   private passwordInput!: Input;
@@ -65,7 +65,7 @@ export class AuthScene extends Container implements IScene {
     });
 
     this.container.pivot.set(275, 325);
-    this.container.position.set(this.manager.getWidth() / 2, this.manager.getHeight() / 2);
+    this.container.position.set(this.game.scene.getWidth() / 2, this.game.scene.getHeight() / 2);
 
     this.addChild(this.container);
   }
@@ -312,7 +312,7 @@ export class AuthScene extends Container implements IScene {
     const storage = new StorageService();
     storage.setItem('authToken', data.authToken);
 
-    this.manager.changeScene(new MenuScene());
+    this.game.scene.changeScene(new MenuScene());
   }
 
   private async processSignupSubmit() {
@@ -336,7 +336,7 @@ export class AuthScene extends Container implements IScene {
     const storage = new StorageService();
     storage.setItem('authToken', data.authToken);
 
-    this.manager.changeScene(new MenuScene());
+    this.game.scene.changeScene(new MenuScene());
   }
 
   private validateLoginData(): boolean {

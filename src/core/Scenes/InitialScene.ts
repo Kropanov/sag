@@ -1,5 +1,5 @@
 import { Container, Assets, Text } from 'pixi.js';
-import { GameManager } from '@core/Manager';
+import { GameManager } from '../Managers';
 import { IScene } from '@/interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { AuthScene, MenuScene } from '@core/Scenes';

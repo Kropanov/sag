@@ -1,4 +1,4 @@
-import { GameManager } from '@core/Manager';
+import { GameManager } from '../Managers';
 import { InitialScene } from '@core/Scenes';
 import { theme } from '@/config';
 import { NotificationManager } from '@core/Notification';

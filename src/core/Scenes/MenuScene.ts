@@ -4,7 +4,7 @@ import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@/types';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
 import { AuthScene, GameScene } from '@core/Scenes';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../Managers';
 import {
   getProgramVersion,
   getSocialMediaIcons,
@@ -14,14 +14,14 @@ import {
 import { StorageService } from '@core/Storage';
 
 export class MenuScene extends Container implements IScene {
-  private manager = GameManager.getInstance();
-  private background: Sprite;
+  private game: GameManager = new GameManager();
+  private readonly background: Sprite;
 
-  private version!: Text;
-  private menu: List;
+  private readonly version!: Text;
+  private readonly menu: List;
 
   private items: Array<MenuItemsType> = [
-    { text: 'New', fn: () => this.game() },
+    { text: 'New', fn: () => this.startGame() },
     { text: 'Load', fn: () => {} },
     { text: 'Online', fn: () => {} },
     { text: 'Settings', fn: () => this.openSettings() },
@@ -29,7 +29,7 @@ export class MenuScene extends Container implements IScene {
     { text: 'Log out', fn: () => this.logout() },
   ];
 
-  private socialMediaIcons: Container;
+  private readonly socialMediaIcons: Container;
 
   constructor() {
     super();
@@ -48,25 +48,16 @@ export class MenuScene extends Container implements IScene {
       type: 'vertical',
     });
 
-    this.menu.x = this.manager.getWidth() / 2;
-    this.menu.y = this.manager.getHeight() / 2.3;
+    this.menu.x = this.game.scene.getWidth() / 2;
+    this.menu.y = this.game.scene.getHeight() / 2.3;
 
     this.fillMenu();
 
     this.addChild(this.menu);
   }
 
-  game() {
-    this.manager.changeScene(new GameScene());
-  }
-
-  back() {
-    this.manager.changeScene(new MenuScene());
-  }
-
-  clearMenu() {
-    this.items = [];
-    this.menu.removeChildren();
+  startGame() {
+    this.game.scene.changeScene(new GameScene());
   }
 
   fillMenu() {
@@ -95,14 +86,10 @@ export class MenuScene extends Container implements IScene {
     });
   }
 
-  onClickMenuItem(scene: IScene) {
-    this.manager.changeScene(scene);
-  }
-
   logout() {
     const storage = new StorageService();
     storage.removeItem('authToken');
-    this.manager.changeScene(new AuthScene());
+    this.game.scene.changeScene(new AuthScene());
   }
 
   openSettings() {}

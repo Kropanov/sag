@@ -1,5 +1,5 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { MenuScene } from '@/core/Scenes';
 import { UIComponent } from '@/interfaces';
 import { MenuItemsType } from '@/types';

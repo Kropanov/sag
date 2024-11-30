@@ -1,6 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@/interfaces';
-import { GameManager } from '@core/Manager';
+import { GameManager } from '../Managers';
 import { Cartridge, Player, Gun } from '@core/Entities';
 import { Keyboard } from '@core/Keyboard';
 import { MusicController } from '@core/Music';

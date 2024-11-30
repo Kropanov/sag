@@ -1,4 +1,4 @@
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
 import { UISettingsMenu } from '@core/Display';

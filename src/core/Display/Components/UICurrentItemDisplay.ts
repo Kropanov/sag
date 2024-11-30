@@ -1,4 +1,4 @@
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
 import { UIAmmo } from './UIAmmo';
