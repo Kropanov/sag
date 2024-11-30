@@ -1,21 +1,31 @@
 import { Notification } from '@core/Entities';
 import { NotificationWidget } from '@core/Display';
-import { INotification } from '@/interfaces';
+import { INotification, IScene } from '@/interfaces';
 
-// TODO: complete logic
+// TODO: rework after ui components refactoring
 export class NotificationManager {
-  private uiNotification: NotificationWidget;
-  private entity: Notification;
+  static _instance: NotificationManager;
+  private scene!: IScene;
+  private entity: Notification = new Notification();
+  private uiNotification: NotificationWidget = new NotificationWidget();
 
-  constructor(uiNotification: NotificationWidget, logic: Notification) {
-    this.uiNotification = uiNotification;
-    this.entity = logic;
+  constructor() {
+    if (NotificationManager._instance) {
+      return NotificationManager._instance;
+    }
+
+    NotificationManager._instance = this;
+  }
+
+  setScene(scene: IScene) {
+    console.log(scene);
+    this.scene = scene;
+    console.log(this.scene);
   }
 
   updateUI() {
-    const notifications = this.entity.getNotifications();
-    console.log(notifications);
-    this.uiNotification.render();
+    this.entity.getNotifications();
+    this.uiNotification.update();
   }
 
   push(notification: INotification): void {

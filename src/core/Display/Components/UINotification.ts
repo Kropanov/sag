@@ -1,16 +1,19 @@
 import { UIComponent } from '@/interfaces';
-import { ContainerChild, Container } from 'pixi.js';
+import { Container } from 'pixi.js';
 
 export class NotificationWidget {
-  private container: Container;
+  private readonly container: Container;
 
   constructor() {
     this.container = new Container();
+    this.render();
   }
 
-  render(): Array<ContainerChild> {
-    return [this.container];
+  render() {
+    return this.container;
   }
+
+  update() {}
 
   getContainer(): Container {
     throw new Error('Method not implemented.');

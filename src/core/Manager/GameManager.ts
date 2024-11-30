@@ -1,9 +1,10 @@
 import { Application, Ticker } from 'pixi.js';
 import { IScene } from '@/interfaces';
+import { NotificationManager } from '@core/Notification';
 
 export class GameManager {
   private static _instance: GameManager;
-
+  private notificationManager: NotificationManager = new NotificationManager();
   private app!: Application;
   private currentScene!: IScene;
 
@@ -56,6 +57,8 @@ export class GameManager {
 
     this.currentScene = newScene;
     this.app.stage.addChild(this.currentScene);
+
+    this.notificationManager.setScene(newScene);
   }
 
   private resize(): void {
