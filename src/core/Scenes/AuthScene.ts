@@ -12,7 +12,6 @@ import {
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
 import { AuthService } from '@/api';
-import { StorageService } from '@core/Storage';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
@@ -309,9 +308,7 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    const storage = new StorageService();
-    storage.setItem('authToken', data.authToken);
-
+    this.game.storage.setItem('authToken', data.authToken);
     this.game.scene.changeScene(new MenuScene());
   }
 
@@ -333,9 +330,7 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    const storage = new StorageService();
-    storage.setItem('authToken', data.authToken);
-
+    this.game.storage.setItem('authToken', data.authToken);
     this.game.scene.changeScene(new MenuScene());
   }
 

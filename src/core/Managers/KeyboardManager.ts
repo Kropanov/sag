@@ -1,17 +1,15 @@
-export class Keyboard {
-  private static _instance: Keyboard;
+export class KeyboardManager {
+  private static _instance: KeyboardManager;
   public readonly state: Map<string, boolean> = new Map();
   private justPressedState: Map<string, boolean> = new Map();
 
-  private constructor() {}
-
-  public static getInstance(): Keyboard {
-    if (!Keyboard._instance) {
-      Keyboard._instance = new Keyboard();
-      this._instance.initialize();
+  constructor() {
+    if (KeyboardManager._instance) {
+      return KeyboardManager._instance;
     }
 
-    return Keyboard._instance;
+    this.initialize();
+    KeyboardManager._instance = this;
   }
 
   public initialize() {

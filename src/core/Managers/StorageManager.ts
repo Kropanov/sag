@@ -1,12 +1,12 @@
-export class StorageService {
-  private static _instance: StorageService;
+export class StorageManager {
+  private static _instance: StorageManager;
 
   constructor(private storage: Storage = localStorage) {
-    if (StorageService._instance) {
-      return StorageService._instance;
+    if (StorageManager._instance) {
+      return StorageManager._instance;
     }
 
-    StorageService._instance = this;
+    StorageManager._instance = this;
   }
 
   setItem(key: string, value: any): void {
