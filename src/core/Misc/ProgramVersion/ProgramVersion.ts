@@ -1,5 +1,5 @@
 import { Text } from 'pixi.js';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { theme } from '@/config';
 import { version } from '../../../../package.json';
 

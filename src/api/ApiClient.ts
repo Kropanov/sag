@@ -1,5 +1,5 @@
+import { StorageManager } from '@core/Managers';
 import axios from 'axios';
-import { StorageService } from '@core/Storage';
 
 const ApiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/',
@@ -12,7 +12,7 @@ const ApiClient = axios.create({
 
 ApiClient.interceptors.request.use(
   (config) => {
-    const storage = new StorageService();
+    const storage = new StorageManager();
 
     const token = storage.getToken();
     if (token) {
@@ -34,4 +34,4 @@ ApiClient.interceptors.response.use(
   },
 );
 
-export default ApiClient;
+export { ApiClient };

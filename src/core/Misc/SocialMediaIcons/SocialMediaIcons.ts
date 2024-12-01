@@ -1,5 +1,5 @@
 import { GITHUB_REP_LINK } from '@/config';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../../Managers';
 import { Container, Sprite } from 'pixi.js';
 
 function getSocialMediaIcons() {

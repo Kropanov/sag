@@ -1,5 +1,5 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '@/core/Manager';
+import { GameManager } from '../Managers';
 import { IScene } from '@/interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
@@ -12,15 +12,14 @@ import {
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
 import { AuthService } from '@/api';
-import { StorageService } from '@core/Storage';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
   private container!: Graphics;
   private authFormType: 'Login' | 'Register' = 'Login';
-  private manager: GameManager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
-  private emailInput!: Input;
+  private usernameInput!: Input;
   private passwordInput!: Input;
   private passwordVerifyInput!: Input;
   private background: Sprite;
@@ -46,7 +45,7 @@ export class AuthScene extends Container implements IScene {
     this.addChild(this.socialMediaIcons);
 
     this.renderContainer();
-    this.renderEmailInput();
+    this.renderUsernameInput();
     this.renderPasswordInput();
     this.renderPasswordVerifyInput();
     this.renderActionButton();
@@ -65,13 +64,13 @@ export class AuthScene extends Container implements IScene {
     });
 
     this.container.pivot.set(275, 325);
-    this.container.position.set(this.manager.getWidth() / 2, this.manager.getHeight() / 2);
+    this.container.position.set(this.game.scene.getWidth() / 2, this.game.scene.getHeight() / 2);
 
     this.addChild(this.container);
   }
 
-  private renderEmailInput() {
-    this.emailInput = new Input({
+  private renderUsernameInput() {
+    this.usernameInput = new Input({
       bg: new Graphics()
         .roundRect(0, 0, this.container.width / 1.5, 40, 30)
         .fill(theme.background.transparent)
@@ -79,7 +78,7 @@ export class AuthScene extends Container implements IScene {
           color: theme.border.secondary,
           width: 1,
         }),
-      placeholder: 'E-mail',
+      placeholder: 'Username',
       maxLength: 35,
       padding: [10, 15],
       textStyle: {
@@ -92,12 +91,12 @@ export class AuthScene extends Container implements IScene {
       addMask: false,
     });
 
-    this.emailInput.x = 90;
-    this.emailInput.y = 100;
+    this.usernameInput.x = 90;
+    this.usernameInput.y = 100;
 
-    this.emailInput.onChange.connect(() => {});
+    this.usernameInput.onChange.connect(() => {});
 
-    this.container.addChild(this.emailInput);
+    this.container.addChild(this.usernameInput);
   }
 
   private renderPasswordInput() {
@@ -167,7 +166,6 @@ export class AuthScene extends Container implements IScene {
       style: {
         fontSize: 18,
         fill: theme.neutral.white,
-        textBaseline: 'bottom',
       },
     });
 
@@ -206,8 +204,6 @@ export class AuthScene extends Container implements IScene {
         style: {
           fontSize: 20,
           fill: theme.neutral.white,
-          textBaseline: 'middle',
-          align: 'center',
         },
       }),
       animations: {
@@ -270,7 +266,7 @@ export class AuthScene extends Container implements IScene {
   }
 
   private clearFormInputs() {
-    this.emailInput.value = '';
+    this.usernameInput.value = '';
     this.passwordInput.value = '';
     this.passwordVerifyInput.value = '';
   }
@@ -302,7 +298,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     const body = {
-      email: this.emailInput.value,
+      name: this.usernameInput.value,
       password: this.passwordInput.value,
     };
 
@@ -312,10 +308,8 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    const storage = new StorageService();
-    storage.setItem('authToken', data.authToken);
-
-    this.manager.changeScene(new MenuScene());
+    this.game.storage.setItem('authToken', data.authToken);
+    this.game.scene.changeScene(new MenuScene());
   }
 
   private async processSignupSubmit() {
@@ -326,7 +320,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     const body = {
-      email: this.emailInput.value,
+      name: this.usernameInput.value,
       password: this.passwordInput.value,
     };
 
@@ -336,21 +330,19 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    const storage = new StorageService();
-    storage.setItem('authToken', data.authToken);
-
-    this.manager.changeScene(new MenuScene());
+    this.game.storage.setItem('authToken', data.authToken);
+    this.game.scene.changeScene(new MenuScene());
   }
 
   private validateLoginData(): boolean {
-    // FIXME: add validation of email and rework this method with notifications
-    return this.emailInput.value !== '' && this.passwordInput.value !== '' && this.passwordInput.value.length > 5;
+    // FIXME: add validation and rework this method with notifications
+    return this.usernameInput.value !== '' && this.passwordInput.value !== '' && this.passwordInput.value.length > 5;
   }
 
   private validateSignupData(): boolean {
-    // FIXME: add validation of email and rework this method with notifications (validateUserData instead of loginData and signupData
+    // FIXME: add validation and rework this method with notifications (validateUserData instead of loginData and signupData
     return (
-      this.emailInput.value !== '' &&
+      this.usernameInput.value !== '' &&
       this.passwordInput.value !== '' &&
       this.passwordInput.value.length > 5 &&
       this.passwordInput.value === this.passwordVerifyInput.value
@@ -360,8 +352,7 @@ export class AuthScene extends Container implements IScene {
   public update(_framesPassed: number): void {}
 
   public resize(screenWidth: number, screenHeight: number): void {
-    // FIXME: perhaps this is the source of style bug
-    // this.container.position.set(screenWidth / 2, screenHeight / 2);
+    this.container.position.set(screenWidth / 2, screenHeight / 2);
 
     handleSocialMediaIconsResize(this.socialMediaIcons, screenWidth, screenHeight);
     handleProgramVersionResize(this.version, screenWidth, screenHeight);

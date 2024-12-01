@@ -1,4 +1,4 @@
-import ApiClient from './ApiClient.ts';
+import { ApiClient } from '@/api';
 import { ItemDTO } from '@/types/dto';
 
 export class ItemService {

@@ -1,11 +1,11 @@
 import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
 import { Slider } from '@pixi/ui';
-import { Settings } from '@core/Settings';
 import { theme } from '@/config';
+import { GameManager } from '@core/Managers';
 
 class UISettingsItemDisplay implements UIComponent {
-  private settings: Settings = Settings.getInstance();
+  private game: GameManager = new GameManager();
   private container!: Container;
 
   public render(): Array<ContainerChild> {
@@ -60,7 +60,7 @@ class UISettingsItemDisplay implements UIComponent {
       slider: slider,
       min,
       max,
-      value: this.settings.volume,
+      value: this.game.audio.volume,
       valueTextStyle: {
         fill: fontColor,
         fontSize,
@@ -69,7 +69,7 @@ class UISettingsItemDisplay implements UIComponent {
     });
 
     singleSlider.onUpdate.connect((value) => {
-      this.settings.setVolume(value);
+      this.game.audio.setVolume(value);
     });
 
     this.container.addChild(text);

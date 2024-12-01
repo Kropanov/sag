@@ -1,4 +1,4 @@
-import { GameManager } from '@core/Manager';
+import { GameManager } from '../Managers';
 import { InitialScene } from '@core/Scenes';
 import { theme } from '@/config';
 
@@ -8,11 +8,15 @@ export class GameLauncher {
   private constructor() {}
 
   public static Run(): GameLauncher {
-    const manager = GameManager.getInstance();
+    const game: GameManager = new GameManager();
 
     if (!GameLauncher.instance) {
-      manager.initialize(theme.neutral.black);
-      manager.changeScene(new InitialScene());
+      const initScene = new InitialScene();
+
+      game.scene.initialize(theme.neutral.black).then((r) => r);
+      game.scene.changeScene(initScene);
+      game.notify.setScene(initScene);
+
       GameLauncher.instance = new GameLauncher();
     }
 

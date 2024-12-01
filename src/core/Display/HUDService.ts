@@ -5,7 +5,7 @@ import { Item, Player } from '../Entities';
 import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
 import { FancyButton } from '@pixi/ui';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '../Manager';
+import { GameManager } from '../Managers';
 import { sound } from '@pixi/sound';
 import { UISettings } from './Components/UISettings';
 import { UIBackpackHoverInfoBox } from '@core/Display/Components/UIBackpackHoverInfoBox.ts';
