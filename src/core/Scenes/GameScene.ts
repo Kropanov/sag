@@ -1,12 +1,10 @@
 import { Container, Sprite } from 'pixi.js';
-import { IScene } from '@/interfaces';
-import { GameManager } from '../Managers';
-import { Cartridge, Player, Gun } from '@core/Entities';
-import { AMMO_TYPE } from '@/enums';
+import { Cartridge, Player, Gun, GameFactory, Backpack } from '@core/Entities';
 import { HUDController } from '@core/Display';
-import { Backpack } from '../Entities/Backpack';
-import GameFactory from '@core/Entities/Factory/GameFactory.ts';
-import { ItemService } from '@/api';
+import { GameManager } from '@core/Managers';
+import { IScene } from '@interfaces';
+import { AMMO_TYPE } from '@enums';
+import { ItemService } from '@api';
 
 export class GameScene extends Container implements IScene {
   private game: GameManager = new GameManager();

@@ -1,9 +1,7 @@
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '../Managers';
-import { IScene } from '@/interfaces';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
+import { IScene } from '@interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
-import { MenuScene } from './MenuScene';
 import {
   getProgramVersion,
   getSocialMediaIcons,
@@ -11,7 +9,9 @@ import {
   handleSocialMediaIconsResize,
 } from '@/core/Misc';
 import { sound } from '@pixi/sound';
-import { AuthService } from '@/api';
+import { AuthService } from '@api';
+import { GameManager } from '@core/Managers';
+import { MenuScene } from '@core/Scenes';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;

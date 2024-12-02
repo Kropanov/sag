@@ -1,6 +1,6 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
 import { GameManager } from '../../Managers';
-import { MenuScene } from '@/core/Scenes';
+import { MenuScene } from '@core/Scenes';
 import { UIComponent } from '@/interfaces';
 import { MenuItemsType } from '@/types';
 import { FancyButton, List } from '@pixi/ui';

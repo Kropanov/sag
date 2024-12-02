@@ -1,7 +1,7 @@
 import { ItemFactory } from '@core/Entities';
 import CreatureFactory from '@core/Entities/Factory/CreatureFactory.ts';
 
-class GameFactory {
+export class GameFactory {
   private static _instance: GameFactory;
   public itemFactory!: ItemFactory;
   public creatureFactory!: CreatureFactory;
@@ -21,5 +21,3 @@ class GameFactory {
     await this.itemFactory.loadItemTemplates();
   }
 }
-
-export default GameFactory;
