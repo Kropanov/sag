@@ -10,7 +10,7 @@ import {
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Misc';
+} from '@core/Misc';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();

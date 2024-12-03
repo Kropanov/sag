@@ -1,4 +1,4 @@
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { ContainerChild, Container, Text } from 'pixi.js';
 import { FancyButton, List } from '@pixi/ui';
 import { GameManager } from '@core/Managers';
