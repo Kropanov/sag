@@ -1,8 +1,8 @@
-import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text } from 'pixi.js';
-import { Slider } from '@pixi/ui';
-import { theme } from '@/config';
 import { GameManager } from '@core/Managers';
+import { UIComponent } from '@interfaces';
+import { Slider } from '@pixi/ui';
+import { theme } from '@config';
 
 class UISettingsItemDisplay implements UIComponent {
   private game: GameManager = new GameManager();

@@ -1,4 +1,4 @@
-import { LerpType } from '@/types';
+import { LerpType } from '@types';
 
 // The lerp function calculates a normalized vector that points from
 // the point (x0, y0) to the point (x1, y1). This vector has a length of 1.

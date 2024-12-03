@@ -1,5 +1,5 @@
-import { UIComponent } from '@/interfaces';
 import { Container } from 'pixi.js';
+import { UIComponent } from '@interfaces';
 
 export class NotificationWidget {
   private readonly container: Container;

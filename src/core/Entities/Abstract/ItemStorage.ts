@@ -1,4 +1,4 @@
-import { Item } from './Item';
+import { Item } from '@core/Entities';
 
 export abstract class ItemStorage {
   abstract open(): Array<Item | null>;

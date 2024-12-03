@@ -1,19 +1,15 @@
-import { Keyboard } from '@/core/Keyboard';
-import { GameManager } from '../Managers';
-import { Item, Player } from '@/core/Entities';
-import { isClickInsideHUDElement, lerp } from '@/utils';
-import { Cartridge } from './Cartridge';
-import { Ammo } from './Ammo';
-import { HUDController } from '@/core/Display';
-import { ItemProps } from '@/interfaces';
+import { Ammo, Cartridge, Item, Player } from '@core/Entities';
+import { isClickInsideHUDElement, lerp } from '@utils';
+import { HUDController } from '@core/Display';
+import { GameManager } from '@core/Managers';
+import { ItemProps } from '@interfaces';
 
 class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
   private hudController: HUDController;
-  private keyboard = Keyboard.getInstance();
-  private manager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private world: any = [];
 
@@ -88,8 +84,8 @@ class Gun extends Item {
     const maxAmmo = this.cartridge.getMaxAmmo();
     this.hudController.setUIAmmo(currentAmmo, maxAmmo);
 
-    const scene = this.manager.getCurrentScene();
-    scene.addChild(ammoSprite);
+    const scene = this.game.scene.getCurrentScene();
+    scene?.addChild(ammoSprite);
     this.world.push(ammo);
   }
 
@@ -112,8 +108,8 @@ class Gun extends Item {
   }
 
   handleInput() {
-    if (this.keyboard.state.get('KeyR')) {
-      this.keyboard.state.set('KeyR', false);
+    if (this.game.keyboard.state.get('KeyR')) {
+      this.game.keyboard.state.set('KeyR', false);
       this.reload();
     }
   }

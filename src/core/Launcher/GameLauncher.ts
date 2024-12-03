@@ -1,6 +1,6 @@
-import { GameManager } from '../Managers';
 import { InitialScene } from '@core/Scenes';
-import { theme } from '@/config';
+import { GameManager } from '@core/Managers';
+import { theme } from '@config';
 
 export class GameLauncher {
   private static instance: GameLauncher;

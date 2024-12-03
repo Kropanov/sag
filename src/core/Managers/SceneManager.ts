@@ -1,5 +1,5 @@
 import { Application, Ticker } from 'pixi.js';
-import { IScene } from '@/interfaces';
+import { IScene } from '@interfaces';
 
 /**
  * Manages the application's scenes and handles scene transitions, resizing, and updates.

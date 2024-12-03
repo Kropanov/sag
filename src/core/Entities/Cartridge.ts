@@ -1,7 +1,7 @@
+import { AMMO_TYPE } from '@enums';
 import { sound } from '@pixi/sound';
-import { Ammo } from './Ammo';
-import { AMMO_TYPE } from '@/enums';
-import { HUDController } from '@/core/Display';
+import { Ammo } from '@core/Entities';
+import { HUDController } from '@core/Display';
 
 export class Cartridge {
   private type: AMMO_TYPE;

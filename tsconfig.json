@@ -18,12 +18,13 @@
     "paths": {
       "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
-      "@utils": ["./src/utils"],
       "@api": ["./src/api"],
+      "@dto": ["./src/types/dto"],
+      "@utils": ["./src/utils"],
       "@enums": ["./src/enums"],
       "@interfaces": ["./src/interfaces"],
-      "@types": ["./src/types"],
-      "@config": ["./src/config"]
+      "@config": ["./src/config"],
+      "@types": ["./src/types"]
     },
     /* Linting */
     "strict": true,

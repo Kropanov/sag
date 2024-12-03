@@ -1,20 +1,17 @@
-import { HoverInfo, IScene } from '@/interfaces';
-import { Graphics, Container, Text, Point } from 'pixi.js';
-import { UIBackpack } from './Components/UIBackpack';
-import { Item, Player } from '../Entities';
-import { UICurrentItemDisplay } from './Components/UICurrentItemDisplay';
-import { FancyButton } from '@pixi/ui';
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '../Managers';
 import { sound } from '@pixi/sound';
-import { UISettings } from './Components/UISettings';
-import { UIBackpackHoverInfoBox } from '@core/Display/Components/UIBackpackHoverInfoBox.ts';
+import { FancyButton } from '@pixi/ui';
+import { Item, Player } from '@core/Entities';
+import { GameManager } from '@core/Managers';
+import { HoverInfo, IScene } from '@interfaces';
+import { Graphics, Container, Text, Point } from 'pixi.js';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
+import { UIBackpack, UIBackpackHoverInfoBox, UICurrentItemDisplay, UISettings } from '@core/Display';
 
 class HUDService {
   private scene: IScene;
-  private player: Player;
+  private readonly player: Player;
 
-  private manager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private uiBackpack: UIBackpack;
   private uiHoverBox: UIBackpackHoverInfoBox;
@@ -235,7 +232,7 @@ class HUDService {
       this.uiSettings.open();
     });
 
-    this.resizeSettingsButton(this.manager.getWidth(), this.manager.getHeight());
+    this.resizeSettingsButton(this.game.scene.getWidth(), this.game.scene.getHeight());
 
     this.settingsButton.visible = false;
 

@@ -1,5 +1,4 @@
-import { ItemFactory } from '@core/Entities';
-import CreatureFactory from '@core/Entities/Factory/CreatureFactory.ts';
+import { ItemFactory, CreatureFactory } from '@core/Entities';
 
 export class GameFactory {
   private static _instance: GameFactory;

@@ -1,4 +1,4 @@
-import { ItemRarity, ItemType } from '@/enums';
+import { ItemRarity, ItemType } from '@enums';
 
 export interface ItemProps {
   name?: string;

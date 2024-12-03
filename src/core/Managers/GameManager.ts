@@ -1,6 +1,6 @@
 import { AudioManager, HUDManager, KeyboardManager, NotifyManager, SceneManager, StorageManager } from '@core/Managers';
 import { AxiosInstance } from 'axios';
-import { ApiClient } from '@/api';
+import { ApiClient } from '@api';
 
 /**
  * Centralized manager for core game systems such as audio, HUD, and scenes.

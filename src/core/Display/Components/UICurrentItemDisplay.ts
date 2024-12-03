@@ -1,14 +1,13 @@
-import { GameManager } from '../../Managers';
-import { UIComponent } from '@/interfaces';
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
-import { UIAmmo } from './UIAmmo';
-import { Item } from '@/core/Entities';
-import { ItemType } from '@/enums';
-import { UIAmount } from './UIAmount';
-import { theme } from '@/config';
+import { UIAmmo, UIAmount } from '@core/Display';
+import { GameManager } from '@core/Managers';
+import { UIComponent } from '@interfaces';
+import { Item } from '@core/Entities';
+import { ItemType } from '@enums';
+import { theme } from '@config';
 
 export class UICurrentItemDisplay implements UIComponent {
-  private manager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private uiAmmo!: UIAmmo;
   private container!: Graphics;
@@ -17,7 +16,7 @@ export class UICurrentItemDisplay implements UIComponent {
 
   public render(): Array<ContainerChild> {
     this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
-    this.container.x = this.manager.getWidth() - 300;
+    this.container.x = this.game.scene.getWidth() - 300;
     this.container.zIndex = 1;
 
     this.uiAmmo = new UIAmmo();

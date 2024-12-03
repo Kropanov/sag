@@ -1,6 +1,5 @@
-import { Backpack } from './Backpack';
 import { rectIntersect } from '@utils';
-import { Creature, Item } from '@core/Entities';
+import { Backpack, Creature, Item } from '@core/Entities';
 
 export class Character extends Creature {
   health: number;

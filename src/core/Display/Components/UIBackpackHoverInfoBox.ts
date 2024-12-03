@@ -1,8 +1,8 @@
-import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
+import { UIComponent } from '@interfaces';
 import { Item } from '@core/Entities';
-import { ItemRarity } from '@/enums';
-import { theme } from '@/config';
+import { ItemRarity } from '@enums';
+import { theme } from '@config';
 
 class UIBackpackHoverInfoBox implements UIComponent {
   private graphics!: Graphics;

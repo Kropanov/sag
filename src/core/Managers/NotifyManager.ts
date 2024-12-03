@@ -1,6 +1,6 @@
 import { Notification } from '@core/Entities';
 import { NotificationWidget } from '@core/Display';
-import { INotification, IScene } from '@/interfaces';
+import { INotification, IScene } from '@interfaces';
 
 // TODO: rework after ui components refactoring
 export class NotifyManager {

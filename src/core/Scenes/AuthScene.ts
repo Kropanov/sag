@@ -7,7 +7,7 @@ import {
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Misc';
+} from '@core/Misc';
 import { sound } from '@pixi/sound';
 import { AuthService } from '@api';
 import { GameManager } from '@core/Managers';

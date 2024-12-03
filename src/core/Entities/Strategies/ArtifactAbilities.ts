@@ -1,4 +1,4 @@
-import { ArtifactAbility } from '@/interfaces';
+import { ArtifactAbility } from '@interfaces';
 
 export class ProtectiveAbility implements ArtifactAbility {
   use() {

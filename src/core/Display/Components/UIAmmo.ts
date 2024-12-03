@@ -1,6 +1,6 @@
-import { UIComponent } from '@/interfaces';
+import { theme } from '@config';
+import { UIComponent } from '@interfaces';
 import { Container, ContainerChild, Text } from 'pixi.js';
-import { theme } from '@/config';
 
 export class UIAmmo implements UIComponent {
   private ammo: Text;

@@ -1,10 +1,10 @@
 import { Container, Assets, Text } from 'pixi.js';
-import { GameManager } from '../Managers';
-import { IScene } from '@/interfaces';
+import { IScene } from '@interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { AuthScene, MenuScene } from '@core/Scenes';
-import { manifest, theme } from '@/config';
-import GameFactory from '@core/Entities/Factory/GameFactory.ts';
+import { manifest, theme } from '@config';
+import { GameFactory } from '@core/Entities';
+import { GameManager } from '@core/Managers';
 
 export class InitialScene extends Container implements IScene {
   private game: GameManager = new GameManager();

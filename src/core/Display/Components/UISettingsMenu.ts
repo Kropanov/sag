@@ -1,13 +1,13 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '../../Managers';
-import { MenuScene } from '@core/Scenes';
-import { UIComponent } from '@/interfaces';
-import { MenuItemsType } from '@/types';
-import { FancyButton, List } from '@pixi/ui';
 import { ContainerChild, Container, Text } from 'pixi.js';
+import { FancyButton, List } from '@pixi/ui';
+import { GameManager } from '@core/Managers';
+import { UIComponent } from '@interfaces';
+import { MenuScene } from '@core/Scenes';
+import { MenuItemsType } from '@types';
 
 class UISettingsMenu implements UIComponent {
-  private manager: GameManager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private menu!: List;
   private items: Array<MenuItemsType> = [
@@ -26,7 +26,7 @@ class UISettingsMenu implements UIComponent {
 
     this.populateMenuWithButtons();
 
-    this.resize(this.manager.getWidth(), this.manager.getHeight());
+    this.resize(this.game.scene.getWidth(), this.game.scene.getHeight());
 
     return [this.menu];
   }
@@ -68,7 +68,7 @@ class UISettingsMenu implements UIComponent {
   }
 
   public navigateToMainMenu() {
-    this.manager.changeScene(new MenuScene());
+    this.game.scene.changeScene(new MenuScene());
   }
 }
 

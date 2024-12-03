@@ -1,5 +1,5 @@
-import { BACKPACK_SLOT_INCREMENT, INITIAL_BACKPACK_CAPACITY } from '@/config';
-import { Item, ItemStorage } from '.';
+import { Item, ItemStorage } from '@core/Entities';
+import { BACKPACK_SLOT_INCREMENT, INITIAL_BACKPACK_CAPACITY } from '@config';
 
 export class Backpack extends ItemStorage {
   private storage: Array<Item | null> = [];

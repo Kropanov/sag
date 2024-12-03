@@ -1,5 +1,5 @@
+import { g } from '@config';
 import { Sprite } from 'pixi.js';
-import { g } from '@/config';
 
 export class Creature {
   sprite: Sprite;

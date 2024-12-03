@@ -1,12 +1,11 @@
-import { GameManager } from '../../Managers';
-import { UIComponent } from '@/interfaces';
+import { theme } from '@config';
+import { UIComponent } from '@interfaces';
+import { GameManager } from '@core/Managers';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
-import { UISettingsMenu } from '@core/Display';
-import { UISettingsItemDisplay } from '@core/Display';
-import { theme } from '@/config/theme.ts';
+import { UISettingsItemDisplay, UISettingsMenu } from '@core/Display';
 
 class UISettings implements UIComponent {
-  private manager: GameManager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private container!: Graphics;
   private containerWidth: number = 600;
@@ -36,7 +35,7 @@ class UISettings implements UIComponent {
       .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
       .fill(theme.background.primary)
       .stroke({ color: theme.border.primary, width: 3 });
-    this.resize(this.manager.getWidth(), this.manager.getHeight());
+    this.resize(this.game.scene.getWidth(), this.game.scene.getHeight());
     this.close();
 
     return [this.container];

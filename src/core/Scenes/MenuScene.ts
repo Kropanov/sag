@@ -1,10 +1,10 @@
 import { Container, Sprite, Text } from 'pixi.js';
-import { IScene } from '@/interfaces';
+import { IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
-import { MenuItemsType } from '@/types';
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
+import { MenuItemsType } from '@types';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { AuthScene, GameScene } from '@core/Scenes';
-import { GameManager } from '../Managers';
+import { GameManager } from '@core/Managers';
 import {
   getProgramVersion,
   getSocialMediaIcons,
