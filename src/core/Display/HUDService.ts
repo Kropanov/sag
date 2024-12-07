@@ -5,7 +5,7 @@ import { GameManager } from '@core/Managers';
 import { HoverInfo, IScene } from '@interfaces';
 import { Graphics, Container, Text, Point } from 'pixi.js';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
-import { UIBackpack, UIBackpackHoverInfoBox, UICurrentItemDisplay, UISettings } from '@core/Display';
+import { Inventory, BackpackHoverInfoBox, CurrentItemDisplay, SettingsBox } from '@core/Display';
 
 class HUDService {
   private scene: IScene;
@@ -13,10 +13,10 @@ class HUDService {
 
   private game: GameManager = new GameManager();
 
-  private uiBackpack: UIBackpack;
-  private uiHoverBox: UIBackpackHoverInfoBox;
-  private uiCurrentItemDisplay: UICurrentItemDisplay;
-  private uiSettings: UISettings;
+  private uiBackpack: Inventory;
+  private uiHoverBox: BackpackHoverInfoBox;
+  private uiCurrentItemDisplay: CurrentItemDisplay;
+  private uiSettings: SettingsBox;
 
   private username!: Text;
   private HPBar!: Graphics;
@@ -33,10 +33,10 @@ class HUDService {
     this.scene = scene;
     this.player = player;
 
-    this.uiBackpack = new UIBackpack(this.player);
+    this.uiBackpack = new Inventory(this.player);
     this.addComponentsToScene(this.uiBackpack.render());
 
-    this.uiHoverBox = new UIBackpackHoverInfoBox();
+    this.uiHoverBox = new BackpackHoverInfoBox();
     this.addComponentsToScene(this.uiHoverBox.render());
 
     this.uiBackpack.on('showHoverInfoBox', (hoverInfo: HoverInfo) => {
@@ -55,10 +55,10 @@ class HUDService {
       this.setUIBackpack(this.player.getBackpackItems());
     });
 
-    this.uiCurrentItemDisplay = new UICurrentItemDisplay();
+    this.uiCurrentItemDisplay = new CurrentItemDisplay();
     this.addComponentsToScene(this.uiCurrentItemDisplay.render());
 
-    this.uiSettings = new UISettings();
+    this.uiSettings = new SettingsBox();
     this.addComponentsToScene(this.uiSettings.render());
 
     this.render();

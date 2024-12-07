@@ -6,8 +6,9 @@ import { GameManager } from '@core/Managers';
 import mitt, { Emitter } from 'mitt';
 import { isStackable } from '@utils';
 import { Slot } from '@types';
+import { HUDComponent } from '@core/Display';
 
-export class UIBackpack implements UIComponent {
+export class Inventory extends HUDComponent {
   private backpack: Array<Item | null> = [];
   private emitter: Emitter<BackpackEvents>;
 
@@ -33,6 +34,8 @@ export class UIBackpack implements UIComponent {
   private timer!: NodeJS.Timeout;
 
   constructor(player: Player) {
+    super();
+
     this.emitter = mitt<BackpackEvents>();
     this.player = player;
     this.slotsContainer = new Container();
@@ -300,9 +303,9 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
-    this.emitter.on(event, handler);
-  }
+  // public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
+  //   this.emitter.on(event, handler);
+  // }
 
   // @ts-ignore
   private removeItemFromBackpack(item: Item) {

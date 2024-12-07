@@ -3,8 +3,9 @@ import { GameManager } from '@core/Managers';
 import { UIComponent } from '@interfaces';
 import { Slider } from '@pixi/ui';
 import { theme } from '@config';
+import { HUDComponent } from '@core/Display';
 
-class UISettingsItemDisplay implements UIComponent {
+class SettingsItemDisplay extends HUDComponent {
   private game: GameManager = new GameManager();
   private container!: Container;
 
@@ -89,4 +90,4 @@ class UISettingsItemDisplay implements UIComponent {
   }
 }
 
-export { UISettingsItemDisplay };
+export { SettingsItemDisplay };

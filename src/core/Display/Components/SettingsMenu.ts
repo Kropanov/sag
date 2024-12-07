@@ -5,8 +5,9 @@ import { GameManager } from '@core/Managers';
 import { UIComponent } from '@interfaces';
 import { MenuScene } from '@core/Scenes';
 import { MenuItemsType } from '@types';
+import { HUDComponent } from '@core/Display';
 
-class UISettingsMenu implements UIComponent {
+class SettingsMenu extends HUDComponent {
   private game: GameManager = new GameManager();
 
   private menu!: List;
@@ -72,4 +73,4 @@ class UISettingsMenu implements UIComponent {
   }
 }
 
-export { UISettingsMenu };
+export { SettingsMenu };

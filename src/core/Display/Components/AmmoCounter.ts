@@ -1,11 +1,13 @@
 import { theme } from '@config';
 import { UIComponent } from '@interfaces';
 import { Container, ContainerChild, Text } from 'pixi.js';
+import { HUDComponent } from '@core/Display';
 
-export class UIAmmo implements UIComponent {
+export class AmmoCounter extends HUDComponent {
   private ammo: Text;
 
   constructor() {
+    super();
     this.ammo = new Text();
   }
 

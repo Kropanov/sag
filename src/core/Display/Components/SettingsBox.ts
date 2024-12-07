@@ -2,9 +2,9 @@ import { theme } from '@config';
 import { UIComponent } from '@interfaces';
 import { GameManager } from '@core/Managers';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
-import { UISettingsItemDisplay, UISettingsMenu } from '@core/Display';
+import { HUDComponent, SettingsItemDisplay, SettingsMenu } from '@core/Display';
 
-class UISettings implements UIComponent {
+class SettingsBox extends HUDComponent {
   private game: GameManager = new GameManager();
 
   private container!: Graphics;
@@ -42,12 +42,12 @@ class UISettings implements UIComponent {
   }
 
   private renderSettingsMenu() {
-    this.menu = new UISettingsMenu();
+    this.menu = new SettingsMenu();
     this.addComponent(this.menu);
   }
 
   private renderSettingsItemDisplay() {
-    this.itemDisplay = new UISettingsItemDisplay();
+    this.itemDisplay = new SettingsItemDisplay();
     this.addComponent(this.itemDisplay);
   }
 
@@ -86,4 +86,4 @@ class UISettings implements UIComponent {
   }
 }
 
-export { UISettings };
+export { SettingsBox };

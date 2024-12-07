@@ -1,5 +1,5 @@
 import { Notification } from '@core/Entities';
-import { NotificationWidget } from '@core/Display';
+import { NotificationBox } from '@core/Display';
 import { INotification, IScene } from '@interfaces';
 
 // TODO: rework after ui components refactoring
@@ -7,7 +7,7 @@ export class NotifyManager {
   static _instance: NotifyManager;
   private scene!: IScene;
   private entity: Notification = new Notification();
-  private uiNotification: NotificationWidget = new NotificationWidget();
+  private uiNotification: NotificationBox = new NotificationBox();
 
   constructor() {
     if (NotifyManager._instance) {

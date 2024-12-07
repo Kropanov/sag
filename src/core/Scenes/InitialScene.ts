@@ -1,10 +1,10 @@
-import { Container, Assets, Text } from 'pixi.js';
+import { Container, Text } from 'pixi.js';
 import { IScene } from '@interfaces';
 import { CircularProgressBar } from '@pixi/ui';
 import { AuthScene, MenuScene } from '@core/Scenes';
-import { manifest, theme } from '@config';
-import { GameFactory } from '@core/Entities';
+import { ResourceLoader } from '@core/Entities';
 import { GameManager } from '@core/Managers';
+import { theme } from '@config';
 
 export class InitialScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -21,7 +21,7 @@ export class InitialScene extends Container implements IScene {
     this.renderLoader();
     this.renderLoaderText();
 
-    this.initializeLoader().then(() => {
+    this.initializeResourceLoader().then(() => {
       this.assetsLoaded();
     });
   }
@@ -60,12 +60,9 @@ export class InitialScene extends Container implements IScene {
     this.addChild(this.loader);
   }
 
-  private async initializeLoader(): Promise<void> {
-    await Assets.init({ manifest: manifest });
-    const gameFactory = new GameFactory();
-    await gameFactory.loadTemplates();
-    const bundleIds = manifest.bundles.map((bundle) => bundle.name);
-    await Assets.loadBundle(bundleIds);
+  private async initializeResourceLoader(): Promise<void> {
+    const loader = new ResourceLoader();
+    await loader.load();
   }
 
   private assetsLoaded(): void {
