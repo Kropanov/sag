@@ -9,6 +9,9 @@ export class AmmoCounter extends HUDComponent {
   constructor() {
     super();
     this.ammo = new Text();
+
+    this.createAmmoDisplay();
+    this.addChild(this.ammo);
   }
 
   public render(): Array<ContainerChild> {

@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import { HUDComponent } from '@core/Display';
 import { EventEmitter } from '@core/Entities';
-import { ResizeManager, SceneManager } from '@core/Managers';
+import { ResizeManager } from '@core/Managers';
 import { HUDComponentRegistry } from '@interfaces';
 import { hudComponents } from '@config';
 
@@ -9,7 +9,6 @@ export class HUDManager extends Container {
   private static _instance: HUDManager;
   private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
   private readonly eventEmitter!: EventEmitter;
-  private readonly scene!: SceneManager;
 
   private resizeManager: ResizeManager = new ResizeManager();
 
@@ -17,7 +16,6 @@ export class HUDManager extends Container {
     super();
 
     this.components = {};
-    this.scene = new SceneManager();
     this.eventEmitter = new EventEmitter();
     this.resizeManager = new ResizeManager();
 
@@ -62,7 +60,6 @@ export class HUDManager extends Container {
     }
     component.setEventBus(this.eventEmitter);
     this.components[name] = component;
-    this.scene.addToScene(component);
     this.addChild(component);
   }
 
@@ -78,6 +75,10 @@ export class HUDManager extends Container {
 
   getComponent<K extends keyof HUDComponentRegistry>(name: K): HUDComponentRegistry[K] | undefined {
     return this.components[name] as HUDComponentRegistry[K];
+  }
+
+  getComponents() {
+    return Object.values(this.components);
   }
 
   update(delta: number): void {

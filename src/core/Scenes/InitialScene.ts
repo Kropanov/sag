@@ -64,12 +64,13 @@ export class InitialScene extends Container implements IScene {
   private async initializeResourceLoader(): Promise<void> {
     const loader = new ResourceLoader();
     await loader.load();
+    this.game.hud.initializeHUD();
   }
 
   private assetsLoaded(): void {
     const token = this.game.storage.getToken();
-    const scene = token ? new MenuScene() : new AuthScene();
-    this.scene.changeScene(scene);
+    const scene = token ? MenuScene : AuthScene;
+    this.scene.changeScene(scene, this.game.hud.getComponents());
   }
 
   update(_framesPassed: number): void {

@@ -29,7 +29,7 @@ export class App {
       .then(() => {
         document.body.appendChild(this.app.canvas);
         this.app.ticker.add(this.loop.bind(this));
-        this.scene.changeScene(new InitialScene());
+        this.scene.changeScene(InitialScene);
       });
   }
 

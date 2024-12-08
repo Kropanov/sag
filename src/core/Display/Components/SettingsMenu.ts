@@ -70,7 +70,7 @@ class SettingsMenu extends HUDComponent {
   }
 
   public navigateToMainMenu() {
-    this.scene.changeScene(new MenuScene());
+    this.scene.changeScene(MenuScene);
   }
 }
 

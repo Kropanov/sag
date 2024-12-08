@@ -311,7 +311,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.scene.changeScene(new MenuScene());
+    this.scene.changeScene(MenuScene);
   }
 
   private async processSignupSubmit() {
@@ -333,7 +333,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.scene.changeScene(new MenuScene());
+    this.scene.changeScene(MenuScene);
   }
 
   private validateLoginData(): boolean {

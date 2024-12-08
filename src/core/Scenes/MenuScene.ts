@@ -34,8 +34,6 @@ export class MenuScene extends Container implements IScene {
   constructor() {
     super();
 
-    this.game.hud.initializeHUD();
-
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
 
@@ -59,7 +57,7 @@ export class MenuScene extends Container implements IScene {
   }
 
   startGame() {
-    this.scene.changeScene(new GameScene());
+    this.scene.changeScene(GameScene);
   }
 
   fillMenu() {
@@ -90,7 +88,7 @@ export class MenuScene extends Container implements IScene {
 
   logout() {
     this.game.storage.removeItem('authToken');
-    this.scene.changeScene(new AuthScene());
+    this.scene.changeScene(AuthScene);
   }
 
   openSettings() {}

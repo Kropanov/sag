@@ -1,6 +1,6 @@
 import { IScene } from '@interfaces';
 import { Application, Container } from 'pixi.js';
-import { ResizeManager } from '@core/Managers/ResizeManager.ts';
+import { ResizeManager } from '@core/Managers';
 
 /**
  * Manages the application's scenes and handles scene transitions, resizing, and updates.
@@ -71,18 +71,23 @@ export class SceneManager {
 
   /**
    * Changes the active scene to a new one.
-   * @param {IScene} newScene - The new scene to be activated.
+   * @param {new () => IScene} SceneClass - The new scene to be activated.
+   * @param {Container[]} components - The components that might be added on scene first
    */
-  public changeScene(newScene: IScene): void {
+  public changeScene(SceneClass: new () => IScene, components?: Container[]): void {
     if (this.currentScene) {
       this.app.stage.removeChild(this.currentScene);
       this.currentScene.destroy();
     }
 
-    this.currentScene = newScene;
-    console.log(this.currentScene, 1);
+    this.currentScene = new SceneClass();
     this.app.stage.addChild(this.currentScene);
-    console.log(2);
+
+    if (components) {
+      components.forEach((component) => {
+        this.addToScene(component);
+      });
+    }
   }
 
   /**
