@@ -32,4 +32,6 @@ export class HUDComponent extends Container {
   public update(_delta: number): void {
     // Override in subclasses for specific update logic
   }
+
+  public resize(_screenWidth: number, _screenHeight: number): void {}
 }

@@ -1,5 +1,6 @@
-import { Application, Ticker } from 'pixi.js';
 import { IScene } from '@interfaces';
+import { Application, Container } from 'pixi.js';
+import { ResizeManager } from '@core/Managers/ResizeManager.ts';
 
 /**
  * Manages the application's scenes and handles scene transitions, resizing, and updates.
@@ -27,6 +28,13 @@ export class SceneManager {
   private currentScene!: IScene;
 
   /**
+   * The resize manager
+   * @private
+   * @type {ResizeManager}
+   */
+  private resizeManager: ResizeManager = new ResizeManager();
+
+  /**
    * Creates or returns the singleton instance of `SceneManager`.
    */
   constructor() {
@@ -34,48 +42,17 @@ export class SceneManager {
       return SceneManager._instance;
     }
 
+    this.resizeManager.subscribe(({ width, height }) => {
+      if (this.currentScene) {
+        this.currentScene.resize(width, height);
+      }
+    });
+
     SceneManager._instance = this;
   }
 
-  /**
-   * Gets the current width of the viewport.
-   * @returns {number} The width of the viewport.
-   */
-  public getWidth(): number {
-    return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-  }
-
-  /**
-   * Gets the current height of the viewport.
-   * @returns {number} The height of the viewport.
-   */
-  public getHeight(): number {
-    return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  }
-
-  /**
-   * Initializes the PIXI.js application with the given background color.
-   * @param {string} background - The background color of the application.
-   * @returns {Promise<void>} Resolves when the application is initialized.
-   */
-  public async initialize(background: string): Promise<void> {
-    this.app = new Application();
-
-    // Expose the application globally for debugging purposes.
-    // @ts-ignore
-    globalThis.__PIXI_APP__ = this.app;
-
-    await this.app.init({
-      background,
-      resizeTo: window,
-      autoDensity: true,
-      resolution: window.devicePixelRatio || 1,
-    });
-
-    document.body.appendChild(this.app.canvas);
-    this.app.ticker.add(this.update.bind(this));
-
-    window.addEventListener('resize', this.resize.bind(this));
+  public setApplication(app: Application) {
+    this.app = app;
   }
 
   /**
@@ -84,6 +61,10 @@ export class SceneManager {
    */
   public getCurrentScene(): IScene | undefined {
     return this.currentScene;
+  }
+
+  public addToScene(component: Container) {
+    this.currentScene.addChild(component);
   }
 
   /**
@@ -101,23 +82,13 @@ export class SceneManager {
   }
 
   /**
-   * Handles window resize events and updates the current scene's dimensions.
-   * @private
-   */
-  private resize(): void {
-    if (this.currentScene) {
-      this.currentScene.resize(this.getWidth(), this.getHeight());
-    }
-  }
-
-  /**
    * Updates the current scene during each application tick.
    * @private
-   * @param {Ticker} ticker - The PIXI.js ticker instance.
+   * @param {number} delta - The delta time of the PIXI.js ticker instance.
    */
-  private update(ticker: Ticker): void {
+  public update(delta: number): void {
     if (this.currentScene) {
-      this.currentScene.update(ticker.deltaTime);
+      this.currentScene.update(delta);
     }
   }
 }

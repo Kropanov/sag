@@ -10,11 +10,13 @@ import {
 } from '@core/Misc';
 import { sound } from '@pixi/sound';
 import { AuthService } from '@api';
-import { GameManager } from '@core/Managers';
+import { GameManager, SceneManager } from '@core/Managers';
 import { MenuScene } from '@core/Scenes';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
+  private scene: SceneManager = new SceneManager();
+
   private container!: Graphics;
   private authFormType: 'Login' | 'Register' = 'Login';
   private game: GameManager = new GameManager();
@@ -64,7 +66,7 @@ export class AuthScene extends Container implements IScene {
     });
 
     this.container.pivot.set(275, 325);
-    this.container.position.set(this.game.scene.getWidth() / 2, this.game.scene.getHeight() / 2);
+    this.container.position.set(this.game.size.getWidth() / 2, this.game.size.getHeight() / 2);
 
     this.addChild(this.container);
   }
@@ -309,7 +311,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.game.scene.changeScene(new MenuScene());
+    this.scene.changeScene(new MenuScene());
   }
 
   private async processSignupSubmit() {
@@ -331,7 +333,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.game.scene.changeScene(new MenuScene());
+    this.scene.changeScene(new MenuScene());
   }
 
   private validateLoginData(): boolean {

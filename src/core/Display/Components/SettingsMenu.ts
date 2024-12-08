@@ -1,7 +1,7 @@
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { ContainerChild, Container, Text } from 'pixi.js';
 import { FancyButton, List } from '@pixi/ui';
-import { GameManager } from '@core/Managers';
+import { GameManager, SceneManager } from '@core/Managers';
 import { UIComponent } from '@interfaces';
 import { MenuScene } from '@core/Scenes';
 import { MenuItemsType } from '@types';
@@ -9,6 +9,7 @@ import { HUDComponent } from '@core/Display';
 
 class SettingsMenu extends HUDComponent {
   private game: GameManager = new GameManager();
+  private scene: SceneManager = new SceneManager();
 
   private menu!: List;
   private items: Array<MenuItemsType> = [
@@ -27,7 +28,7 @@ class SettingsMenu extends HUDComponent {
 
     this.populateMenuWithButtons();
 
-    this.resize(this.game.scene.getWidth(), this.game.scene.getHeight());
+    this.resize(this.game.size.getWidth(), this.game.size.getHeight());
 
     return [this.menu];
   }
@@ -69,7 +70,7 @@ class SettingsMenu extends HUDComponent {
   }
 
   public navigateToMainMenu() {
-    this.game.scene.changeScene(new MenuScene());
+    this.scene.changeScene(new MenuScene());
   }
 }
 

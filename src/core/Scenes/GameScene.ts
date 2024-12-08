@@ -10,9 +10,8 @@ export class GameScene extends Container implements IScene {
   private game: GameManager = new GameManager();
   private readonly display: HUDController;
 
-  private readonly background: Sprite;
-
   private readonly player: Player;
+  private readonly background: Sprite;
   private readonly backpack: Backpack;
   private readonly enemies: any = [];
 
@@ -97,8 +96,8 @@ export class GameScene extends Container implements IScene {
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
-    const screenWidth = _screenWidth || this.game.scene.getWidth();
-    const screenHeight = _screenHeight || this.game.scene.getHeight();
+    const screenWidth = _screenWidth || this.game.size.getWidth();
+    const screenHeight = _screenHeight || this.game.size.getHeight();
 
     this.floorBounds = {
       left: 0,

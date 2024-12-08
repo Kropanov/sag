@@ -16,7 +16,7 @@ export class CurrentItemDisplay extends HUDComponent {
 
   public render(): Array<ContainerChild> {
     this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
-    this.container.x = this.game.scene.getWidth() - 300;
+    this.container.x = this.game.size.getWidth() - 300;
     this.container.zIndex = 1;
 
     this.uiAmmo = new AmmoCounter();

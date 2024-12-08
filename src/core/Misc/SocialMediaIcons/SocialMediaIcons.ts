@@ -19,7 +19,7 @@ function getSocialMediaIcons() {
     window.open(GITHUB_REP_LINK);
   });
 
-  handleSocialMediaIconsResize(container, game.scene.getWidth(), game.scene.getHeight());
+  handleSocialMediaIconsResize(container, game.size.getWidth(), game.size.getHeight());
 
   return container;
 }

@@ -83,8 +83,8 @@ export class Inventory extends HUDComponent {
       this.setCurrentItem(0);
     }
 
-    const width = this.game.scene.getWidth();
-    const height = this.game.scene.getHeight();
+    const width = this.game.size.getWidth();
+    const height = this.game.size.getHeight();
 
     this.resizeSlotsContainer(width, height);
 

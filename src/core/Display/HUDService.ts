@@ -232,7 +232,7 @@ class HUDService {
       this.uiSettings.open();
     });
 
-    this.resizeSettingsButton(this.game.scene.getWidth(), this.game.scene.getHeight());
+    this.resizeSettingsButton(this.game.size.getWidth(), this.game.size.getHeight());
 
     this.settingsButton.visible = false;
 

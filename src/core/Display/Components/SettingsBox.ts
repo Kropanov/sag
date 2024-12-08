@@ -35,7 +35,7 @@ class SettingsBox extends HUDComponent {
       .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
       .fill(theme.background.primary)
       .stroke({ color: theme.border.primary, width: 3 });
-    this.resize(this.game.scene.getWidth(), this.game.scene.getHeight());
+    this.resize(this.game.size.getWidth(), this.game.size.getHeight());
     this.close();
 
     return [this.container];

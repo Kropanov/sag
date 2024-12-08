@@ -1,4 +1,11 @@
-import { AudioManager, HUDManager, KeyboardManager, NotifyManager, SceneManager, StorageManager } from '@core/Managers';
+import {
+  AudioManager,
+  HUDManager,
+  KeyboardManager,
+  NotifyManager,
+  ResizeManager,
+  StorageManager,
+} from '@core/Managers';
 import { AxiosInstance } from 'axios';
 import { ApiClient } from '@api';
 
@@ -9,7 +16,7 @@ import { ApiClient } from '@api';
  * for accessing and controlling various game systems in a cohesive manner.
  *
  * While `GameManager` centralizes the management of core game systems, each of the
- * individual managers (e.g., `AudioManager`, `HUDManager`, `SceneManager`, etc.) can
+ * individual managers (e.g., `AudioManager`, `HUDManager`, etc.) can
  * also be used independently without the need to reference `GameManager`. This allows
  * for greater modularity and flexibility in how game systems are accessed and used.
  *
@@ -36,13 +43,6 @@ export class GameManager {
    * @type {HUDManager}
    */
   public hud: HUDManager;
-
-  /**
-   * Instance responsible for managing scenes within the game.
-   * Handles transitions, scene initialization, and rendering of the active scene.
-   * @type {SceneManager}
-   */
-  public scene: SceneManager;
 
   /**
    * Instance responsible for managing audio functionalities.
@@ -81,6 +81,13 @@ export class GameManager {
   public keyboard: KeyboardManager;
 
   /**
+   * Instance responsible for managing size of the device screen.
+   * Provides functionality to listen for device resizing
+   * and counting the width & the height.
+   */
+  public size: ResizeManager;
+
+  /**
    * Creates an instance of `GameManager` and initializes core managers.
    *
    * Each manager is created independently and is ready to use after the `GameManager`
@@ -88,8 +95,8 @@ export class GameManager {
    */
   constructor() {
     this.api = ApiClient;
-    this.hud = new HUDManager();
-    this.scene = new SceneManager();
+    this.hud = HUDManager.getInstance();
+    this.size = new ResizeManager();
     this.audio = new AudioManager();
     this.notify = new NotifyManager();
     this.storage = new StorageManager();

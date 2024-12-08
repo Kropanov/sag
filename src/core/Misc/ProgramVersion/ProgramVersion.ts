@@ -15,8 +15,8 @@ function getProgramVersion() {
     },
   });
 
-  versionText.x = game.scene.getWidth() - versionText.width - 8;
-  versionText.y = game.scene.getHeight() - versionText.height - 5;
+  versionText.x = game.size.getWidth() - versionText.width - 8;
+  versionText.y = game.size.getHeight() - versionText.height - 5;
 
   return versionText;
 }

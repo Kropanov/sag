@@ -1,45 +1,70 @@
+import { AmmoCounter, HUDComponent } from '@core/Display';
 import { Container } from 'pixi.js';
 import { EventEmitter } from '@core/Entities';
-import { HUDComponent } from '@core/Display';
+import { ResizeManager } from '@core/Managers/ResizeManager.ts';
+import { SceneManager } from '@core/Managers/SceneManager.ts';
+
+// Define a type-safe registry for components
+interface HUDComponentRegistry {
+  ammo: AmmoCounter;
+  // Add other components here as needed
+}
 
 export class HUDManager extends Container {
-  private components: Map<string, HUDComponent>;
-  private eventEmitter: EventEmitter;
+  private static _instance: HUDManager;
+  private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
+  private readonly eventEmitter!: EventEmitter;
+  private readonly scene!: SceneManager;
 
-  constructor() {
+  private resizeManager: ResizeManager = new ResizeManager();
+
+  private constructor() {
     super();
-    this.components = new Map();
+
+    // Initialize properties
+    this.components = {};
+    this.scene = new SceneManager();
     this.eventEmitter = new EventEmitter();
+    this.resizeManager = new ResizeManager();
+
+    this.handleResizeUpdates();
   }
 
-  public addComponent(name: string, component: HUDComponent) {
-    if (this.components.has(name)) {
+  public static getInstance(): HUDManager {
+    if (!HUDManager._instance) {
+      HUDManager._instance = new HUDManager();
+    }
+    return HUDManager._instance;
+  }
+
+  public addComponent<K extends keyof HUDComponentRegistry>(name: K, component: HUDComponentRegistry[K]): void {
+    if (this.components[name]) {
       console.warn(`Component with name "${name}" already exists.`);
       return;
     }
-
-    this.components.set(name, component);
+    component.setEventBus(this.eventEmitter);
+    this.components[name] = component;
+    this.scene.addToScene(component);
     this.addChild(component);
   }
 
-  public removeComponent(name: string) {
-    const component = this.components.get(name);
+  removeComponent<K extends keyof HUDComponentRegistry>(name: K): void {
+    const component = this.components[name];
     if (!component) {
       console.warn(`Component with name "${name}" does not exist.`);
       return;
     }
-
     this.removeChild(component);
-    this.components.delete(name);
+    delete this.components[name];
   }
 
-  public getComponent(name: string) {
-    return this.components.get(name);
+  getComponent<K extends keyof HUDComponentRegistry>(name: K): HUDComponentRegistry[K] | undefined {
+    return this.components[name] as HUDComponentRegistry[K];
   }
 
-  public update(delta: number) {
-    this.components.forEach((component) => {
-      if (typeof component.update === 'function') {
+  update(delta: number): void {
+    Object.values(this.components).forEach((component) => {
+      if (component?.update) {
         component.update(delta);
       }
     });
@@ -47,5 +72,15 @@ export class HUDManager extends Container {
 
   public dispatch<T = any>(event: string, data: T): void {
     this.eventEmitter.emit(event, data);
+  }
+
+  private handleResizeUpdates() {
+    this.resizeManager.subscribe(({ width, height }) => {
+      Object.values(this.components).forEach((component) => {
+        if (component?.resize) {
+          component.resize(width, height);
+        }
+      });
+    });
   }
 }

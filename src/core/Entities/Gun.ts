@@ -1,7 +1,7 @@
 import { Ammo, Cartridge, Item, Player } from '@core/Entities';
 import { isClickInsideHUDElement, lerp } from '@utils';
 import { HUDController } from '@core/Display';
-import { GameManager } from '@core/Managers';
+import { GameManager, SceneManager } from '@core/Managers';
 import { ItemProps } from '@interfaces';
 
 class Gun extends Item {
@@ -10,6 +10,7 @@ class Gun extends Item {
 
   private hudController: HUDController;
   private game: GameManager = new GameManager();
+  private scene: SceneManager = new SceneManager();
 
   private world: any = [];
 
@@ -84,7 +85,7 @@ class Gun extends Item {
     const maxAmmo = this.cartridge.getMaxAmmo();
     this.hudController.setUIAmmo(currentAmmo, maxAmmo);
 
-    const scene = this.game.scene.getCurrentScene();
+    const scene = this.scene.getCurrentScene();
     scene?.addChild(ammoSprite);
     this.world.push(ammo);
   }
