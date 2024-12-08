@@ -64,6 +64,8 @@ export class SceneManager {
   }
 
   public addToScene(component: Container) {
+    console.log(component);
+    console.log(this.currentScene);
     this.currentScene.addChild(component);
   }
 
@@ -78,7 +80,9 @@ export class SceneManager {
     }
 
     this.currentScene = newScene;
+    console.log(this.currentScene, 1);
     this.app.stage.addChild(this.currentScene);
+    console.log(2);
   }
 
   /**

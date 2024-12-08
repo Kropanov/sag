@@ -48,9 +48,7 @@ export class AmmoCounter extends HUDComponent {
     throw new Error('Method not implemented.');
   }
 
-  public resize(_screenWidth: number, _screenHeight: number): void {
-    throw new Error('Method not implemented.');
-  }
+  public resize(_screenWidth: number, _screenHeight: number): void {}
 
   public setAmmo(currentValue: number | string, maxAmmo: number) {
     this.ammo.text = `${currentValue}/${maxAmmo}`;

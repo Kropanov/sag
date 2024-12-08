@@ -34,6 +34,8 @@ export class MenuScene extends Container implements IScene {
   constructor() {
     super();
 
+    this.game.hud.initializeHUD();
+
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
 

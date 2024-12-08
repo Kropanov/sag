@@ -1,14 +1,9 @@
-import { AmmoCounter, HUDComponent } from '@core/Display';
 import { Container } from 'pixi.js';
+import { HUDComponent } from '@core/Display';
 import { EventEmitter } from '@core/Entities';
-import { ResizeManager } from '@core/Managers/ResizeManager.ts';
-import { SceneManager } from '@core/Managers/SceneManager.ts';
-
-// Define a type-safe registry for components
-interface HUDComponentRegistry {
-  ammo: AmmoCounter;
-  // Add other components here as needed
-}
+import { ResizeManager, SceneManager } from '@core/Managers';
+import { HUDComponentRegistry } from '@interfaces';
+import { hudComponents } from '@config';
 
 export class HUDManager extends Container {
   private static _instance: HUDManager;
@@ -21,7 +16,6 @@ export class HUDManager extends Container {
   private constructor() {
     super();
 
-    // Initialize properties
     this.components = {};
     this.scene = new SceneManager();
     this.eventEmitter = new EventEmitter();
@@ -35,6 +29,30 @@ export class HUDManager extends Container {
       HUDManager._instance = new HUDManager();
     }
     return HUDManager._instance;
+  }
+
+  public initializeHUD(): void {
+    Object.entries(hudComponents).forEach(([key, component]) => {
+      this.addComponent(key as keyof HUDComponentRegistry, component);
+    });
+  }
+
+  public destroyHUD(): void {
+    Object.entries(hudComponents).forEach(([key, _component]) => {
+      this.removeComponent(key as keyof HUDComponentRegistry);
+    });
+  }
+
+  public showHUD(): void {
+    Object.entries(hudComponents).forEach(([_key, component]) => {
+      component.show();
+    });
+  }
+
+  public hideHUD(): void {
+    Object.entries(hudComponents).forEach(([_key, component]) => {
+      component.hide();
+    });
   }
 
   public addComponent<K extends keyof HUDComponentRegistry>(name: K, component: HUDComponentRegistry[K]): void {

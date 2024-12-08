@@ -29,6 +29,14 @@ export class HUDComponent extends Container {
     this.eventEmitter.emit(event, data);
   }
 
+  public show() {
+    this.visible = true;
+  }
+
+  public hide() {
+    this.visible = false;
+  }
+
   public update(_delta: number): void {
     // Override in subclasses for specific update logic
   }
