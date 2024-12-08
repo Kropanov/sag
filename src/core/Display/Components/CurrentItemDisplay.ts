@@ -1,26 +1,25 @@
-import { GameManager } from '../../Managers';
-import { UIComponent } from '@/interfaces';
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
-import { UIAmmo } from './UIAmmo';
-import { Item } from '@/core/Entities';
-import { ItemType } from '@/enums';
-import { UIAmount } from './UIAmount';
-import { theme } from '@/config';
+import { AmmoCounter, HUDComponent, ItemAmount } from '@core/Display';
+import { GameManager } from '@core/Managers';
+import { UIComponent } from '@interfaces';
+import { Item } from '@core/Entities';
+import { ItemType } from '@enums';
+import { theme } from '@config';
 
-export class UICurrentItemDisplay implements UIComponent {
-  private manager = GameManager.getInstance();
+export class CurrentItemDisplay extends HUDComponent {
+  private game: GameManager = new GameManager();
 
-  private uiAmmo!: UIAmmo;
+  private uiAmmo!: AmmoCounter;
   private container!: Graphics;
   private currentItemSprite!: Sprite;
   private currentItem!: Item | null;
 
   public render(): Array<ContainerChild> {
     this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
-    this.container.x = this.manager.getWidth() - 300;
+    this.container.x = this.game.size.getWidth() - 300;
     this.container.zIndex = 1;
 
-    this.uiAmmo = new UIAmmo();
+    this.uiAmmo = new AmmoCounter();
     this.addComponent(this.uiAmmo);
 
     return [this.container];
@@ -45,7 +44,7 @@ export class UICurrentItemDisplay implements UIComponent {
 
     switch (selectedItem.type) {
       case ItemType.Gun:
-        this.uiAmmo = new UIAmmo();
+        this.uiAmmo = new AmmoCounter();
         this.addComponent(this.uiAmmo);
         break;
       case ItemType.Artifact:
@@ -67,7 +66,7 @@ export class UICurrentItemDisplay implements UIComponent {
   }
 
   renderCurrentItemAmount(amount: number) {
-    const uiAmount = new UIAmount();
+    const uiAmount = new ItemAmount();
     uiAmount.setItemAmount(amount);
     this.addComponent(uiAmount);
   }

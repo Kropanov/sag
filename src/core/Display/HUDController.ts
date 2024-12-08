@@ -1,7 +1,7 @@
-import { IScene } from '@/interfaces';
-import { HUDService } from './HUDService';
-import { Item, Player } from '../Entities';
+import { IScene } from '@interfaces';
 import { Container } from 'pixi.js';
+import { Item, Player } from '@core/Entities';
+import { HUDService } from '@core/Display';
 
 class HUDController {
   private player: Player;

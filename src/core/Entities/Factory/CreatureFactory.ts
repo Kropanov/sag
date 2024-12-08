@@ -1,5 +1,3 @@
-class CreatureFactory {
+export class CreatureFactory {
   constructor() {}
 }
-
-export default CreatureFactory;

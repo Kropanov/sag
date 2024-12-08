@@ -1,11 +1,10 @@
 import YAML from 'yaml';
 import axios from 'axios';
-import { ItemTemplate } from '@/types';
-import { ItemProps } from '@/interfaces';
-import { ItemType } from '@/enums';
-import { Artifact, Item, Player, ReincarnationAbility } from '@core/Entities';
-import { Material } from '@core/Entities/Material.ts';
-import { ItemDTO } from '@/types/dto';
+import { ItemDTO } from '@dto';
+import { ItemType } from '@enums';
+import { ItemTemplate } from '@types';
+import { ItemProps } from '@interfaces';
+import { Material, Artifact, Item, Player, ReincarnationAbility } from '@core/Entities';
 
 export class ItemFactory {
   private itemTemplates: ItemTemplate[] | [] = [];

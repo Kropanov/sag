@@ -1,20 +1,17 @@
 import { Container, Sprite } from 'pixi.js';
-import { IScene } from '@/interfaces';
-import { GameManager } from '../Managers';
-import { Cartridge, Player, Gun } from '@core/Entities';
-import { AMMO_TYPE } from '@/enums';
+import { Cartridge, Player, Gun, GameFactory, Backpack } from '@core/Entities';
 import { HUDController } from '@core/Display';
-import { Backpack } from '../Entities/Backpack';
-import GameFactory from '@core/Entities/Factory/GameFactory.ts';
-import { ItemService } from '@/api';
+import { GameManager } from '@core/Managers';
+import { IScene } from '@interfaces';
+import { AMMO_TYPE } from '@enums';
+import { ItemService } from '@api';
 
 export class GameScene extends Container implements IScene {
   private game: GameManager = new GameManager();
   private readonly display: HUDController;
 
-  private readonly background: Sprite;
-
   private readonly player: Player;
+  private readonly background: Sprite;
   private readonly backpack: Backpack;
   private readonly enemies: any = [];
 
@@ -99,8 +96,8 @@ export class GameScene extends Container implements IScene {
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
-    const screenWidth = _screenWidth || this.game.scene.getWidth();
-    const screenHeight = _screenHeight || this.game.scene.getHeight();
+    const screenWidth = _screenWidth || this.game.size.getWidth();
+    const screenHeight = _screenHeight || this.game.size.getHeight();
 
     this.floorBounds = {
       left: 0,

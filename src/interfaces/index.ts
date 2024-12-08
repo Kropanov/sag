@@ -1,3 +1,4 @@
+export * from './hud-component-registry.interface.ts';
 export * from './artifact-ability.interface.ts';
 export * from './backpack-events.interface.ts';
 export * from './entity.interface.ts';

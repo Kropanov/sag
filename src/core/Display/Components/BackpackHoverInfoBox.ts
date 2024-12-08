@@ -1,10 +1,11 @@
-import { UIComponent } from '@/interfaces';
 import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
+import { UIComponent } from '@interfaces';
 import { Item } from '@core/Entities';
-import { ItemRarity } from '@/enums';
-import { theme } from '@/config';
+import { ItemRarity } from '@enums';
+import { theme } from '@config';
+import { HUDComponent } from '@core/Display';
 
-class UIBackpackHoverInfoBox implements UIComponent {
+class BackpackHoverInfoBox extends HUDComponent {
   private graphics!: Graphics;
   private readonly container!: Container;
   private itemRarityBox!: Graphics;
@@ -24,6 +25,8 @@ class UIBackpackHoverInfoBox implements UIComponent {
   private containerHeight: number = 600;
 
   constructor() {
+    super();
+
     this.container = new Container();
     this.container.zIndex = 6;
     this.hide();
@@ -273,4 +276,4 @@ class UIBackpackHoverInfoBox implements UIComponent {
   }
 }
 
-export { UIBackpackHoverInfoBox };
+export { BackpackHoverInfoBox };

@@ -1,12 +1,17 @@
-import { UIComponent } from '@/interfaces';
+import { theme } from '@config';
+import { UIComponent } from '@interfaces';
 import { Container, ContainerChild, Text } from 'pixi.js';
-import { theme } from '@/config';
+import { HUDComponent } from '@core/Display';
 
-export class UIAmmo implements UIComponent {
+export class AmmoCounter extends HUDComponent {
   private ammo: Text;
 
   constructor() {
+    super();
     this.ammo = new Text();
+
+    this.createAmmoDisplay();
+    this.addChild(this.ammo);
   }
 
   public render(): Array<ContainerChild> {
@@ -46,9 +51,7 @@ export class UIAmmo implements UIComponent {
     throw new Error('Method not implemented.');
   }
 
-  public resize(_screenWidth: number, _screenHeight: number): void {
-    throw new Error('Method not implemented.');
-  }
+  public resize(_screenWidth: number, _screenHeight: number): void {}
 
   public setAmmo(currentValue: number | string, maxAmmo: number) {
     this.ammo.text = `${currentValue}/${maxAmmo}`;

@@ -13,10 +13,18 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "baseUrl": ".",
     /* Paths */
     "paths": {
       "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
+      "@api": ["./src/api"],
+      "@dto": ["./src/types/dto"],
+      "@utils": ["./src/utils"],
+      "@enums": ["./src/enums"],
+      "@interfaces": ["./src/interfaces"],
+      "@config": ["./src/config"],
+      "@types": ["./src/types"]
     },
     /* Linting */
     "strict": true,

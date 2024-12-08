@@ -1,4 +1,4 @@
-import { AMMO_TYPE } from '@/enums';
+import { AMMO_TYPE } from '@enums';
 
 export const AMMO_DAMAGE: { [type in AMMO_TYPE]: number } = {
   [AMMO_TYPE.DEFAULT]: 2,

@@ -1,10 +1,12 @@
-import { UIComponent } from '@/interfaces';
 import { Container } from 'pixi.js';
+import { UIComponent } from '@interfaces';
+import { HUDComponent } from '@core/Display';
 
-export class NotificationWidget {
+export class NotificationBox extends HUDComponent {
   private readonly container: Container;
 
   constructor() {
+    super();
     this.container = new Container();
     this.render();
   }

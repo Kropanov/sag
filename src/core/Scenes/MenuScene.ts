@@ -1,21 +1,22 @@
 import { Container, Sprite, Text } from 'pixi.js';
-import { IScene } from '@/interfaces';
+import { IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
-import { MenuItemsType } from '@/types';
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
+import { MenuItemsType } from '@types';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { AuthScene, GameScene } from '@core/Scenes';
-import { GameManager } from '../Managers';
+import { GameManager, SceneManager } from '@core/Managers';
 import {
   getProgramVersion,
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Misc';
+} from '@core/Misc';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
-  private readonly background: Sprite;
+  private scene: SceneManager = new SceneManager();
 
+  private readonly background: Sprite;
   private readonly version!: Text;
   private readonly menu: List;
 
@@ -47,8 +48,8 @@ export class MenuScene extends Container implements IScene {
       type: 'vertical',
     });
 
-    this.menu.x = this.game.scene.getWidth() / 2;
-    this.menu.y = this.game.scene.getHeight() / 2.3;
+    this.menu.x = this.game.size.getWidth() / 2;
+    this.menu.y = this.game.size.getHeight() / 2.3;
 
     this.fillMenu();
 
@@ -56,7 +57,7 @@ export class MenuScene extends Container implements IScene {
   }
 
   startGame() {
-    this.game.scene.changeScene(new GameScene());
+    this.scene.changeScene(GameScene);
   }
 
   fillMenu() {
@@ -87,7 +88,7 @@ export class MenuScene extends Container implements IScene {
 
   logout() {
     this.game.storage.removeItem('authToken');
-    this.game.scene.changeScene(new AuthScene());
+    this.scene.changeScene(AuthScene);
   }
 
   openSettings() {}

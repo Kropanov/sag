@@ -1,9 +1,9 @@
-import { GITHUB_REP_LINK } from '@/config';
-import { GameManager } from '../../Managers';
+import { GITHUB_REP_LINK } from '@config';
 import { Container, Sprite } from 'pixi.js';
+import { GameManager } from '@core/Managers';
 
 function getSocialMediaIcons() {
-  const manager = GameManager.getInstance();
+  const game: GameManager = new GameManager();
   const container = new Container();
 
   const githubIcon = Sprite.from('github_white');
@@ -19,7 +19,7 @@ function getSocialMediaIcons() {
     window.open(GITHUB_REP_LINK);
   });
 
-  handleSocialMediaIconsResize(container, manager.getWidth(), manager.getHeight());
+  handleSocialMediaIconsResize(container, game.size.getWidth(), game.size.getHeight());
 
   return container;
 }

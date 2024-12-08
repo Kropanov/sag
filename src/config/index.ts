@@ -6,3 +6,4 @@ export * from './ammo.ts';
 export * from './storage.ts';
 export * from './theme.ts';
 export * from './assets.ts';
+export * from './hud.ts';

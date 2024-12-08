@@ -1,10 +1,10 @@
 import { Text } from 'pixi.js';
-import { GameManager } from '../../Managers';
-import { theme } from '@/config';
+import { theme } from '@config';
+import { GameManager } from '@core/Managers';
 import { version } from '../../../../package.json';
 
 function getProgramVersion() {
-  const manager = GameManager.getInstance();
+  const game = new GameManager();
 
   const versionText = new Text({
     text: `v${version} beta`,
@@ -15,8 +15,8 @@ function getProgramVersion() {
     },
   });
 
-  versionText.x = manager.getWidth() - versionText.width - 8;
-  versionText.y = manager.getHeight() - versionText.height - 5;
+  versionText.x = game.size.getWidth() - versionText.width - 8;
+  versionText.y = game.size.getHeight() - versionText.height - 5;
 
   return versionText;
 }

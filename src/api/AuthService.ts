@@ -1,5 +1,5 @@
-import { LoginRequestDTO, RegisterRequestDTO } from '@/types/dto';
-import { ApiClient } from '@/api';
+import { ApiClient } from '@api';
+import { LoginRequestDTO, RegisterRequestDTO } from '@dto';
 
 export class AuthService {
   async login(body: LoginRequestDTO) {

@@ -5,3 +5,4 @@ export * from './HudManager.ts';
 export * from './NotifyManager.ts';
 export * from './KeyboardManager.ts';
 export * from './StorageManager.ts';
+export * from './ResizeManager.ts';

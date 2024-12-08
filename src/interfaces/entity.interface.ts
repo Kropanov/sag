@@ -1,4 +1,4 @@
-import { vCollisionNormType } from '@/types';
+import { vCollisionNormType } from '@types';
 
 export interface IEntity {
   x: number;

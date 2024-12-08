@@ -1,6 +1,9 @@
 export * from './Abstract/Item.ts';
 export * from './Abstract/ItemStorage.ts';
 
+export * from './Base/EventEmitter.ts';
+export * from './Base/ResourceLoader.ts';
+
 export * from './Strategies/ArtifactAbilities.ts';
 
 export * from './Factory/ItemFactory.ts';
@@ -16,3 +19,5 @@ export * from './Ammo.ts';
 export * from './Cartridge.ts';
 export * from './Gun.ts';
 export * from './Notification.ts';
+export * from './Backpack.ts';
+export * from './Material.ts';

@@ -1,12 +1,11 @@
-import { GameManager } from '../../Managers';
-import { UIComponent } from '@/interfaces';
+import { theme } from '@config';
+import { UIComponent } from '@interfaces';
+import { GameManager } from '@core/Managers';
 import { ContainerChild, Container, Graphics } from 'pixi.js';
-import { UISettingsMenu } from '@core/Display';
-import { UISettingsItemDisplay } from '@core/Display';
-import { theme } from '@/config/theme.ts';
+import { HUDComponent, SettingsItemDisplay, SettingsMenu } from '@core/Display';
 
-class UISettings implements UIComponent {
-  private manager: GameManager = GameManager.getInstance();
+class SettingsBox extends HUDComponent {
+  private game: GameManager = new GameManager();
 
   private container!: Graphics;
   private containerWidth: number = 600;
@@ -36,19 +35,19 @@ class UISettings implements UIComponent {
       .filletRect(0, 0, this.containerWidth, this.containerHeight, 10)
       .fill(theme.background.primary)
       .stroke({ color: theme.border.primary, width: 3 });
-    this.resize(this.manager.getWidth(), this.manager.getHeight());
+    this.resize(this.game.size.getWidth(), this.game.size.getHeight());
     this.close();
 
     return [this.container];
   }
 
   private renderSettingsMenu() {
-    this.menu = new UISettingsMenu();
+    this.menu = new SettingsMenu();
     this.addComponent(this.menu);
   }
 
   private renderSettingsItemDisplay() {
-    this.itemDisplay = new UISettingsItemDisplay();
+    this.itemDisplay = new SettingsItemDisplay();
     this.addComponent(this.itemDisplay);
   }
 
@@ -87,4 +86,4 @@ class UISettings implements UIComponent {
   }
 }
 
-export { UISettings };
+export { SettingsBox };

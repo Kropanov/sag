@@ -1,5 +1,5 @@
-import { ArtifactAbility, ItemProps } from '@/interfaces';
-import { Item } from './Abstract/Item';
+import { Item } from '@core/Entities';
+import { ArtifactAbility, ItemProps } from '@interfaces';
 
 export class Artifact extends Item {
   private ability: ArtifactAbility;

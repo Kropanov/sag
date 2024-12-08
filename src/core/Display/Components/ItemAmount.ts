@@ -1,9 +1,14 @@
-import { UIComponent } from '@/interfaces';
+import { theme } from '@config';
+import { UIComponent } from '@interfaces';
 import { ContainerChild, Container, Text } from 'pixi.js';
-import { theme } from '@/config';
+import { HUDComponent } from '@core/Display';
 
-export class UIAmount implements UIComponent {
+export class ItemAmount extends HUDComponent {
   private amount: number = 0;
+
+  constructor() {
+    super();
+  }
 
   render(): Array<ContainerChild> {
     return this.createAmountDisplay();
@@ -22,12 +27,6 @@ export class UIAmount implements UIComponent {
     itemAmount.x += 47;
     itemAmount.y += 97;
     itemAmount.zIndex = 1;
-
-    // const qty = Sprite.from('qty_v4');
-    // qty.scale.set(0.45);
-    // qty.x += 35;
-    // qty.y += 75;
-    // qty.zIndex = 1;
 
     return [itemAmount];
   }

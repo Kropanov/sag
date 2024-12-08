@@ -1,20 +1,22 @@
-import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@/config';
-import { GameManager } from '../Managers';
-import { IScene } from '@/interfaces';
+import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
+import { IScene } from '@interfaces';
 import { FancyButton, Input } from '@pixi/ui';
 import { Container, Graphics, Rectangle, Sprite, Text } from 'pixi.js';
-import { MenuScene } from './MenuScene';
 import {
   getProgramVersion,
   getSocialMediaIcons,
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
-} from '@/core/Misc';
+} from '@core/Misc';
 import { sound } from '@pixi/sound';
-import { AuthService } from '@/api';
+import { AuthService } from '@api';
+import { GameManager, SceneManager } from '@core/Managers';
+import { MenuScene } from '@core/Scenes';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
+  private scene: SceneManager = new SceneManager();
+
   private container!: Graphics;
   private authFormType: 'Login' | 'Register' = 'Login';
   private game: GameManager = new GameManager();
@@ -64,7 +66,7 @@ export class AuthScene extends Container implements IScene {
     });
 
     this.container.pivot.set(275, 325);
-    this.container.position.set(this.game.scene.getWidth() / 2, this.game.scene.getHeight() / 2);
+    this.container.position.set(this.game.size.getWidth() / 2, this.game.size.getHeight() / 2);
 
     this.addChild(this.container);
   }
@@ -309,7 +311,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.game.scene.changeScene(new MenuScene());
+    this.scene.changeScene(MenuScene);
   }
 
   private async processSignupSubmit() {
@@ -331,7 +333,7 @@ export class AuthScene extends Container implements IScene {
     }
 
     this.game.storage.setItem('authToken', data.authToken);
-    this.game.scene.changeScene(new MenuScene());
+    this.scene.changeScene(MenuScene);
   }
 
   private validateLoginData(): boolean {

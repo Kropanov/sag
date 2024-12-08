@@ -1,5 +1,5 @@
-import { StorageManager } from '@core/Managers';
 import axios from 'axios';
+import { StorageManager } from '@core/Managers';
 
 const ApiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/',

@@ -1,5 +1,5 @@
-import { ItemProps } from '@/interfaces';
-import { Item } from './Abstract/Item';
+import { Item } from '@core/Entities';
+import { ItemProps } from '@interfaces';
 
 export class Material extends Item {
   constructor(props: ItemProps) {

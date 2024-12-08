@@ -1,3 +1,3 @@
-import { GameLauncher } from '@/core/Launcher';
+import { AppLauncher } from '@core/Launcher';
 
-GameLauncher.Run();
+AppLauncher.Run();

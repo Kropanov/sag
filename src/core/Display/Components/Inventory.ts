@@ -1,13 +1,14 @@
-import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@/config';
-import { Item, Player } from '@/core/Entities';
-import { GameManager } from '../../Managers';
-import { BackpackEvents, UIComponent } from '@/interfaces';
-import { Slot } from '@/types';
-import mitt, { Emitter } from 'mitt';
+import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
 import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
-import { isStackable } from '@/utils';
+import { BackpackEvents, UIComponent } from '@interfaces';
+import { Item, Player } from '@core/Entities';
+import { GameManager } from '@core/Managers';
+import mitt, { Emitter } from 'mitt';
+import { isStackable } from '@utils';
+import { Slot } from '@types';
+import { HUDComponent } from '@core/Display';
 
-export class UIBackpack implements UIComponent {
+export class Inventory extends HUDComponent {
   private backpack: Array<Item | null> = [];
   private emitter: Emitter<BackpackEvents>;
 
@@ -15,7 +16,7 @@ export class UIBackpack implements UIComponent {
   private readonly slotsContainer: Container;
 
   private player: Player;
-  private manager = GameManager.getInstance();
+  private game: GameManager = new GameManager();
 
   private currentHoldingSlotIndex: number | undefined;
   private currentHoldingSlotItem: Item | null = null;
@@ -33,6 +34,8 @@ export class UIBackpack implements UIComponent {
   private timer!: NodeJS.Timeout;
 
   constructor(player: Player) {
+    super();
+
     this.emitter = mitt<BackpackEvents>();
     this.player = player;
     this.slotsContainer = new Container();
@@ -80,8 +83,9 @@ export class UIBackpack implements UIComponent {
       this.setCurrentItem(0);
     }
 
-    const width = this.manager.getWidth();
-    const height = this.manager.getHeight();
+    const width = this.game.size.getWidth();
+    const height = this.game.size.getHeight();
+
     this.resizeSlotsContainer(width, height);
 
     return [this.slotsContainer];
@@ -299,9 +303,9 @@ export class UIBackpack implements UIComponent {
     }
   }
 
-  public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
-    this.emitter.on(event, handler);
-  }
+  // public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
+  //   this.emitter.on(event, handler);
+  // }
 
   // @ts-ignore
   private removeItemFromBackpack(item: Item) {

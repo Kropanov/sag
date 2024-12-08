@@ -1,4 +1,4 @@
-import { ItemType, ItemRarity } from '@/enums';
+import { ItemType, ItemRarity } from '@enums';
 
 export type ItemTemplate = {
   id: string;

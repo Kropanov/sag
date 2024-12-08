@@ -1,9 +1,8 @@
-import { Keyboard } from '@core/Keyboard';
-import { Character } from '@core/Entities';
-import { Backpack } from './Backpack';
+import { Backpack, Character } from '@core/Entities';
+import { GameManager } from '@core/Managers';
 
 export class Player extends Character {
-  controls: Keyboard = Keyboard.getInstance();
+  game: GameManager = new GameManager();
 
   prevY: number;
   prevX: number;
@@ -34,19 +33,19 @@ export class Player extends Character {
   }
 
   handleInput() {
-    if (this.controls.state.get('KeyW')) {
+    if (this.game.keyboard.state.get('KeyW')) {
       this.move(0, -this.velocity);
     }
-    if (this.controls.state.get('KeyS')) {
+    if (this.game.keyboard.state.get('KeyS')) {
       this.move(0, this.velocity);
     }
-    if (this.controls.state.get('KeyA')) {
+    if (this.game.keyboard.state.get('KeyA')) {
       this.move(-this.velocity, 0);
     }
-    if (this.controls.state.get('KeyD')) {
+    if (this.game.keyboard.state.get('KeyD')) {
       this.move(this.velocity, 0);
     }
-    if (this.controls.state.get('Space')) {
+    if (this.game.keyboard.state.get('Space')) {
       this.move(0, -this.velocity);
     }
   }
