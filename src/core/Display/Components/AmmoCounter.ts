@@ -10,6 +10,8 @@ export class AmmoCounter extends HUDComponent {
     super();
     this.ammo = new Text();
 
+    this.setNested(true);
+
     this.createAmmoDisplay();
     this.addChild(this.ammo);
   }

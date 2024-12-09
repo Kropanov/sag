@@ -3,10 +3,12 @@ import { Container } from 'pixi.js';
 
 export class HUDComponent extends Container {
   private eventEmitter?: EventEmitter;
+  private nested;
 
   constructor() {
     super();
-    this.visible = true; // Default visibility
+    this.nested = false;
+    this.visible = false; // Default visibility
   }
 
   public setEventBus(eventEmitter: EventEmitter): void {
@@ -27,6 +29,14 @@ export class HUDComponent extends Container {
       return;
     }
     this.eventEmitter.emit(event, data);
+  }
+
+  public setNested(value: boolean): void {
+    this.nested = value;
+  }
+
+  public isNestedComponent() {
+    return this.nested;
   }
 
   public show() {

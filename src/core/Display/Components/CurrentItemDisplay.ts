@@ -14,6 +14,12 @@ export class CurrentItemDisplay extends HUDComponent {
   private currentItemSprite!: Sprite;
   private currentItem!: Item | null;
 
+  constructor() {
+    super();
+    this.render();
+    this.addChild(this.container);
+  }
+
   public render(): Array<ContainerChild> {
     this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
     this.container.x = this.game.size.getWidth() - 300;

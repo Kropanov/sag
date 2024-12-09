@@ -43,7 +43,9 @@ export class HUDManager extends Container {
 
   public showHUD(): void {
     Object.entries(hudComponents).forEach(([_key, component]) => {
-      component.show();
+      if (!component.isNestedComponent()) {
+        component.show();
+      }
     });
   }
 
@@ -58,6 +60,7 @@ export class HUDManager extends Container {
       console.warn(`Component with name "${name}" already exists.`);
       return;
     }
+
     component.setEventBus(this.eventEmitter);
     this.components[name] = component;
     this.addChild(component);
@@ -78,6 +81,7 @@ export class HUDManager extends Container {
   }
 
   getComponents() {
+    // console.log(this.children); // FIXME:
     return Object.values(this.components);
   }
 
