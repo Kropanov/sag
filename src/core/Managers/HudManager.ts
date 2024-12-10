@@ -8,7 +8,6 @@ import { hudComponents } from '@config';
 export class HUDManager extends Container {
   private static _instance: HUDManager;
 
-  private readonly displayedComponents!: HUDComponent[];
   private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
 
   private readonly eventEmitter!: EventEmitter;
@@ -19,7 +18,6 @@ export class HUDManager extends Container {
     super();
 
     this.components = {};
-    this.displayedComponents = [];
     this.eventEmitter = new EventEmitter();
     this.resizeManager = new ResizeManager();
 
@@ -30,6 +28,7 @@ export class HUDManager extends Container {
     if (!HUDManager._instance) {
       HUDManager._instance = new HUDManager();
     }
+
     return HUDManager._instance;
   }
 
@@ -65,10 +64,6 @@ export class HUDManager extends Container {
 
     component.setEventBus(this.eventEmitter);
     this.components[name] = component;
-
-    if (!component.isNestedComponent()) {
-      this.displayedComponents.push(component);
-    }
   }
 
   removeComponent<K extends keyof HUDComponentRegistry>(name: K): void {
@@ -87,7 +82,7 @@ export class HUDManager extends Container {
   }
 
   getDisplayedComponents() {
-    return this.displayedComponents;
+    return Object.values(this.components);
   }
 
   update(delta: number): void {

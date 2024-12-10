@@ -95,7 +95,7 @@ export class GameManager {
    */
   constructor() {
     this.api = ApiClient;
-    this.hud = HUDManager.getInstance();
+    this.hud = HUDManager.getInstance(); // FIXME: I guess it's not a good idea to call game inside hud components so it should be removed from here
     this.size = new ResizeManager();
     this.audio = new AudioManager();
     this.notify = new NotifyManager();
