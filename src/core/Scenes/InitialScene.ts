@@ -71,7 +71,7 @@ export class InitialScene extends Container implements IScene {
   private assetsLoaded(): void {
     const token = this.game.storage.getToken();
     const scene = token ? MenuScene : AuthScene;
-    this.scene.changeScene(scene, this.game.hud.getComponents());
+    this.scene.changeScene(scene, this.game.hud.getDisplayedComponents());
   }
 
   update(_framesPassed: number): void {

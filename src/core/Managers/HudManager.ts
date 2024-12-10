@@ -7,7 +7,10 @@ import { hudComponents } from '@config';
 
 export class HUDManager extends Container {
   private static _instance: HUDManager;
+
+  private readonly displayedComponents!: HUDComponent[];
   private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
+
   private readonly eventEmitter!: EventEmitter;
 
   private resizeManager: ResizeManager = new ResizeManager();
@@ -16,6 +19,7 @@ export class HUDManager extends Container {
     super();
 
     this.components = {};
+    this.displayedComponents = [];
     this.eventEmitter = new EventEmitter();
     this.resizeManager = new ResizeManager();
 
@@ -43,9 +47,7 @@ export class HUDManager extends Container {
 
   public showHUD(): void {
     Object.entries(hudComponents).forEach(([_key, component]) => {
-      if (!component.isNestedComponent()) {
-        component.show();
-      }
+      component.show();
     });
   }
 
@@ -63,7 +65,10 @@ export class HUDManager extends Container {
 
     component.setEventBus(this.eventEmitter);
     this.components[name] = component;
-    this.addChild(component);
+
+    if (!component.isNestedComponent()) {
+      this.displayedComponents.push(component);
+    }
   }
 
   removeComponent<K extends keyof HUDComponentRegistry>(name: K): void {
@@ -72,6 +77,7 @@ export class HUDManager extends Container {
       console.warn(`Component with name "${name}" does not exist.`);
       return;
     }
+
     this.removeChild(component);
     delete this.components[name];
   }
@@ -80,9 +86,8 @@ export class HUDManager extends Container {
     return this.components[name] as HUDComponentRegistry[K];
   }
 
-  getComponents() {
-    // console.log(this.children); // FIXME:
-    return Object.values(this.components);
+  getDisplayedComponents() {
+    return this.displayedComponents;
   }
 
   update(delta: number): void {
