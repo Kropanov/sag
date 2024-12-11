@@ -30,6 +30,8 @@ export class HUDComponent extends Container {
     this.eventEmitter.emit(event, data);
   }
 
+  protected render() {}
+
   public show() {
     this.visible = true;
   }

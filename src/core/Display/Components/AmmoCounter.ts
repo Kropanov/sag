@@ -17,7 +17,7 @@ export class AmmoCounter extends HUDComponent {
     this.addChild(this.ammo);
   }
 
-  private render() {
+  protected render() {
     this.ammo = new Text({
       text: '0 / 20',
       style: {
