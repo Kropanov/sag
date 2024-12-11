@@ -1,5 +1,5 @@
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
-import { AmmoCounter, HUDComponent, ItemAmount } from '@core/Display';
+import { HUDComponent, ItemAmount } from '@core/Display';
 import { GameManager } from '@core/Managers';
 import { Item } from '@core/Entities';
 import { ItemType } from '@enums';
@@ -8,7 +8,7 @@ import { theme } from '@config';
 export class CurrentItemDisplay extends HUDComponent {
   private game: GameManager = new GameManager();
 
-  private uiAmmo!: AmmoCounter;
+  // private uiAmmo!: AmmoCounter;
   private container!: Graphics;
   private currentItemSprite!: Sprite;
   private currentItem!: Item | null;
@@ -31,6 +31,7 @@ export class CurrentItemDisplay extends HUDComponent {
     return [this.container];
   }
 
+  // FIXME: move to another place
   public setCurrentItem(selectedItem: Item | null) {
     if (selectedItem === null) {
       this.currentItem = null;
@@ -50,7 +51,7 @@ export class CurrentItemDisplay extends HUDComponent {
 
     switch (selectedItem.type) {
       case ItemType.Gun:
-        this.uiAmmo = new AmmoCounter();
+        // this.uiAmmo = new AmmoCounter();
         // this.addComponent(this.uiAmmo);
         break;
       case ItemType.Artifact:
@@ -82,14 +83,6 @@ export class CurrentItemDisplay extends HUDComponent {
       const children = this.container.getChildAt(0);
       this.container.removeChild(children);
     }
-  }
-
-  public getContainer() {
-    return this.container;
-  }
-
-  public setAmmo(currentValue: number | string, maxAmmo: number) {
-    this.uiAmmo.setAmmo(currentValue, maxAmmo);
   }
 
   public resize(_screenWidth: number, _screenHeight: number): void {}
