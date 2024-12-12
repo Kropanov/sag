@@ -1,21 +1,27 @@
-import { BACKPACK_SLOT_INCREMENT, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
+import {
+  BACKPACK_SLOT_INCREMENT,
+  INITIAL_BACKPACK_CAPACITY,
+  STORAGE_SLOT_SPACING,
+  STORAGE_SLOT_WIDTH,
+  theme,
+} from '@config';
 import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
-import { BackpackEvents, UIComponent } from '@interfaces';
-import { Item, Player } from '@core/Entities';
+import { UIComponent } from '@interfaces';
+import { Item } from '@core/Entities';
 import { GameManager } from '@core/Managers';
-import mitt, { Emitter } from 'mitt';
+// import mitt, { Emitter } from 'mitt';
 import { isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
 export class Inventory extends HUDComponent {
   private backpack: Array<Item | null> = [];
-  private emitter: Emitter<BackpackEvents>;
+  // private emitter: Emitter<BackpackEvents>;
 
   private slots: Slot[] = [];
   private readonly slotsContainer: Container;
 
-  private player: Player;
+  // private player: Player;
   private game: GameManager = new GameManager();
 
   private currentHoldingSlotIndex: number | undefined;
@@ -33,15 +39,17 @@ export class Inventory extends HUDComponent {
 
   private timer!: NodeJS.Timeout;
 
-  constructor(player: Player) {
+  constructor() {
     super();
 
-    this.emitter = mitt<BackpackEvents>();
-    this.player = player;
+    // this.emitter = mitt<BackpackEvents>();
+    // this.player = player;
     this.slotsContainer = new Container();
     this.slotsContainer.sortableChildren = true;
     this.slotsContainer.interactive = true;
     this.slotsContainer.zIndex = 1;
+
+    this.updateBackpack();
 
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
@@ -55,8 +63,13 @@ export class Inventory extends HUDComponent {
     return this.renderBackpackSlots();
   }
 
-  public updateBackpack(newBackpack: Array<Item | null> | undefined) {
-    this.backpack = newBackpack ?? [];
+  public updateBackpack(newBackpack: Array<Item | null> = []) {
+    if (this.isEmptyBackpack(newBackpack)) {
+      this.backpack = this.generateEmptyBackpack();
+    } else {
+      this.backpack = newBackpack;
+    }
+
     this.resetBackpackSlots();
     this.renderBackpackSlots();
   }
@@ -88,7 +101,17 @@ export class Inventory extends HUDComponent {
 
     this.resizeSlotsContainer(width, height);
 
+    this.addChild(this.slotsContainer);
     return [this.slotsContainer];
+  }
+
+  private generateEmptyBackpack() {
+    const backpack = [];
+    for (let i = 0; i < INITIAL_BACKPACK_CAPACITY; i++) {
+      backpack.push(null);
+    }
+
+    return backpack;
   }
 
   private createSlotGraphics(row: number, slotIndex: number, i: number): Graphics {
@@ -209,9 +232,9 @@ export class Inventory extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          this.player.reassignItemAt(this.draggedItem, index);
-          this.emitter.emit('updateUIBackpack');
-          this.emitter.emit('updateCurrentItem', index);
+          // this.player.reassignItemAt(this.draggedItem, index);
+          // this.emitter.emit('updateUIBackpack');
+          // this.emitter.emit('updateCurrentItem', index);
 
           return;
         }
@@ -241,11 +264,11 @@ export class Inventory extends HUDComponent {
         const slotContainsPoint = graphics.containsPoint(localPoint);
 
         if (slotContainsPoint && item) {
-          this.emitter.emit('showHoverInfoBox', {
-            targetItem: item,
-            cursorX: clientX,
-            cursorY: clientY,
-          });
+          // this.emitter.emit('showHoverInfoBox', {
+          //   targetItem: item,
+          //   cursorX: clientX,
+          //   cursorY: clientY,
+          // });
         }
       }
     }, 2000);
@@ -253,7 +276,7 @@ export class Inventory extends HUDComponent {
 
   private onSlotMouseOut() {
     clearTimeout(this.timer);
-    this.emitter.emit('hideHoverInfoBox');
+    // this.emitter.emit('hideHoverInfoBox');
   }
 
   public updateSlotVisibility() {
@@ -269,11 +292,11 @@ export class Inventory extends HUDComponent {
 
         graphics.visible = this.isInventoryExpanded;
 
-        if (item && item !== null) {
+        if (item) {
           item.sprite.visible = this.isInventoryExpanded;
         }
 
-        if (text && text !== null) {
+        if (text) {
           text.visible = this.isInventoryExpanded;
         }
       }
@@ -287,7 +310,7 @@ export class Inventory extends HUDComponent {
   private onSlotClick(slotIndex: number, i: number) {
     if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
       this.selectedSlotIndex = slotIndex;
-      this.emitter.emit('updateCurrentItem', slotIndex);
+      // this.emitter.emit('updateCurrentItem', slotIndex);
     }
   }
 
@@ -303,14 +326,18 @@ export class Inventory extends HUDComponent {
     }
   }
 
+  private isEmptyBackpack(backpack: Array<Item | null>): boolean {
+    return backpack && backpack.length === 0;
+  }
+
   // public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
   //   this.emitter.on(event, handler);
   // }
 
   // @ts-ignore
   private removeItemFromBackpack(item: Item) {
-    this.player.removeItemFromBackpack(item);
-    this.updateBackpack(this.player.getBackpackItems());
+    // this.player.removeItemFromBackpack(item);
+    // this.updateBackpack(this.player.getBackpackItems());
   }
 
   public getContainer(): Container {

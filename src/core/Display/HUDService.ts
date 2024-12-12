@@ -33,7 +33,7 @@ class HUDService {
     this.scene = scene;
     this.player = player;
 
-    this.uiBackpack = new Inventory(this.player);
+    this.uiBackpack = new Inventory();
     this.addComponentsToScene(this.uiBackpack.render());
 
     this.uiHoverBox = new BackpackHoverInfoBox();
