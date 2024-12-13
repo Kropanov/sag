@@ -1,5 +1,9 @@
 export * from './HUDComponent.ts';
 
+export * from './Components/InventoryDraft.ts';
+
+export * from './Components/SharedChest.ts';
+export * from './Components/InventoryBag.ts';
 export * from './Components/Inventory.ts';
 export * from './Components/AmmoCounter.ts';
 export * from './Components/ItemAmount.ts';
