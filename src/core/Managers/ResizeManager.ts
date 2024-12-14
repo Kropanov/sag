@@ -1,4 +1,5 @@
 import { EventEmitter } from '@core/Entities';
+import { getScreenHeight, getScreenWidth } from '@utils';
 
 export class ResizeManager {
   private static _instance: ResizeManager;
@@ -21,8 +22,8 @@ export class ResizeManager {
   }
 
   private updateDimensions(): void {
-    this.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    this.width = getScreenWidth();
+    this.height = getScreenHeight();
   }
 
   private onResize(): void {

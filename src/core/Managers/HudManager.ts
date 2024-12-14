@@ -81,7 +81,7 @@ export class HUDManager extends Container {
     return this.components[name] as HUDComponentRegistry[K];
   }
 
-  getDisplayedComponents() {
+  getComponents() {
     return Object.values(this.components);
   }
 

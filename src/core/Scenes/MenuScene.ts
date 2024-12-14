@@ -11,6 +11,8 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@core/Misc';
+import { Artifact, Backpack, Item, ReincarnationAbility } from '@core/Entities';
+import { ItemRarity, ItemType } from '@enums';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -54,6 +56,24 @@ export class MenuScene extends Container implements IScene {
     this.fillMenu();
 
     this.addChild(this.menu);
+
+    // FIXME: only for testing purposes
+    // -----------------------------------------
+    const backpack = new Backpack();
+    const book1Props = { amount: 3, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
+    const book_1 = new Artifact(book1Props, new ReincarnationAbility());
+    backpack.push(book_1);
+    const hudBackpack = this.game.hud.getComponent('backpack');
+
+    if (hudBackpack) {
+      hudBackpack.registerEvent('placeItemAt', ({ item, index }: { item: Item; index: number }) => {
+        backpack.placeItem(item, index);
+      });
+
+      hudBackpack.inventory = backpack.open();
+    }
+
+    // -----------------------------------------
   }
 
   startGame() {

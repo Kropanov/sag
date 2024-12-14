@@ -1,23 +1,18 @@
-import {
-  BACKPACK_SLOT_INCREMENT,
-  INITIAL_BACKPACK_CAPACITY,
-  STORAGE_SLOT_SPACING,
-  STORAGE_SLOT_WIDTH,
-  theme,
-} from '@config';
+import { INITIAL_BACKPACK_CAPACITY, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
 import { Graphics, Point, Text } from 'pixi.js';
 import { Item } from '@core/Entities';
-import { GameManager } from '@core/Managers';
-import { isStackable } from '@utils';
+import { getScreenHeight, getScreenWidth, isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
 export class InventoryDraft extends HUDComponent {
-  private game: GameManager = new GameManager();
-
   private _inventory: Array<Item | null> = [];
+  private _inventory_capacity = 10;
 
   private slots: Slot[] = [];
+
+  // private currentHoldingSlotIndex: number | undefined;
+  // private currentHoldingSlotItem: Item | null = null;
 
   private isInventoryExpanded: boolean = false;
   private initialHoldingItemPosition: Point = new Point();
@@ -40,6 +35,11 @@ export class InventoryDraft extends HUDComponent {
 
     this.inventory = [];
 
+    const width = getScreenWidth();
+    const height = getScreenHeight();
+
+    this.resizeSlotsContainer(width, height);
+
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
     document.addEventListener('mouseup', this.onDragEnd.bind(this));
@@ -50,8 +50,11 @@ export class InventoryDraft extends HUDComponent {
 
   set inventory(newInventory: (Item | null)[] | null | undefined) {
     this._inventory = this.isEmpty(newInventory) ? this.generateEmptyBackpack() : (newInventory ?? []);
-
     this.refresh();
+  }
+
+  set inventory_capacity(value: number) {
+    this._inventory_capacity = value;
   }
 
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
@@ -63,11 +66,18 @@ export class InventoryDraft extends HUDComponent {
     this.renderSlots();
   }
 
-  private renderSlots() {
-    for (let i = 0; i < this._inventory.length; i++) {
-      const row = Math.floor(i / BACKPACK_SLOT_INCREMENT);
-      const slotIndex = i % BACKPACK_SLOT_INCREMENT;
+  private resetSlots() {
+    this.slots.length = 0;
+    while (this.children.length > 0) {
+      const el = this.getChildAt(0);
+      this.removeChild(el);
+    }
+  }
 
+  private renderSlots() {
+    for (let i = 0; i < this._inventory_capacity; i++) {
+      const row = Math.floor(i / this._inventory_capacity);
+      const slotIndex = i % this._inventory_capacity;
       const item = this._inventory[i];
       const graphics = this.createSlotGraphics(row, slotIndex, i);
 
@@ -79,13 +89,6 @@ export class InventoryDraft extends HUDComponent {
         this.appendSlot(graphics, item, text);
       }
     }
-
-    const width = this.game.size.getWidth();
-    const height = this.game.size.getHeight();
-
-    this.resizeSlotsContainer(width, height);
-
-    console.log('this.children ->', this.children);
   }
 
   private generateEmptyBackpack() {
@@ -215,10 +218,8 @@ export class InventoryDraft extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          // this.player.reassignItemAt(this.draggedItem, index);
-          // this.emitter.emit('updateUIBackpack');
-          // this.emitter.emit('updateCurrentItem', index);
-
+          this.callEvent('placeItemAt', { item: this.draggedItem, index });
+          this.refresh();
           return;
         }
       }
@@ -268,7 +269,7 @@ export class InventoryDraft extends HUDComponent {
     }
 
     for (let i = 0; i < this._inventory.length; i++) {
-      if (i >= BACKPACK_SLOT_INCREMENT) {
+      if (i >= this._inventory_capacity) {
         const item = this.slots[i].item;
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
@@ -291,7 +292,7 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private onSlotClick(slotIndex: number, i: number) {
-    if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
+    if (this.selectedSlotIndex !== slotIndex && i <= this._inventory_capacity) {
       this.selectedSlotIndex = slotIndex;
       // this.emitter.emit('updateCurrentItem', slotIndex);
     }
@@ -309,20 +310,13 @@ export class InventoryDraft extends HUDComponent {
     }
   }
 
-  private resetSlots() {
-    this.slots.length = 0;
-    while (this.children.length > 0) {
-      const el = this.getChildAt(0);
-      this.removeChild(el);
-    }
-  }
-
   private resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
     this.y = 20;
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
+    console.log('!!@!@');
     this.resizeSlotsContainer(screenWidth, _screenHeight);
   }
 }
