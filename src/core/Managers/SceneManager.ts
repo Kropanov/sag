@@ -64,8 +64,6 @@ export class SceneManager {
   }
 
   public addToScene(component: Container) {
-    console.log(component, component.visible, component.zIndex);
-    console.log(this.currentScene);
     this.currentScene.addChild(component);
   }
 

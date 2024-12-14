@@ -316,7 +316,6 @@ export class InventoryDraft extends HUDComponent {
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
-    console.log('!!@!@');
     this.resizeSlotsContainer(screenWidth, _screenHeight);
   }
 }

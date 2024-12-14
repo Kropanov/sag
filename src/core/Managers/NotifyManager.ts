@@ -5,7 +5,7 @@ import { INotification, IScene } from '@interfaces';
 // TODO: rework after ui components refactoring
 export class NotifyManager {
   static _instance: NotifyManager;
-  private scene!: IScene;
+  // private scene!: IScene;
   private entity: Notification = new Notification();
   private uiNotification: NotificationBox = new NotificationBox();
 
@@ -17,10 +17,8 @@ export class NotifyManager {
     NotifyManager._instance = this;
   }
 
-  setScene(scene: IScene) {
-    console.log(scene);
-    this.scene = scene;
-    console.log(this.scene);
+  setScene(_scene: IScene) {
+    // this.scene = scene;
   }
 
   updateUI() {
