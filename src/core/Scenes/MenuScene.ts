@@ -70,6 +70,7 @@ export class MenuScene extends Container implements IScene {
         backpack.placeItem(item, index);
       });
 
+      hudBackpack.defineLocation(this.width / 2 - hudBackpack.width / 2, 15);
       hudBackpack.inventory = backpack.open();
     }
 

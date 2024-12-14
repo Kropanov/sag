@@ -7,7 +7,8 @@ import { HUDComponent } from '@core/Display';
 
 export class InventoryDraft extends HUDComponent {
   private _inventory: Array<Item | null> = [];
-  private _inventory_capacity = 10;
+  private _inventoryCapacity = 20;
+  private _backpackSlotIncrement = 10;
 
   private slots: Slot[] = [];
 
@@ -35,10 +36,12 @@ export class InventoryDraft extends HUDComponent {
 
     this.inventory = [];
 
-    const width = getScreenWidth();
-    const height = getScreenHeight();
+    getScreenWidth();
+    getScreenHeight();
+    // const width = getScreenWidth();
+    // const height = getScreenHeight();
 
-    this.resizeSlotsContainer(width, height);
+    // this.resizeSlotsContainer(width, height);
 
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
@@ -53,8 +56,8 @@ export class InventoryDraft extends HUDComponent {
     this.refresh();
   }
 
-  set inventory_capacity(value: number) {
-    this._inventory_capacity = value;
+  set inventoryCapacity(value: number) {
+    this._inventoryCapacity = value;
   }
 
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
@@ -75,9 +78,9 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private renderSlots() {
-    for (let i = 0; i < this._inventory_capacity; i++) {
-      const row = Math.floor(i / this._inventory_capacity);
-      const slotIndex = i % this._inventory_capacity;
+    for (let i = 0; i < this._inventoryCapacity; i++) {
+      const row = Math.floor(i / this._backpackSlotIncrement);
+      const slotIndex = i % this._backpackSlotIncrement;
       const item = this._inventory[i];
       const graphics = this.createSlotGraphics(row, slotIndex, i);
 
@@ -122,6 +125,11 @@ export class InventoryDraft extends HUDComponent {
     this.addChild(graphics);
 
     return graphics;
+  }
+
+  public defineLocation(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
 
   // private updateSlotGraphics(graphics: Graphics, index: number, strokeColor: string) {
@@ -269,7 +277,7 @@ export class InventoryDraft extends HUDComponent {
     }
 
     for (let i = 0; i < this._inventory.length; i++) {
-      if (i >= this._inventory_capacity) {
+      if (i >= this._inventoryCapacity) {
         const item = this.slots[i].item;
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
@@ -292,7 +300,7 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private onSlotClick(slotIndex: number, i: number) {
-    if (this.selectedSlotIndex !== slotIndex && i <= this._inventory_capacity) {
+    if (this.selectedSlotIndex !== slotIndex && i <= this._inventoryCapacity) {
       this.selectedSlotIndex = slotIndex;
       // this.emitter.emit('updateCurrentItem', slotIndex);
     }
@@ -312,7 +320,7 @@ export class InventoryDraft extends HUDComponent {
 
   private resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
-    this.y = 20;
+    this.y = 15;
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
