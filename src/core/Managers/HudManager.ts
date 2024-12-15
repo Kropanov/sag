@@ -7,7 +7,9 @@ import { hudComponents } from '@config';
 
 export class HUDManager extends Container {
   private static _instance: HUDManager;
+
   private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
+
   private readonly eventEmitter!: EventEmitter;
 
   private resizeManager: ResizeManager = new ResizeManager();
@@ -26,6 +28,7 @@ export class HUDManager extends Container {
     if (!HUDManager._instance) {
       HUDManager._instance = new HUDManager();
     }
+
     return HUDManager._instance;
   }
 
@@ -58,9 +61,9 @@ export class HUDManager extends Container {
       console.warn(`Component with name "${name}" already exists.`);
       return;
     }
+
     component.setEventBus(this.eventEmitter);
     this.components[name] = component;
-    this.addChild(component);
   }
 
   removeComponent<K extends keyof HUDComponentRegistry>(name: K): void {
@@ -69,6 +72,7 @@ export class HUDManager extends Container {
       console.warn(`Component with name "${name}" does not exist.`);
       return;
     }
+
     this.removeChild(component);
     delete this.components[name];
   }

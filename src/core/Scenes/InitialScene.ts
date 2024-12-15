@@ -64,7 +64,8 @@ export class InitialScene extends Container implements IScene {
   private async initializeResourceLoader(): Promise<void> {
     const loader = new ResourceLoader();
     await loader.load();
-    this.game.hud.initializeHUD();
+    this.game.hud.initializeHUD(); // FIXME: only for testing purposes
+    this.game.hud.showHUD();
   }
 
   private assetsLoaded(): void {

@@ -43,4 +43,12 @@ export const theme = {
     staminaBar: '#ffbf00',
     shield: '#8c8c8c',
   },
+  chest: {
+    shared: {
+      background: '#3A3A3A',
+      border: '#232323',
+    },
+    background: '#4E3621',
+    border: '#8C6B30',
+  },
 };

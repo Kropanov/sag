@@ -1,30 +1,26 @@
-import {
-  BACKPACK_SLOT_INCREMENT,
-  INITIAL_BACKPACK_CAPACITY,
-  STORAGE_SLOT_SPACING,
-  STORAGE_SLOT_WIDTH,
-  theme,
-} from '@config';
-import { Container, ContainerChild, Graphics, Point, Text } from 'pixi.js';
+import { INITIAL_BACKPACK_CAPACITY, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
+import { Graphics, Point, Text } from 'pixi.js';
 import { Item } from '@core/Entities';
-import { GameManager } from '@core/Managers';
-// import mitt, { Emitter } from 'mitt';
 import { isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
-export class Inventory extends HUDComponent {
-  private inventory: Array<Item | null> = [];
-  // private emitter: Emitter<BackpackEvents>;
+export class InventoryDraft extends HUDComponent {
+  private _inventory: Array<Item | null> = [];
+
+  protected inventoryCapacity = 10;
+  protected backpackSlotIncrement = 10;
+
+  protected slotFillColor = theme.background.secondary;
+  protected slotBorderColor = theme.border.primary;
+
+  protected backgroundColor = theme.background.transparent;
+  private backgroundGraphics: Graphics;
 
   private slots: Slot[] = [];
-  private readonly slotsContainer: Container;
 
-  // private player: Player;
-  private game: GameManager = new GameManager();
-
-  private currentHoldingSlotIndex: number | undefined;
-  private currentHoldingSlotItem: Item | null = null;
+  // private currentHoldingSlotIndex: number | undefined;
+  // private currentHoldingSlotItem: Item | null = null;
 
   private isInventoryExpanded: boolean = false;
   private initialHoldingItemPosition: Point = new Point();
@@ -41,44 +37,50 @@ export class Inventory extends HUDComponent {
   constructor() {
     super();
 
-    // this.emitter = mitt<BackpackEvents>();
-    // this.player = player;
-    this.slotsContainer = new Container();
-    this.slotsContainer.sortableChildren = true;
-    this.slotsContainer.interactive = true;
-    this.slotsContainer.zIndex = 1;
+    this.zIndex = 1;
+    this.interactive = true;
+    this.sortableChildren = true;
 
-    this.updateBackpack();
+    this.inventory = [];
+
+    this.backgroundGraphics = new Graphics();
 
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
     document.addEventListener('mouseup', this.onDragEnd.bind(this));
 
-    this.slotsContainer.on('pointerover', this.onSlotMouseOver.bind(this));
-    this.slotsContainer.on('pointerout', this.onSlotMouseOut.bind(this));
+    this.on('pointerover', this.onSlotMouseOver.bind(this));
+    this.on('pointerout', this.onSlotMouseOut.bind(this));
   }
 
-  public render(): Array<ContainerChild> {
-    return this.renderBackpackSlots();
+  set inventory(newInventory: (Item | null)[] | null | undefined) {
+    this._inventory = this.isEmpty(newInventory) ? this.generateEmptyBackpack() : (newInventory ?? []);
+    this.refresh();
   }
 
-  public updateBackpack(newBackpack: Array<Item | null> = []) {
-    if (this.isEmptyBackpack(newBackpack)) {
-      this.inventory = this.generateEmptyBackpack();
-    } else {
-      this.inventory = newBackpack;
+  private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
+    return !inventory || inventory.length === 0;
+  }
+
+  public refresh() {
+    this.resetSlots();
+    this.renderSlots();
+    this.renderBackground();
+  }
+
+  private resetSlots() {
+    this.slots.length = 0;
+    while (this.children.length > 0) {
+      const el = this.getChildAt(0);
+      this.removeChild(el);
     }
-
-    this.resetBackpackSlots();
-    this.renderBackpackSlots();
   }
 
-  private renderBackpackSlots(): Array<ContainerChild> {
-    for (let i = 0; i < this.inventory.length; i++) {
-      const row = Math.floor(i / BACKPACK_SLOT_INCREMENT);
-      const slotIndex = i % BACKPACK_SLOT_INCREMENT;
-
-      const item = this.inventory[i];
+  private renderSlots() {
+    for (let i = 0; i < this.inventoryCapacity; i++) {
+      const row = Math.floor(i / this.backpackSlotIncrement);
+      const slotIndex = i % this.backpackSlotIncrement;
+      const item = this._inventory[i];
       const graphics = this.createSlotGraphics(row, slotIndex, i);
 
       if (!item) {
@@ -89,19 +91,25 @@ export class Inventory extends HUDComponent {
         this.appendSlot(graphics, item, text);
       }
     }
+  }
 
-    if (this.inventory && this.inventory.length !== 0) {
-      this.updateSlotVisibility();
-      this.setCurrentItem(0);
-    }
+  private renderBackground(padding: number = 10) {
+    const scalePaddingFactor = 1.8;
+    this.backgroundGraphics = new Graphics()
+      .roundRect(
+        -padding,
+        -padding,
+        this.width + scalePaddingFactor * padding,
+        this.height + scalePaddingFactor * padding,
+        10,
+      )
+      .fill(this.backgroundColor);
+    this.backgroundGraphics.zIndex = 0;
 
-    const width = this.game.size.getWidth();
-    const height = this.game.size.getHeight();
+    this.backgroundGraphics.width = this.width + scalePaddingFactor * padding;
+    this.backgroundGraphics.height = this.height + scalePaddingFactor * padding;
 
-    this.resizeSlotsContainer(width, height);
-
-    this.addChild(this.slotsContainer);
-    return [this.slotsContainer];
+    this.addChild(this.backgroundGraphics);
   }
 
   private generateEmptyBackpack() {
@@ -122,9 +130,9 @@ export class Inventory extends HUDComponent {
         STORAGE_SLOT_WIDTH,
         10,
       )
-      .fill(theme.background.secondary)
+      .fill(this.slotFillColor)
       .stroke({
-        color: theme.border.primary,
+        color: this.slotBorderColor,
         width: 2,
       });
 
@@ -132,21 +140,26 @@ export class Inventory extends HUDComponent {
     graphics.interactive = true;
     graphics.on('pointertap', () => this.onSlotClick(slotIndex, i));
 
-    this.slotsContainer.addChild(graphics);
+    this.addChild(graphics);
 
     return graphics;
   }
 
-  private updateSlotGraphics(graphics: Graphics, index: number, strokeColor: string) {
-    graphics.clear();
-    graphics
-      .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
-      .fill(theme.background.secondary)
-      .stroke({
-        color: strokeColor,
-        width: 2,
-      });
+  public defineLocation(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
+
+  // private updateSlotGraphics(graphics: Graphics, index: number, strokeColor: string) {
+  //   graphics.clear();
+  //   graphics
+  //     .roundRect((STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * index, 0, STORAGE_SLOT_WIDTH, STORAGE_SLOT_WIDTH, 10)
+  //     .fill(theme.background.secondary)
+  //     .stroke({
+  //       color: strokeColor,
+  //       width: 2,
+  //     });
+  // }
 
   private createSlotText(item: Item, row: number, slotIndex: number): Text {
     const itemAmountText = new Text({
@@ -169,7 +182,7 @@ export class Inventory extends HUDComponent {
     itemAmountText.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex + STORAGE_SLOT_WIDTH - 3;
     itemAmountText.y = STORAGE_SLOT_WIDTH + row * (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING);
 
-    this.slotsContainer.addChild(itemAmountText);
+    this.addChild(itemAmountText);
 
     return itemAmountText;
   }
@@ -182,11 +195,11 @@ export class Inventory extends HUDComponent {
     item.sprite.x = (STORAGE_SLOT_WIDTH + STORAGE_SLOT_SPACING) * slotIndex;
     item.sprite.scale.set(scaleFactor);
 
-    this.slotsContainer.addChild(item.sprite);
+    this.addChild(item.sprite);
   }
 
   private onDragStart(event: MouseEvent) {
-    const localPoint = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
+    const localPoint = this.toLocal(new Point(event.clientX, event.clientY));
 
     for (let index = 0; index < this.slots.length; index++) {
       const slot = this.slots[index];
@@ -200,7 +213,7 @@ export class Inventory extends HUDComponent {
 
         this.hideItemAmountLabel();
 
-        const spriteLocalPosition = this.slotsContainer.toLocal(slot.item.sprite.getGlobalPosition());
+        const spriteLocalPosition = this.toLocal(slot.item.sprite.getGlobalPosition());
         this.offset = new Point(localPoint.x - spriteLocalPosition.x, localPoint.y - spriteLocalPosition.y);
         return;
       }
@@ -209,7 +222,7 @@ export class Inventory extends HUDComponent {
 
   private onDragMoving(event: MouseEvent) {
     if (this.isDragging && this.draggedItem) {
-      const localMousePosition = this.slotsContainer.toLocal(new Point(event.clientX, event.clientY));
+      const localMousePosition = this.toLocal(new Point(event.clientX, event.clientY));
 
       this.draggedItem.sprite.position.x = localMousePosition.x - this.offset!.x;
       this.draggedItem.sprite.position.y = localMousePosition.y - this.offset!.y;
@@ -223,7 +236,7 @@ export class Inventory extends HUDComponent {
       this.draggedItem.sprite.cursor = 'default';
 
       const globalPoint = new Point(event.clientX, event.clientY);
-      const localPoint = this.slotsContainer.toLocal(globalPoint);
+      const localPoint = this.toLocal(globalPoint);
 
       for (let index = 0; index < this.slots.length; index++) {
         const graphics = this.slots[index].graphics;
@@ -231,10 +244,8 @@ export class Inventory extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          // this.player.reassignItemAt(this.draggedItem, index);
-          // this.emitter.emit('updateUIBackpack');
-          // this.emitter.emit('updateCurrentItem', index);
-
+          this.callEvent('placeItemAt', { item: this.draggedItem, index });
+          this.refresh();
           return;
         }
       }
@@ -256,7 +267,7 @@ export class Inventory extends HUDComponent {
 
     this.timer = setTimeout(() => {
       const globalPoint = new Point(clientX, clientY);
-      const localPoint = this.slotsContainer.toLocal(globalPoint);
+      const localPoint = this.toLocal(globalPoint);
 
       for (let index = 0; index < this.slots.length; index++) {
         const { graphics, item } = this.slots[index];
@@ -279,12 +290,12 @@ export class Inventory extends HUDComponent {
   }
 
   public updateSlotVisibility() {
-    if (this.inventory && this.inventory.length === 0) {
+    if (this._inventory && this._inventory.length === 0) {
       return;
     }
 
-    for (let i = 0; i < this.inventory.length; i++) {
-      if (i >= BACKPACK_SLOT_INCREMENT) {
+    for (let i = 0; i < this._inventory.length; i++) {
+      if (i >= this.inventoryCapacity) {
         const item = this.slots[i].item;
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
@@ -307,7 +318,7 @@ export class Inventory extends HUDComponent {
   }
 
   private onSlotClick(slotIndex: number, i: number) {
-    if (this.selectedSlotIndex !== slotIndex && i <= BACKPACK_SLOT_INCREMENT) {
+    if (this.selectedSlotIndex !== slotIndex && i <= this.inventoryCapacity) {
       this.selectedSlotIndex = slotIndex;
       // this.emitter.emit('updateCurrentItem', slotIndex);
     }
@@ -325,70 +336,12 @@ export class Inventory extends HUDComponent {
     }
   }
 
-  private isEmptyBackpack(backpack: Array<Item | null>): boolean {
-    return backpack && backpack.length === 0;
+  protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
+    this.x = (screenWidth - this.width) / 2;
+    this.y = 15;
   }
 
-  // public on(event: keyof BackpackEvents, handler: (arg: any) => void) {
-  //   this.emitter.on(event, handler);
-  // }
-
-  // @ts-ignore
-  private removeItemFromBackpack(item: Item) {
-    // this.player.removeItemFromBackpack(item);
-    // this.updateBackpack(this.player.getBackpackItems());
-  }
-
-  public getContainer(): Container {
-    return this.slotsContainer;
-  }
-
-  public setCurrentItem(index: number): void {
-    if (this.currentHoldingSlotIndex === index || BACKPACK_SLOT_INCREMENT <= index) {
-      return;
-    }
-
-    if (this.currentHoldingSlotIndex !== undefined) {
-      const graphics = this.slots[this.currentHoldingSlotIndex].graphics;
-      this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, theme.border.primary);
-    }
-
-    this.currentHoldingSlotIndex = index;
-
-    const item = this.slots[index].item;
-    const graphics = this.slots[index].graphics;
-    this.updateSlotGraphics(graphics, this.currentHoldingSlotIndex, theme.border.highlight);
-
-    this.currentHoldingSlotItem = item;
-  }
-
-  public getCurrentItem(): Item | null {
-    return this.currentHoldingSlotItem;
-  }
-
-  public checkInventoryExpanded() {
-    return this.isInventoryExpanded;
-  }
-
-  public toggleInventoryExpanded() {
-    this.isInventoryExpanded = !this.isInventoryExpanded;
-    this.updateSlotVisibility();
-  }
-
-  private resetBackpackSlots() {
-    this.slots.length = 0;
-    while (this.slotsContainer.children.length > 0) {
-      const el = this.slotsContainer.getChildAt(0);
-      this.slotsContainer.removeChild(el);
-    }
-  }
-
-  private resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
-    this.slotsContainer.x = (screenWidth - this.slotsContainer.width) / 2;
-    this.slotsContainer.y = 20;
-  }
-
-  public resize(screenWidth: number, screenHeight: number): void {
-    this.resizeSlotsContainer(screenWidth, screenHeight);
+  public resize(screenWidth: number, _screenHeight: number): void {
+    this.defineResizeStrategy(screenWidth, _screenHeight);
   }
 }

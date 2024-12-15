@@ -33,7 +33,7 @@ class HUDService {
     this.scene = scene;
     this.player = player;
 
-    this.uiBackpack = new Inventory(this.player);
+    this.uiBackpack = new Inventory();
     this.addComponentsToScene(this.uiBackpack.render());
 
     this.uiHoverBox = new BackpackHoverInfoBox();
@@ -247,7 +247,7 @@ class HUDService {
   public getHUDContainers(): Container[] {
     return [
       this.uiBackpack.getContainer(),
-      this.uiCurrentItemDisplay.getContainer(),
+      // this.uiCurrentItemDisplay.getContainer(),
       this.uiSettings.getContainer(),
       this.settingsButton,
     ];
@@ -262,8 +262,8 @@ class HUDService {
     this.uiHoverBox.show();
   }
 
-  public setUIAmmo(currentValue: number | string, maxAmmo: number) {
-    this.uiCurrentItemDisplay.setAmmo(currentValue, maxAmmo);
+  public setUIAmmo(_currentValue: number | string, _maxAmmo: number) {
+    // this.uiCurrentItemDisplay.setAmmo(currentValue, maxAmmo);
   }
 
   public setUIUsername(value: string) {

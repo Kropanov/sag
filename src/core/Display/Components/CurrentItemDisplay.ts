@@ -1,7 +1,6 @@
 import { ContainerChild, Graphics, Sprite } from 'pixi.js';
-import { AmmoCounter, HUDComponent, ItemAmount } from '@core/Display';
+import { HUDComponent, ItemAmount } from '@core/Display';
 import { GameManager } from '@core/Managers';
-import { UIComponent } from '@interfaces';
 import { Item } from '@core/Entities';
 import { ItemType } from '@enums';
 import { theme } from '@config';
@@ -9,22 +8,30 @@ import { theme } from '@config';
 export class CurrentItemDisplay extends HUDComponent {
   private game: GameManager = new GameManager();
 
-  private uiAmmo!: AmmoCounter;
+  // private uiAmmo!: AmmoCounter;
   private container!: Graphics;
   private currentItemSprite!: Sprite;
   private currentItem!: Item | null;
 
-  public render(): Array<ContainerChild> {
-    this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
-    this.container.x = this.game.size.getWidth() - 300;
-    this.container.zIndex = 1;
+  constructor() {
+    super();
+    this.render();
+    this.addChild(this.container);
+  }
 
-    this.uiAmmo = new AmmoCounter();
-    this.addComponent(this.uiAmmo);
+  public render(): Array<ContainerChild> {
+    this.width = 300;
+    this.height = 150;
+    this.x = this.game.size.getWidth() - 300;
+
+    this.container = new Graphics().roundRect(0, 0, 300, 150, 10).fill({ color: theme.background.primary });
+    // this.container.x = this.game.size.getWidth() - 300;
+    this.container.zIndex = 1;
 
     return [this.container];
   }
 
+  // FIXME: move to another place
   public setCurrentItem(selectedItem: Item | null) {
     if (selectedItem === null) {
       this.currentItem = null;
@@ -44,8 +51,8 @@ export class CurrentItemDisplay extends HUDComponent {
 
     switch (selectedItem.type) {
       case ItemType.Gun:
-        this.uiAmmo = new AmmoCounter();
-        this.addComponent(this.uiAmmo);
+        // this.uiAmmo = new AmmoCounter();
+        // this.addComponent(this.uiAmmo);
         break;
       case ItemType.Artifact:
         this.renderCurrentItemAmount(selectedItem.amount);
@@ -68,7 +75,7 @@ export class CurrentItemDisplay extends HUDComponent {
   renderCurrentItemAmount(amount: number) {
     const uiAmount = new ItemAmount();
     uiAmount.setItemAmount(amount);
-    this.addComponent(uiAmount);
+    // this.addComponent(uiAmount);
   }
 
   resetContainer() {
@@ -76,20 +83,6 @@ export class CurrentItemDisplay extends HUDComponent {
       const children = this.container.getChildAt(0);
       this.container.removeChild(children);
     }
-  }
-
-  public addComponent(component: UIComponent): void {
-    for (let _ of component.render()) {
-      this.container.addChild(_);
-    }
-  }
-
-  public getContainer() {
-    return this.container;
-  }
-
-  public setAmmo(currentValue: number | string, maxAmmo: number) {
-    this.uiAmmo.setAmmo(currentValue, maxAmmo);
   }
 
   public resize(_screenWidth: number, _screenHeight: number): void {}

@@ -6,7 +6,8 @@ export class HUDComponent extends Container {
 
   constructor() {
     super();
-    this.visible = true; // Default visibility
+
+    this.visible = false; // Default visibility
   }
 
   public setEventBus(eventEmitter: EventEmitter): void {
@@ -28,6 +29,8 @@ export class HUDComponent extends Container {
     }
     this.eventEmitter.emit(event, data);
   }
+
+  protected render() {}
 
   public show() {
     this.visible = true;
