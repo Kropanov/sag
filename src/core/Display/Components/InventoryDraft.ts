@@ -1,14 +1,21 @@
 import { INITIAL_BACKPACK_CAPACITY, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
 import { Graphics, Point, Text } from 'pixi.js';
 import { Item } from '@core/Entities';
-import { getScreenHeight, getScreenWidth, isStackable } from '@utils';
+import { isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
 export class InventoryDraft extends HUDComponent {
   private _inventory: Array<Item | null> = [];
-  private _inventoryCapacity = 20;
-  private _backpackSlotIncrement = 10;
+
+  protected inventoryCapacity = 10;
+  protected backpackSlotIncrement = 10;
+
+  protected slotFillColor = theme.background.secondary;
+  protected slotBorderColor = theme.border.primary;
+
+  protected backgroundColor = theme.background.transparent;
+  private backgroundGraphics: Graphics;
 
   private slots: Slot[] = [];
 
@@ -36,12 +43,7 @@ export class InventoryDraft extends HUDComponent {
 
     this.inventory = [];
 
-    getScreenWidth();
-    getScreenHeight();
-    // const width = getScreenWidth();
-    // const height = getScreenHeight();
-
-    // this.resizeSlotsContainer(width, height);
+    this.backgroundGraphics = new Graphics();
 
     document.addEventListener('mousedown', this.onDragStart.bind(this));
     document.addEventListener('mousemove', this.onDragMoving.bind(this));
@@ -56,10 +58,6 @@ export class InventoryDraft extends HUDComponent {
     this.refresh();
   }
 
-  set inventoryCapacity(value: number) {
-    this._inventoryCapacity = value;
-  }
-
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
     return !inventory || inventory.length === 0;
   }
@@ -67,6 +65,7 @@ export class InventoryDraft extends HUDComponent {
   public refresh() {
     this.resetSlots();
     this.renderSlots();
+    this.renderBackground();
   }
 
   private resetSlots() {
@@ -78,9 +77,9 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private renderSlots() {
-    for (let i = 0; i < this._inventoryCapacity; i++) {
-      const row = Math.floor(i / this._backpackSlotIncrement);
-      const slotIndex = i % this._backpackSlotIncrement;
+    for (let i = 0; i < this.inventoryCapacity; i++) {
+      const row = Math.floor(i / this.backpackSlotIncrement);
+      const slotIndex = i % this.backpackSlotIncrement;
       const item = this._inventory[i];
       const graphics = this.createSlotGraphics(row, slotIndex, i);
 
@@ -92,6 +91,25 @@ export class InventoryDraft extends HUDComponent {
         this.appendSlot(graphics, item, text);
       }
     }
+  }
+
+  private renderBackground(padding: number = 10) {
+    const scalePaddingFactor = 1.8;
+    this.backgroundGraphics = new Graphics()
+      .roundRect(
+        -padding,
+        -padding,
+        this.width + scalePaddingFactor * padding,
+        this.height + scalePaddingFactor * padding,
+        10,
+      )
+      .fill(this.backgroundColor);
+    this.backgroundGraphics.zIndex = 0;
+
+    this.backgroundGraphics.width = this.width + scalePaddingFactor * padding;
+    this.backgroundGraphics.height = this.height + scalePaddingFactor * padding;
+
+    this.addChild(this.backgroundGraphics);
   }
 
   private generateEmptyBackpack() {
@@ -112,9 +130,9 @@ export class InventoryDraft extends HUDComponent {
         STORAGE_SLOT_WIDTH,
         10,
       )
-      .fill(theme.background.secondary)
+      .fill(this.slotFillColor)
       .stroke({
-        color: theme.border.primary,
+        color: this.slotBorderColor,
         width: 2,
       });
 
@@ -277,7 +295,7 @@ export class InventoryDraft extends HUDComponent {
     }
 
     for (let i = 0; i < this._inventory.length; i++) {
-      if (i >= this._inventoryCapacity) {
+      if (i >= this.inventoryCapacity) {
         const item = this.slots[i].item;
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
@@ -300,7 +318,7 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private onSlotClick(slotIndex: number, i: number) {
-    if (this.selectedSlotIndex !== slotIndex && i <= this._inventoryCapacity) {
+    if (this.selectedSlotIndex !== slotIndex && i <= this.inventoryCapacity) {
       this.selectedSlotIndex = slotIndex;
       // this.emitter.emit('updateCurrentItem', slotIndex);
     }
@@ -318,12 +336,12 @@ export class InventoryDraft extends HUDComponent {
     }
   }
 
-  private resizeSlotsContainer(screenWidth: number, _screenHeight: number) {
+  protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
     this.y = 15;
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
-    this.resizeSlotsContainer(screenWidth, _screenHeight);
+    this.defineResizeStrategy(screenWidth, _screenHeight);
   }
 }
