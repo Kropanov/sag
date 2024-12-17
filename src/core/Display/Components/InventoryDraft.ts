@@ -1,12 +1,13 @@
 import { INITIAL_BACKPACK_CAPACITY, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
 import { Graphics, Point, Text } from 'pixi.js';
-import { Item } from '@core/Entities';
+import { Item, Storage } from '@core/Entities';
 import { isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
 export class InventoryDraft extends HUDComponent {
   private _inventory: Array<Item | null> = [];
+  private _entity: Storage | null;
 
   protected inventoryCapacity = 10;
   protected backpackSlotIncrement = 10;
@@ -42,6 +43,7 @@ export class InventoryDraft extends HUDComponent {
     this.sortableChildren = true;
 
     this.inventory = [];
+    this._entity = null;
 
     this.backgroundGraphics = new Graphics();
 
@@ -56,6 +58,10 @@ export class InventoryDraft extends HUDComponent {
   set inventory(newInventory: (Item | null)[] | null | undefined) {
     this._inventory = this.isEmpty(newInventory) ? this.generateEmptyBackpack() : (newInventory ?? []);
     this.refresh();
+  }
+
+  set entity(instance: Storage) {
+    this._entity = instance;
   }
 
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
@@ -244,7 +250,8 @@ export class InventoryDraft extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          this.callEvent('placeItemAt', { item: this.draggedItem, index });
+          this._entity?.placeItem(this.draggedItem, index);
+          // this.callEvent('placeItemAt', { item: this.draggedItem, index });
           this.refresh();
           return;
         }

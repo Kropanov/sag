@@ -11,7 +11,7 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@core/Misc';
-import { Artifact, Backpack, Item, ReincarnationAbility } from '@core/Entities';
+import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
 import { ItemRarity, ItemType } from '@enums';
 
 export class MenuScene extends Container implements IScene {
@@ -63,15 +63,24 @@ export class MenuScene extends Container implements IScene {
     const book1Props = { amount: 3, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
     const book_1 = new Artifact(book1Props, new ReincarnationAbility());
     backpack.push(book_1);
+
+    const chest = new Chest();
+    const book2Props = { amount: 1, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
+    const book_2 = new Artifact(book2Props, new ReincarnationAbility());
+    chest.push(book_2);
+
     const hudBackpack = this.game.hud.getComponent('backpack');
+    const hudSharedChest = this.game.hud.getComponent('chest');
 
     if (hudBackpack) {
-      hudBackpack.registerEvent('placeItemAt', ({ item, index }: { item: Item; index: number }) => {
-        backpack.placeItem(item, index);
-      });
-
+      hudBackpack.entity = backpack;
       hudBackpack.defineLocation(this.width / 2 - hudBackpack.width / 2, 15);
       hudBackpack.inventory = backpack.open();
+    }
+
+    if (hudSharedChest) {
+      hudSharedChest.entity = chest;
+      hudSharedChest.inventory = chest.open();
     }
 
     // -----------------------------------------

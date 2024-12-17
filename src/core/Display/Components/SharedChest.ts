@@ -2,8 +2,8 @@ import { theme } from '@config';
 import { InventoryDraft } from '@core/Display';
 
 export class SharedChest extends InventoryDraft {
-  protected inventoryCapacity = 36;
-  protected backpackSlotIncrement = 12;
+  protected inventoryCapacity = 21;
+  protected backpackSlotIncrement = 7;
 
   protected backgroundColor = theme.background.primary;
 
@@ -15,7 +15,7 @@ export class SharedChest extends InventoryDraft {
     // required to refresh the graphics
     this.inventory = [];
 
-    this.defineLocation(1100, 500);
+    this.defineLocation(1100, 400);
   }
 
   protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
