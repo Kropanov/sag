@@ -5,7 +5,7 @@ import { ItemRarity } from '@enums';
 import { theme } from '@config';
 import { HUDComponent } from '@core/Display';
 
-class BackpackHoverInfoBox extends HUDComponent {
+class InventoryHoverInfoBox extends HUDComponent {
   private graphics!: Graphics;
   private readonly container!: Container;
   private itemRarityBox!: Graphics;
@@ -276,4 +276,4 @@ class BackpackHoverInfoBox extends HUDComponent {
   }
 }
 
-export { BackpackHoverInfoBox };
+export { InventoryHoverInfoBox };

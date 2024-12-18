@@ -5,7 +5,7 @@ import { GameManager } from '@core/Managers';
 import { HoverInfo, IScene } from '@interfaces';
 import { Graphics, Container, Text, Point } from 'pixi.js';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
-import { Inventory, BackpackHoverInfoBox, CurrentItemDisplay, SettingsBox } from '@core/Display';
+import { Inventory, InventoryHoverInfoBox, CurrentItemDisplay, SettingsBox } from '@core/Display';
 
 class HUDService {
   private scene: IScene;
@@ -14,7 +14,7 @@ class HUDService {
   private game: GameManager = new GameManager();
 
   private uiBackpack: Inventory;
-  private uiHoverBox: BackpackHoverInfoBox;
+  private uiHoverBox: InventoryHoverInfoBox;
   private uiCurrentItemDisplay: CurrentItemDisplay;
   private uiSettings: SettingsBox;
 
@@ -36,7 +36,7 @@ class HUDService {
     this.uiBackpack = new Inventory();
     this.addComponentsToScene(this.uiBackpack.render());
 
-    this.uiHoverBox = new BackpackHoverInfoBox();
+    this.uiHoverBox = new InventoryHoverInfoBox();
     this.addComponentsToScene(this.uiHoverBox.render());
 
     this.uiBackpack.on('showHoverInfoBox', (hoverInfo: HoverInfo) => {
