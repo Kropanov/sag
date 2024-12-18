@@ -67,7 +67,11 @@ export class MenuScene extends Container implements IScene {
     const chest = new Chest();
     const book2Props = { amount: 1, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
     const book_2 = new Artifact(book2Props, new ReincarnationAbility());
+
+    const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };
+    const book_3 = new Artifact(book3Props, new ReincarnationAbility());
     chest.push(book_2);
+    chest.push(book_3);
 
     const hudBackpack = this.game.hud.getComponent('backpack');
     const hudSharedChest = this.game.hud.getComponent('chest');
@@ -82,7 +86,6 @@ export class MenuScene extends Container implements IScene {
       hudSharedChest.entity = chest;
       hudSharedChest.inventory = chest.open();
     }
-
     // -----------------------------------------
   }
 

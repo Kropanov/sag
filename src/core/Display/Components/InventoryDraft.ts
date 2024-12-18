@@ -250,8 +250,7 @@ export class InventoryDraft extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          this._entity?.placeItem(this.draggedItem, index);
-          // this.callEvent('placeItemAt', { item: this.draggedItem, index });
+          this._entity?.moveItemTo(this.draggedItem, index);
           this.refresh();
           return;
         }

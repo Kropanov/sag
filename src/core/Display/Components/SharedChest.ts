@@ -2,8 +2,8 @@ import { theme } from '@config';
 import { InventoryDraft } from '@core/Display';
 
 export class SharedChest extends InventoryDraft {
-  protected inventoryCapacity = 21;
-  protected backpackSlotIncrement = 7;
+  protected inventoryCapacity = 24;
+  protected backpackSlotIncrement = 8;
 
   protected backgroundColor = theme.background.primary;
 
