@@ -2,6 +2,7 @@ import { Container, Point, Sprite, Text } from 'pixi.js';
 import { HoverInfo, IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@types';
+import { ItemRarity, ItemType } from '@enums';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { AuthScene, GameScene } from '@core/Scenes';
 import { GameManager, SceneManager } from '@core/Managers';
@@ -12,7 +13,6 @@ import {
   handleSocialMediaIconsResize,
 } from '@core/Misc';
 import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
-import { ItemRarity, ItemType } from '@enums';
 import { InventoryBag, InventoryHoverInfoBox, SharedChest } from '@core/Display';
 
 export class MenuScene extends Container implements IScene {
@@ -87,8 +87,11 @@ export class MenuScene extends Container implements IScene {
       this.hudBackpack.inventory = backpack.open();
 
       this.hudBackpack.registerEvent('showHoverInfoBox', (hoverInfo: HoverInfo) => {
-        console.log('Call');
         this.showItemHoverInfo(hoverInfo);
+      });
+
+      this.hudBackpack.registerEvent('hideHoverInfoBox', ({}) => {
+        this.hudHoverInfoBox?.hide();
       });
     }
 
@@ -104,8 +107,6 @@ export class MenuScene extends Container implements IScene {
     const globalPoint = new Point(cursorX, cursorY);
     const localPoint = this.scene.getCurrentScene()?.toLocal(globalPoint);
     if (this.hudHoverInfoBox) {
-      console.log('fef ');
-      console.log(targetItem, localPoint);
       this.hudHoverInfoBox.setPosition(localPoint?.x, localPoint?.y);
       this.hudHoverInfoBox.setItem(targetItem);
       this.hudHoverInfoBox.show();

@@ -276,8 +276,9 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private onSlotMouseOver(event: MouseEvent) {
+    this.callEvent('hideHoverInfoBox', {});
+
     const { clientX, clientY } = event;
-    console.log('onSlotMouseOver');
     this.timer = setTimeout(() => {
       const globalPoint = new Point(clientX, clientY);
       const localPoint = this.toLocal(globalPoint);

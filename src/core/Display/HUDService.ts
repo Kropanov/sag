@@ -37,7 +37,6 @@ class HUDService {
     this.addComponentsToScene(this.uiBackpack.render());
 
     this.uiHoverBox = new InventoryHoverInfoBox();
-    this.addComponentsToScene(this.uiHoverBox.render());
 
     this.uiBackpack.on('showHoverInfoBox', (hoverInfo: HoverInfo) => {
       this.showItemHoverInfo(hoverInfo);
