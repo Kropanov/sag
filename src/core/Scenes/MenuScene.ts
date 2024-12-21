@@ -13,6 +13,7 @@ import {
 } from '@core/Misc';
 import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
 import { ItemRarity, ItemType } from '@enums';
+import { InventoryBag, SharedChest } from '@core/Display';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -33,8 +34,14 @@ export class MenuScene extends Container implements IScene {
 
   private readonly socialMediaIcons: Container;
 
+  private readonly hudSharedChest: SharedChest | undefined;
+  private readonly hudBackpack: InventoryBag | undefined;
+
   constructor() {
     super();
+
+    this.hudBackpack = this.game.hud.getComponent('backpack');
+    this.hudSharedChest = this.game.hud.getComponent('chest');
 
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
@@ -73,19 +80,23 @@ export class MenuScene extends Container implements IScene {
     chest.push(book_2);
     chest.push(book_3);
 
-    const hudBackpack = this.game.hud.getComponent('backpack');
-    const hudSharedChest = this.game.hud.getComponent('chest');
-
-    if (hudBackpack) {
-      hudBackpack.entity = backpack;
-      hudBackpack.inventory = backpack.open();
+    if (this.hudBackpack) {
+      this.hudBackpack.entity = backpack;
+      this.hudBackpack.inventory = backpack.open();
     }
 
-    if (hudSharedChest) {
-      hudSharedChest.entity = chest;
-      hudSharedChest.inventory = chest.open();
+    if (this.hudSharedChest) {
+      this.hudSharedChest.entity = chest;
+      this.hudSharedChest.inventory = chest.open();
     }
     // -----------------------------------------
+  }
+
+  // FIXME: remove after testing
+  handleInput() {
+    if (this.game.keyboard.isKeyJustPressed('Escape')) {
+      this.hudBackpack?.showFullInventory();
+    }
   }
 
   startGame() {
@@ -125,7 +136,9 @@ export class MenuScene extends Container implements IScene {
 
   openSettings() {}
 
-  update(_delta: number): void {}
+  update(_delta: number): void {
+    this.handleInput();
+  }
 
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;

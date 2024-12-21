@@ -3,10 +3,11 @@ import { getScreenWidth } from '@utils';
 import { InventoryDraft } from '@core/Display';
 
 export class InventoryBag extends InventoryDraft {
-  protected backgroundColor = theme.background.primary;
+  protected inventoryCapacity = 10;
+  protected backpackSlotIncrement = 10;
 
-  protected slotFillColor = theme.chest.shared.background;
-  protected slotBorderColor = theme.chest.shared.border;
+  protected slotFillColor = theme.background.secondary;
+  protected slotBorderColor = theme.border.primary;
 
   constructor() {
     super();
@@ -17,5 +18,9 @@ export class InventoryBag extends InventoryDraft {
   protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
     this.y = 10;
+  }
+
+  public showFullInventory() {
+    this.toggleInventoryExpanded();
   }
 }

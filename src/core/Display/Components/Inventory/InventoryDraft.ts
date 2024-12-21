@@ -23,7 +23,7 @@ export class InventoryDraft extends HUDComponent {
   // private currentHoldingSlotIndex: number | undefined;
   // private currentHoldingSlotItem: Item | null = null;
 
-  private isInventoryExpanded: boolean = false;
+  private _isInventoryExpanded: boolean = false;
   private initialHoldingItemPosition: Point = new Point();
 
   private isDragging = false;
@@ -64,6 +64,15 @@ export class InventoryDraft extends HUDComponent {
     this._entity = instance;
   }
 
+  public toggleInventoryExpanded() {
+    this.isInventoryExpanded = !this._isInventoryExpanded;
+  }
+
+  set isInventoryExpanded(value: boolean) {
+    this._isInventoryExpanded = value;
+    this.updateSlotsVisibility();
+  }
+
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
     return !inventory || inventory.length === 0;
   }
@@ -83,7 +92,7 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private renderSlots() {
-    for (let i = 0; i < this.inventoryCapacity; i++) {
+    for (let i = 0; i < this._inventory.length; i++) {
       const row = Math.floor(i / this.backpackSlotIncrement);
       const slotIndex = i % this.backpackSlotIncrement;
       const item = this._inventory[i];
@@ -97,6 +106,8 @@ export class InventoryDraft extends HUDComponent {
         this.appendSlot(graphics, item, text);
       }
     }
+
+    this.updateSlotsVisibility();
   }
 
   private renderBackground(padding: number = 10) {
@@ -110,10 +121,6 @@ export class InventoryDraft extends HUDComponent {
         10,
       )
       .fill(this.backgroundColor);
-    this.backgroundGraphics.zIndex = 0;
-
-    this.backgroundGraphics.width = this.width + scalePaddingFactor * padding;
-    this.backgroundGraphics.height = this.height + scalePaddingFactor * padding;
 
     this.addChild(this.backgroundGraphics);
   }
@@ -295,7 +302,7 @@ export class InventoryDraft extends HUDComponent {
     // this.emitter.emit('hideHoverInfoBox');
   }
 
-  public updateSlotVisibility() {
+  public updateSlotsVisibility() {
     if (this._inventory && this._inventory.length === 0) {
       return;
     }
@@ -306,14 +313,15 @@ export class InventoryDraft extends HUDComponent {
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
 
-        graphics.visible = this.isInventoryExpanded;
+        graphics.visible = this._isInventoryExpanded;
+        console.log(graphics.visible);
 
         if (item) {
-          item.sprite.visible = this.isInventoryExpanded;
+          item.sprite.visible = this._isInventoryExpanded;
         }
 
         if (text) {
-          text.visible = this.isInventoryExpanded;
+          text.visible = this._isInventoryExpanded;
         }
       }
     }
