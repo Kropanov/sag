@@ -1,5 +1,5 @@
-import { Container, Sprite, Text } from 'pixi.js';
-import { IScene } from '@interfaces';
+import { Container, Point, Sprite, Text } from 'pixi.js';
+import { HoverInfo, IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@types';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
@@ -13,7 +13,7 @@ import {
 } from '@core/Misc';
 import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
 import { ItemRarity, ItemType } from '@enums';
-import { InventoryBag, SharedChest } from '@core/Display';
+import { InventoryBag, InventoryHoverInfoBox, SharedChest } from '@core/Display';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -36,12 +36,14 @@ export class MenuScene extends Container implements IScene {
 
   private readonly hudSharedChest: SharedChest | undefined;
   private readonly hudBackpack: InventoryBag | undefined;
+  private readonly hudHoverInfoBox: InventoryHoverInfoBox | undefined;
 
   constructor() {
     super();
 
     this.hudBackpack = this.game.hud.getComponent('backpack');
     this.hudSharedChest = this.game.hud.getComponent('chest');
+    this.hudHoverInfoBox = this.game.hud.getComponent('itemInfoBox');
 
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
@@ -83,6 +85,11 @@ export class MenuScene extends Container implements IScene {
     if (this.hudBackpack) {
       this.hudBackpack.entity = backpack;
       this.hudBackpack.inventory = backpack.open();
+
+      this.hudBackpack.registerEvent('showHoverInfoBox', (hoverInfo: HoverInfo) => {
+        console.log('Call');
+        this.showItemHoverInfo(hoverInfo);
+      });
     }
 
     if (this.hudSharedChest) {
@@ -90,6 +97,19 @@ export class MenuScene extends Container implements IScene {
       this.hudSharedChest.inventory = chest.open();
     }
     // -----------------------------------------
+  }
+
+  public showItemHoverInfo(hoverInfo: HoverInfo) {
+    const { targetItem, cursorX, cursorY } = hoverInfo;
+    const globalPoint = new Point(cursorX, cursorY);
+    const localPoint = this.scene.getCurrentScene()?.toLocal(globalPoint);
+    if (this.hudHoverInfoBox) {
+      console.log('fef ');
+      console.log(targetItem, localPoint);
+      this.hudHoverInfoBox.setPosition(localPoint?.x, localPoint?.y);
+      this.hudHoverInfoBox.setItem(targetItem);
+      this.hudHoverInfoBox.show();
+    }
   }
 
   // FIXME: remove after testing

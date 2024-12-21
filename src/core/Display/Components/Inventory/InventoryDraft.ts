@@ -38,8 +38,8 @@ export class InventoryDraft extends HUDComponent {
   constructor() {
     super();
 
-    this.zIndex = 1;
-    this.interactive = true;
+    this.zIndex = 10;
+    this.eventMode = 'dynamic';
     this.sortableChildren = true;
 
     this.inventory = [];
@@ -277,7 +277,7 @@ export class InventoryDraft extends HUDComponent {
 
   private onSlotMouseOver(event: MouseEvent) {
     const { clientX, clientY } = event;
-
+    console.log('onSlotMouseOver');
     this.timer = setTimeout(() => {
       const globalPoint = new Point(clientX, clientY);
       const localPoint = this.toLocal(globalPoint);
@@ -287,11 +287,13 @@ export class InventoryDraft extends HUDComponent {
         const slotContainsPoint = graphics.containsPoint(localPoint);
 
         if (slotContainsPoint && item) {
-          // this.emitter.emit('showHoverInfoBox', {
-          //   targetItem: item,
-          //   cursorX: clientX,
-          //   cursorY: clientY,
-          // });
+          console.log('here?');
+          console.log(item, clientX, clientY);
+          this.callEvent('showHoverInfoBox', {
+            targetItem: item,
+            cursorX: clientX,
+            cursorY: clientY,
+          });
         }
       }
     }, 2000);
@@ -314,7 +316,6 @@ export class InventoryDraft extends HUDComponent {
         const text = this.slots[i].text;
 
         graphics.visible = this._isInventoryExpanded;
-        console.log(graphics.visible);
 
         if (item) {
           item.sprite.visible = this._isInventoryExpanded;

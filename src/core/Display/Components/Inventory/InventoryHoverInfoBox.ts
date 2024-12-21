@@ -1,13 +1,11 @@
-import { ContainerChild, Container, Graphics, Text, Sprite } from 'pixi.js';
-import { UIComponent } from '@interfaces';
+import { Graphics, Text, Sprite } from 'pixi.js';
 import { Item } from '@core/Entities';
 import { ItemRarity } from '@enums';
 import { theme } from '@config';
 import { HUDComponent } from '@core/Display';
 
-class InventoryHoverInfoBox extends HUDComponent {
+export class InventoryHoverInfoBox extends HUDComponent {
   private graphics!: Graphics;
-  private readonly container!: Container;
   private itemRarityBox!: Graphics;
 
   private itemName!: Text;
@@ -27,8 +25,7 @@ class InventoryHoverInfoBox extends HUDComponent {
   constructor() {
     super();
 
-    this.container = new Container();
-    this.container.zIndex = 6;
+    this.zIndex = 10;
     this.hide();
 
     this.renderGraphicsContainer();
@@ -45,14 +42,10 @@ class InventoryHoverInfoBox extends HUDComponent {
     // TODO: start implementing render of resources to sell
   }
 
-  public render(): Array<ContainerChild> {
-    return [this.container];
-  }
-
   public renderGraphicsContainer(): void {
     this.graphics = new Graphics();
     this.graphics.filletRect(0, 0, this.containerWidth, this.containerHeight, 10).fill(theme.background.primary);
-    this.container.addChild(this.graphics);
+    this.addChild(this.graphics);
   }
 
   public renderItemName(): void {
@@ -69,7 +62,7 @@ class InventoryHoverInfoBox extends HUDComponent {
     this.itemName.x = 10;
     this.itemName.y = 10;
 
-    this.container.addChild(this.itemName);
+    this.addChild(this.itemName);
   }
 
   public renderItemDescription(): void {
@@ -88,7 +81,7 @@ class InventoryHoverInfoBox extends HUDComponent {
     this.itemDescription.x = 10;
     this.itemDescription.y = 95;
 
-    this.container.addChild(this.itemDescription);
+    this.addChild(this.itemDescription);
   }
 
   public renderItemRarityBox(): void {
@@ -98,7 +91,7 @@ class InventoryHoverInfoBox extends HUDComponent {
     this.itemRarityBox.x = 0;
     this.itemRarityBox.y = 42;
 
-    this.container.addChild(this.itemRarityBox);
+    this.addChild(this.itemRarityBox);
   }
 
   public renderItemRarityTitle() {
@@ -141,7 +134,7 @@ class InventoryHoverInfoBox extends HUDComponent {
 
     this.itemAbilitiesText.x = 10;
 
-    this.container.addChild(this.itemAbilitiesText);
+    this.addChild(this.itemAbilitiesText);
   }
 
   public renderItemHistory(): void {
@@ -160,7 +153,7 @@ class InventoryHoverInfoBox extends HUDComponent {
 
     this.itemHistoryText.x = 15;
 
-    this.container.addChild(this.itemHistoryText);
+    this.addChild(this.itemHistoryText);
   }
 
   public renderItemCost() {
@@ -238,21 +231,9 @@ class InventoryHoverInfoBox extends HUDComponent {
     this.itemHistoryText.y = this.graphics.height - this.itemHistoryText.height - 10;
   }
 
-  public show(): void {
-    this.container.visible = true;
-  }
-
-  public hide(): void {
-    this.container.visible = false;
-  }
-
-  public getContainer(): Container {
-    return this.container;
-  }
-
-  public setPosition(x: number, y: number): void {
-    this.container.x = x;
-    this.container.y = y;
+  public setPosition(x: number = 0, y: number = 0): void {
+    this.x = x;
+    this.y = y;
   }
 
   public setItem(item: Item): void {
@@ -267,13 +248,5 @@ class InventoryHoverInfoBox extends HUDComponent {
     this.updateItemFuel();
   }
 
-  public addComponent(_component: UIComponent): void {
-    throw new Error('Method not implemented.');
-  }
-
-  public resize(_screenWidth: number, _screenHeight: number): void {
-    throw new Error('Method not implemented.');
-  }
+  public resize(_screenWidth: number, _screenHeight: number): void {}
 }
-
-export { InventoryHoverInfoBox };

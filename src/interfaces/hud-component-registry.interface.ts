@@ -1,4 +1,4 @@
-import { AmmoCounter, CurrentItemDisplay, InventoryBag, SharedChest } from '@core/Display';
+import { AmmoCounter, CurrentItemDisplay, InventoryBag, InventoryHoverInfoBox, SharedChest } from '@core/Display';
 
 // Define a type-safe registry for components
 export interface HUDComponentRegistry {
@@ -6,6 +6,6 @@ export interface HUDComponentRegistry {
   currentItem: CurrentItemDisplay;
   backpack: InventoryBag;
   chest: SharedChest;
-  // chest: Shar;
+  itemInfoBox: InventoryHoverInfoBox;
   // Add other components here as needed
 }
