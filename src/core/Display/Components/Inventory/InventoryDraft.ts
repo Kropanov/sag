@@ -151,7 +151,7 @@ export class InventoryDraft extends HUDComponent {
     return graphics;
   }
 
-  public defineLocation(x: number, y: number) {
+  public defineLocation(x: number = 0, y: number = 0) {
     this.x = x;
     this.y = y;
   }
@@ -344,7 +344,7 @@ export class InventoryDraft extends HUDComponent {
 
   protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
-    this.y = 15;
+    this.y = 10;
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
