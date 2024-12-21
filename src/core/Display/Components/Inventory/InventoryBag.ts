@@ -9,6 +9,8 @@ export class InventoryBag extends InventoryDraft {
   protected slotFillColor = theme.background.secondary;
   protected slotBorderColor = theme.border.primary;
 
+  public alwaysVisible = true;
+
   constructor() {
     super();
 

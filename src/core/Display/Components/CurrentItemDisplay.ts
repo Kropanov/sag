@@ -13,6 +13,8 @@ export class CurrentItemDisplay extends HUDComponent {
   private currentItemSprite!: Sprite;
   private currentItem!: Item | null;
 
+  public alwaysVisible = true;
+
   constructor() {
     super();
     this.render();

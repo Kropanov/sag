@@ -3,11 +3,13 @@ import { Container } from 'pixi.js';
 
 export class HUDComponent extends Container {
   private eventEmitter?: EventEmitter;
+  public alwaysVisible: boolean;
 
   constructor() {
     super();
 
     this.visible = false; // Default visibility
+    this.alwaysVisible = false;
   }
 
   public setEventBus(eventEmitter: EventEmitter): void {

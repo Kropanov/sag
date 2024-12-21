@@ -8,9 +8,9 @@ import { hudComponents } from '@config';
 export class HUDManager extends Container {
   private static _instance: HUDManager;
 
-  private readonly components!: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
+  private readonly components: Partial<Record<keyof HUDComponentRegistry, HUDComponent>>;
 
-  private readonly eventEmitter!: EventEmitter;
+  private readonly eventEmitter: EventEmitter;
 
   private resizeManager: ResizeManager = new ResizeManager();
 
@@ -39,19 +39,21 @@ export class HUDManager extends Container {
   }
 
   public destroyHUD(): void {
-    Object.entries(hudComponents).forEach(([key, _component]) => {
+    Object.entries(this.components).forEach(([key, _component]) => {
       this.removeComponent(key as keyof HUDComponentRegistry);
     });
   }
 
   public showHUD(): void {
-    Object.entries(hudComponents).forEach(([_key, component]) => {
-      component.show();
+    Object.entries(this.components).forEach(([_key, component]) => {
+      if (component.alwaysVisible) {
+        component.show();
+      }
     });
   }
 
   public hideHUD(): void {
-    Object.entries(hudComponents).forEach(([_key, component]) => {
+    Object.entries(this.components).forEach(([_key, component]) => {
       component.hide();
     });
   }
