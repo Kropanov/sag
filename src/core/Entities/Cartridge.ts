@@ -1,7 +1,6 @@
 import { AMMO_TYPE } from '@enums';
 import { sound } from '@pixi/sound';
 import { Ammo } from '@core/Entities';
-import { HUDController } from '@core/Display';
 
 export class Cartridge {
   private type: AMMO_TYPE;
@@ -10,17 +9,15 @@ export class Cartridge {
 
   private reloadTime: number;
   private isReloading: boolean = false;
-  private hudController: HUDController;
 
-  constructor(maxAmmo: number, type: AMMO_TYPE, reloadTime: number, hudController: HUDController) {
+  constructor(maxAmmo: number, type: AMMO_TYPE, reloadTime: number) {
     this.type = type;
     this.bullets = [];
     this.maxAmmo = maxAmmo;
     this.reloadTime = reloadTime;
-    this.hudController = hudController;
 
     this.fill();
-    this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
+    // this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
   }
 
   getBullets() {
@@ -61,7 +58,7 @@ export class Cartridge {
       this.bullets.push(ammo);
     }
 
-    this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
+    // this.hudController.setUIAmmo(this.bullets.length, this.maxAmmo);
     this.isReloading = false;
   }
 
