@@ -1,4 +1,4 @@
-import { Container, Point, Sprite, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
 import { HoverInfo, IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@types';
@@ -87,7 +87,7 @@ export class MenuScene extends Container implements IScene {
       this.hudBackpack.inventory = backpack.open();
 
       this.hudBackpack.registerEvent('showHoverInfoBox', (hoverInfo: HoverInfo) => {
-        this.showItemHoverInfo(hoverInfo);
+        this.hudHoverInfoBox?.showItemHoverInfo(hoverInfo);
       });
 
       this.hudBackpack.registerEvent('hideHoverInfoBox', ({}) => {
@@ -100,17 +100,6 @@ export class MenuScene extends Container implements IScene {
       this.hudSharedChest.inventory = chest.open();
     }
     // -----------------------------------------
-  }
-
-  public showItemHoverInfo(hoverInfo: HoverInfo) {
-    const { targetItem, cursorX, cursorY } = hoverInfo;
-    const globalPoint = new Point(cursorX, cursorY);
-    const localPoint = this.scene.getCurrentScene()?.toLocal(globalPoint);
-    if (this.hudHoverInfoBox) {
-      this.hudHoverInfoBox.setPosition(localPoint?.x, localPoint?.y);
-      this.hudHoverInfoBox.setItem(targetItem);
-      this.hudHoverInfoBox.show();
-    }
   }
 
   // FIXME: remove after testing

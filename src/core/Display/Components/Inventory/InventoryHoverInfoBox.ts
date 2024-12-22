@@ -1,10 +1,14 @@
-import { Graphics, Text, Sprite } from 'pixi.js';
+import { Graphics, Text, Sprite, Point } from 'pixi.js';
 import { Item } from '@core/Entities';
 import { ItemRarity } from '@enums';
 import { theme } from '@config';
 import { HUDComponent } from '@core/Display';
+import { HoverInfo } from '@interfaces';
+import { SceneManager } from '@core/Managers';
 
 export class InventoryHoverInfoBox extends HUDComponent {
+  private scene: SceneManager = new SceneManager();
+
   private graphics!: Graphics;
   private itemRarityBox!: Graphics;
 
@@ -38,8 +42,17 @@ export class InventoryHoverInfoBox extends HUDComponent {
     this.renderItemHistory();
     this.renderItemCost();
     this.renderItemFuel();
+  }
 
-    // TODO: start implementing render of resources to sell
+  // FIXME: rename
+  public showItemHoverInfo(hoverInfo: HoverInfo) {
+    const { targetItem, cursorX, cursorY } = hoverInfo;
+    const globalPoint = new Point(cursorX, cursorY);
+    const localPoint = this.scene.getCurrentScene()?.toLocal(globalPoint);
+
+    this.setPosition(localPoint?.x, localPoint?.y);
+    this.setItem(targetItem);
+    this.show();
   }
 
   public renderGraphicsContainer(): void {
