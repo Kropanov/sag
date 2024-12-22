@@ -10,7 +10,7 @@ export class SharedChest extends InventoryDraft {
   protected slotFillColor = theme.chest.shared.background;
   protected slotBorderColor = theme.chest.shared.border;
 
-  public alwaysVisible = true;
+  public alwaysVisible = false;
 
   constructor() {
     super();

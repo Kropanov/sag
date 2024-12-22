@@ -79,7 +79,7 @@ export class HUDManager extends Container {
     delete this.components[name];
   }
 
-  getComponent<K extends keyof HUDComponentRegistry>(name: K): HUDComponentRegistry[K] | undefined {
+  getComponent<K extends keyof HUDComponentRegistry>(name: K): HUDComponentRegistry[K] {
     return this.components[name] as HUDComponentRegistry[K];
   }
 

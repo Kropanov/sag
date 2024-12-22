@@ -1,8 +1,7 @@
 import { Container, Sprite, Text } from 'pixi.js';
-import { HoverInfo, IScene } from '@interfaces';
+import { IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@types';
-import { ItemRarity, ItemType } from '@enums';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
 import { AuthScene, GameScene } from '@core/Scenes';
 import { GameManager, SceneManager } from '@core/Managers';
@@ -12,8 +11,6 @@ import {
   handleProgramVersionResize,
   handleSocialMediaIconsResize,
 } from '@core/Misc';
-import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
-import { InventoryBag, InventoryHoverInfoBox, SettingsButton, SharedChest } from '@core/Display';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -34,18 +31,8 @@ export class MenuScene extends Container implements IScene {
 
   private readonly socialMediaIcons: Container;
 
-  private readonly hudSharedChest: SharedChest | undefined;
-  private readonly hudBackpack: InventoryBag | undefined;
-  private readonly hudHoverInfoBox: InventoryHoverInfoBox | undefined;
-  private readonly settingsButton: SettingsButton | undefined;
-
   constructor() {
     super();
-
-    this.hudBackpack = this.game.hud.getComponent('backpack');
-    this.hudSharedChest = this.game.hud.getComponent('chest');
-    this.hudHoverInfoBox = this.game.hud.getComponent('itemInfoBox');
-    this.settingsButton = this.game.hud.getComponent('settingsButton');
 
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
@@ -67,53 +54,12 @@ export class MenuScene extends Container implements IScene {
     this.fillMenu();
 
     this.addChild(this.menu);
-
-    // FIXME: only for testing purposes
-    // -----------------------------------------
-    const backpack = new Backpack();
-    const book1Props = { amount: 3, type: ItemType.Artifact, asset: 'book_1', rarity: ItemRarity.Unique };
-    const book_1 = new Artifact(book1Props, new ReincarnationAbility());
-    backpack.push(book_1);
-
-    const chest = new Chest();
-    const book2Props = { amount: 1, type: ItemType.Artifact, asset: 'book_3', rarity: ItemRarity.Unique };
-    const book_2 = new Artifact(book2Props, new ReincarnationAbility());
-
-    const book3Props = { amount: 1, type: ItemType.Artifact, asset: 'book_4', rarity: ItemRarity.Unique };
-    const book_3 = new Artifact(book3Props, new ReincarnationAbility());
-    chest.push(book_2);
-    chest.push(book_3);
-
-    if (this.hudBackpack) {
-      this.hudBackpack.entity = backpack;
-      this.hudBackpack.inventory = backpack.open();
-
-      this.hudBackpack.registerEvent('showHoverInfoBox', (hoverInfo: HoverInfo) => {
-        this.hudHoverInfoBox?.showItemHoverInfo(hoverInfo);
-      });
-
-      this.hudBackpack.registerEvent('hideHoverInfoBox', ({}) => {
-        this.hudHoverInfoBox?.hide();
-      });
-    }
-
-    if (this.hudSharedChest) {
-      this.hudSharedChest.entity = chest;
-      this.hudSharedChest.inventory = chest.open();
-    }
-    // -----------------------------------------
-  }
-
-  // FIXME: remove after testing
-  handleInput() {
-    if (this.game.keyboard.isKeyJustPressed('Escape')) {
-      this.hudBackpack?.showFullInventory();
-      this.settingsButton?.toggleSettingsVisibility();
-    }
   }
 
   startGame() {
-    this.scene.changeScene(GameScene);
+    // TODO: think about the place where the hud should be initialize
+    this.game.hud.initializeHUD();
+    this.scene.changeScene(GameScene, this.game.hud.getComponents());
   }
 
   fillMenu() {
@@ -149,9 +95,7 @@ export class MenuScene extends Container implements IScene {
 
   openSettings() {}
 
-  update(_delta: number): void {
-    this.handleInput();
-  }
+  update(_delta: number): void {}
 
   resize(screenWidth: number, screenHeight: number): void {
     this.menu.x = screenWidth / 2;

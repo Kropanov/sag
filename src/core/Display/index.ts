@@ -16,4 +16,5 @@ export * from './Components/SettingsMenu.ts';
 export * from './Components/SettingsItemDisplay.ts';
 export * from './Components/CurrentItemDisplay.ts';
 export * from './Components/NotificationBox.ts';
-export * from './HUDService.ts';
+
+export * from './HUDController.ts';
