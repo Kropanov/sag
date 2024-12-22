@@ -1,6 +1,5 @@
 import { Ammo, Cartridge, Item, Player } from '@core/Entities';
-import { isClickInsideHUDElement, lerp } from '@utils';
-import { HUDController } from '@core/Display';
+import { lerp } from '@utils';
 import { GameManager, SceneManager } from '@core/Managers';
 import { ItemProps } from '@interfaces';
 
@@ -8,7 +7,6 @@ class Gun extends Item {
   private player: Player;
   private cartridge: Cartridge;
 
-  private hudController: HUDController;
   private game: GameManager = new GameManager();
   private scene: SceneManager = new SceneManager();
 
@@ -17,11 +15,10 @@ class Gun extends Item {
   private mouseEvent!: MouseEvent;
   shootingInterval: any;
 
-  constructor(props: ItemProps, player: Player, cartridge: Cartridge, hudController: HUDController) {
+  constructor(props: ItemProps, player: Player, cartridge: Cartridge) {
     super(props);
     this.cartridge = cartridge;
     this.player = player;
-    this.hudController = hudController;
     this.listen();
   }
 
@@ -32,14 +29,14 @@ class Gun extends Item {
   }
 
   startShooting(event: MouseEvent) {
-    const hudContainers = this.hudController.getHUDContainers();
-
-    for (let container of hudContainers) {
-      const hudBounds = container.getBounds();
-      if (isClickInsideHUDElement(event, hudBounds)) {
-        return;
-      }
-    }
+    // const hudContainers = this.hudController.getHUDContainers();
+    //
+    // for (let container of hudContainers) {
+    //   const hudBounds = container.getBounds();
+    //   if (isClickInsideHUDElement(event, hudBounds)) {
+    //     return;
+    //   }
+    // }
 
     if (event.button === 0) {
       this.shoot(event);
@@ -81,9 +78,9 @@ class Gun extends Item {
     ammo.setDirection(direction);
     ammo.setSpritePosition(x0, y0);
 
-    const currentAmmo = this.cartridge.shoot();
-    const maxAmmo = this.cartridge.getMaxAmmo();
-    this.hudController.setUIAmmo(currentAmmo, maxAmmo);
+    // const currentAmmo = this.cartridge.shoot();
+    // const maxAmmo = this.cartridge.getMaxAmmo();
+    // this.hudController.setUIAmmo(currentAmmo, maxAmmo);
 
     const scene = this.scene.getCurrentScene();
     scene?.addChild(ammoSprite);

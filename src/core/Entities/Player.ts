@@ -1,18 +1,30 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
+import { HUDController } from '@core/Display';
 
 export class Player extends Character {
-  game: GameManager = new GameManager();
+  private game: GameManager = new GameManager();
 
   prevY: number;
   prevX: number;
 
   velocity: number = 4;
 
+  private hud: HUDController;
+  hudBackpack;
+
   constructor(texture: string, x: number, y: number, backpack: Backpack) {
     super(texture, x, y, backpack);
     this.prevX = x;
     this.prevY = y;
+
+    this.hudBackpack = this.game.hud.getComponent('backpack');
+
+    this.hudBackpack.entity = backpack;
+    this.hudBackpack.inventory = backpack.open();
+
+    this.hud = new HUDController();
+    this.game.hud.showHUD();
   }
 
   update(delta: number, enemies: any, floorBounds: any) {
@@ -48,6 +60,8 @@ export class Player extends Character {
     if (this.game.keyboard.state.get('Space')) {
       this.move(0, -this.velocity);
     }
+
+    this.hud.handleInput();
   }
 
   checkFloorBounds(bounds: any) {

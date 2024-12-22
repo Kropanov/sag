@@ -1,48 +1,34 @@
-import { IScene } from '@interfaces';
-import { Container } from 'pixi.js';
-import { Item, Player } from '@core/Entities';
-import { HUDService } from '@core/Display';
+import { GameManager } from '@core/Managers';
+import { HoverInfo } from '@interfaces';
+import { InventoryBag, InventoryHoverInfoBox, SettingsButton } from '@core/Display';
 
-class HUDController {
-  private player: Player;
-  private hudService: HUDService;
+export class HUDController {
+  private game: GameManager = new GameManager();
 
-  constructor(player: Player, scene: IScene) {
-    this.player = player;
-    this.hudService = new HUDService(scene, player);
+  private readonly hudBackpack: InventoryBag | undefined;
+  private readonly hudHoverInfoBox: InventoryHoverInfoBox | undefined;
+  private readonly settingsButton: SettingsButton | undefined;
+
+  constructor() {
+    this.hudBackpack = this.game.hud.getComponent('backpack');
+    this.hudHoverInfoBox = this.game.hud.getComponent('itemInfoBox');
+    this.settingsButton = this.game.hud.getComponent('settingsButton');
+
+    if (this.hudBackpack) {
+      this.hudBackpack.registerEvent('showHoverInfoBox', (hoverInfo: HoverInfo) => {
+        this.hudHoverInfoBox?.showItemHoverInfo(hoverInfo);
+      });
+
+      this.hudBackpack.registerEvent('hideHoverInfoBox', ({}) => {
+        this.hudHoverInfoBox?.hide();
+      });
+    }
   }
 
-  public setUIAmmo(currentValue: number | string, maxAmmo: number) {
-    this.hudService.setUIAmmo(currentValue, maxAmmo);
-  }
-
-  public setUIUsername(value: string) {
-    this.hudService.setUIUsername(value);
-  }
-
-  public setUIBackpack(backpack: Array<Item> | undefined) {
-    this.hudService.setUIBackpack(backpack);
-  }
-
-  public updateUIBackpack() {
-    this.hudService.setUIBackpack(this.player.getBackpackItems());
-  }
-
-  public getHUDContainers(): Container[] {
-    return this.hudService.getHUDContainers();
-  }
-
-  public resize(screenWidth: number, screenHeight: number) {
-    this.hudService.resize(screenWidth, screenHeight);
-  }
-
-  public setCurrentItem(index: number) {
-    this.hudService.setCurrentItem(index);
-  }
-
-  public showFullInventoryWithSettings() {
-    this.hudService.showFullInventoryWithSettings();
+  handleInput() {
+    if (this.game.keyboard.isKeyJustPressed('Escape')) {
+      this.hudBackpack?.showFullInventory();
+      this.settingsButton?.toggleSettingsVisibility();
+    }
   }
 }
-
-export { HUDController };

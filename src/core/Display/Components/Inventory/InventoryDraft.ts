@@ -1,12 +1,13 @@
 import { INITIAL_BACKPACK_CAPACITY, STORAGE_SLOT_SPACING, STORAGE_SLOT_WIDTH, theme } from '@config';
 import { Graphics, Point, Text } from 'pixi.js';
-import { Item } from '@core/Entities';
+import { Item, Storage } from '@core/Entities';
 import { isStackable } from '@utils';
 import { Slot } from '@types';
 import { HUDComponent } from '@core/Display';
 
 export class InventoryDraft extends HUDComponent {
   private _inventory: Array<Item | null> = [];
+  private _entity: Storage | null;
 
   protected inventoryCapacity = 10;
   protected backpackSlotIncrement = 10;
@@ -22,7 +23,7 @@ export class InventoryDraft extends HUDComponent {
   // private currentHoldingSlotIndex: number | undefined;
   // private currentHoldingSlotItem: Item | null = null;
 
-  private isInventoryExpanded: boolean = false;
+  private _isInventoryExpanded: boolean = false;
   private initialHoldingItemPosition: Point = new Point();
 
   private isDragging = false;
@@ -37,11 +38,12 @@ export class InventoryDraft extends HUDComponent {
   constructor() {
     super();
 
-    this.zIndex = 1;
-    this.interactive = true;
+    this.zIndex = 10;
+    this.eventMode = 'dynamic';
     this.sortableChildren = true;
 
     this.inventory = [];
+    this._entity = null;
 
     this.backgroundGraphics = new Graphics();
 
@@ -56,6 +58,19 @@ export class InventoryDraft extends HUDComponent {
   set inventory(newInventory: (Item | null)[] | null | undefined) {
     this._inventory = this.isEmpty(newInventory) ? this.generateEmptyBackpack() : (newInventory ?? []);
     this.refresh();
+  }
+
+  set entity(instance: Storage) {
+    this._entity = instance;
+  }
+
+  public toggleInventoryExpanded() {
+    this.isInventoryExpanded = !this._isInventoryExpanded;
+  }
+
+  set isInventoryExpanded(value: boolean) {
+    this._isInventoryExpanded = value;
+    this.updateSlotsVisibility();
   }
 
   private isEmpty(inventory: (Item | null)[] | null | undefined): boolean {
@@ -77,7 +92,7 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private renderSlots() {
-    for (let i = 0; i < this.inventoryCapacity; i++) {
+    for (let i = 0; i < this._inventory.length; i++) {
       const row = Math.floor(i / this.backpackSlotIncrement);
       const slotIndex = i % this.backpackSlotIncrement;
       const item = this._inventory[i];
@@ -91,6 +106,8 @@ export class InventoryDraft extends HUDComponent {
         this.appendSlot(graphics, item, text);
       }
     }
+
+    this.updateSlotsVisibility();
   }
 
   private renderBackground(padding: number = 10) {
@@ -104,10 +121,6 @@ export class InventoryDraft extends HUDComponent {
         10,
       )
       .fill(this.backgroundColor);
-    this.backgroundGraphics.zIndex = 0;
-
-    this.backgroundGraphics.width = this.width + scalePaddingFactor * padding;
-    this.backgroundGraphics.height = this.height + scalePaddingFactor * padding;
 
     this.addChild(this.backgroundGraphics);
   }
@@ -145,7 +158,7 @@ export class InventoryDraft extends HUDComponent {
     return graphics;
   }
 
-  public defineLocation(x: number, y: number) {
+  public defineLocation(x: number = 0, y: number = 0) {
     this.x = x;
     this.y = y;
   }
@@ -244,7 +257,7 @@ export class InventoryDraft extends HUDComponent {
         const slotVisible = graphics.visible;
 
         if (slotContainsPoint && slotVisible) {
-          this.callEvent('placeItemAt', { item: this.draggedItem, index });
+          this._entity?.moveItemTo(this.draggedItem, index);
           this.refresh();
           return;
         }
@@ -263,8 +276,9 @@ export class InventoryDraft extends HUDComponent {
   }
 
   private onSlotMouseOver(event: MouseEvent) {
-    const { clientX, clientY } = event;
+    this.callEvent('hideHoverInfoBox', {});
 
+    const { clientX, clientY } = event;
     this.timer = setTimeout(() => {
       const globalPoint = new Point(clientX, clientY);
       const localPoint = this.toLocal(globalPoint);
@@ -274,11 +288,13 @@ export class InventoryDraft extends HUDComponent {
         const slotContainsPoint = graphics.containsPoint(localPoint);
 
         if (slotContainsPoint && item) {
-          // this.emitter.emit('showHoverInfoBox', {
-          //   targetItem: item,
-          //   cursorX: clientX,
-          //   cursorY: clientY,
-          // });
+          console.log('here?');
+          console.log(item, clientX, clientY);
+          this.callEvent('showHoverInfoBox', {
+            targetItem: item,
+            cursorX: clientX,
+            cursorY: clientY,
+          });
         }
       }
     }, 2000);
@@ -289,7 +305,7 @@ export class InventoryDraft extends HUDComponent {
     // this.emitter.emit('hideHoverInfoBox');
   }
 
-  public updateSlotVisibility() {
+  public updateSlotsVisibility() {
     if (this._inventory && this._inventory.length === 0) {
       return;
     }
@@ -300,14 +316,14 @@ export class InventoryDraft extends HUDComponent {
         const graphics = this.slots[i].graphics;
         const text = this.slots[i].text;
 
-        graphics.visible = this.isInventoryExpanded;
+        graphics.visible = this._isInventoryExpanded;
 
         if (item) {
-          item.sprite.visible = this.isInventoryExpanded;
+          item.sprite.visible = this._isInventoryExpanded;
         }
 
         if (text) {
-          text.visible = this.isInventoryExpanded;
+          text.visible = this._isInventoryExpanded;
         }
       }
     }
@@ -338,7 +354,7 @@ export class InventoryDraft extends HUDComponent {
 
   protected defineResizeStrategy(screenWidth: number, _screenHeight: number) {
     this.x = (screenWidth - this.width) / 2;
-    this.y = 15;
+    this.y = 10;
   }
 
   public resize(screenWidth: number, _screenHeight: number): void {
