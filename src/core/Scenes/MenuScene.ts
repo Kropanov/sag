@@ -13,7 +13,7 @@ import {
   handleSocialMediaIconsResize,
 } from '@core/Misc';
 import { Artifact, Backpack, Chest, ReincarnationAbility } from '@core/Entities';
-import { InventoryBag, InventoryHoverInfoBox, SharedChest } from '@core/Display';
+import { InventoryBag, InventoryHoverInfoBox, SettingsButton, SharedChest } from '@core/Display';
 
 export class MenuScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -37,6 +37,7 @@ export class MenuScene extends Container implements IScene {
   private readonly hudSharedChest: SharedChest | undefined;
   private readonly hudBackpack: InventoryBag | undefined;
   private readonly hudHoverInfoBox: InventoryHoverInfoBox | undefined;
+  private readonly settingsButton: SettingsButton | undefined;
 
   constructor() {
     super();
@@ -44,6 +45,7 @@ export class MenuScene extends Container implements IScene {
     this.hudBackpack = this.game.hud.getComponent('backpack');
     this.hudSharedChest = this.game.hud.getComponent('chest');
     this.hudHoverInfoBox = this.game.hud.getComponent('itemInfoBox');
+    this.settingsButton = this.game.hud.getComponent('settingsButton');
 
     this.background = Sprite.from('menu_background');
     this.addChild(this.background);
@@ -106,6 +108,7 @@ export class MenuScene extends Container implements IScene {
   handleInput() {
     if (this.game.keyboard.isKeyJustPressed('Escape')) {
       this.hudBackpack?.showFullInventory();
+      this.settingsButton?.toggleSettingsVisibility();
     }
   }
 

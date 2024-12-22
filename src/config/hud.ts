@@ -1,4 +1,11 @@
-import { AmmoCounter, CurrentItemDisplay, InventoryBag, InventoryHoverInfoBox, SharedChest } from '@core/Display';
+import {
+  AmmoCounter,
+  CurrentItemDisplay,
+  InventoryBag,
+  InventoryHoverInfoBox,
+  SettingsButton,
+  SharedChest,
+} from '@core/Display';
 import { HUDComponentRegistry } from '@interfaces';
 
 export const hudComponents: HUDComponentRegistry = {
@@ -7,5 +14,6 @@ export const hudComponents: HUDComponentRegistry = {
   chest: new SharedChest(),
   backpack: new InventoryBag(),
   itemInfoBox: new InventoryHoverInfoBox(),
+  settingsButton: new SettingsButton(),
   // Add other components here
 };

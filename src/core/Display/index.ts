@@ -10,6 +10,8 @@ export * from './Components/Inventory/LootChest.ts';
 export * from './Components/AmmoCounter.ts';
 export * from './Components/ItemAmount.ts';
 export * from './Components/SettingsBox.ts';
+
+export * from './Components/SettingsButton.ts';
 export * from './Components/SettingsMenu.ts';
 export * from './Components/SettingsItemDisplay.ts';
 export * from './Components/CurrentItemDisplay.ts';
