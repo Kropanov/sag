@@ -24,7 +24,7 @@ export class Player extends Character {
     this.hudBackpack.inventory = backpack.open();
 
     this.hud = new HUDController();
-    this.game.hud.showHUD();
+    this.game.hud.hideHUD();
   }
 
   update(delta: number, enemies: any, floorBounds: any) {
