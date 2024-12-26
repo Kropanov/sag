@@ -94,6 +94,7 @@ export class GameManager {
    * instance is constructed. This class does not enforce a singleton pattern by default.
    */
   constructor() {
+    // this.user =
     this.api = ApiClient;
     this.hud = HUDManager.getInstance(); // FIXME: I guess it's not a good idea to call game inside hud components so it should be removed from here
     this.size = new ResizeManager();
