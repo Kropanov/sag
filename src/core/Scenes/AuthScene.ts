@@ -310,6 +310,7 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
+    this.game.user.setUserInfo(data.authToken);
     this.game.storage.setItem('authToken', data.authToken);
     this.scene.changeScene(MenuScene);
   }
@@ -332,6 +333,7 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
+    this.game.user.setUserInfo(data.authToken);
     this.game.storage.setItem('authToken', data.authToken);
     this.scene.changeScene(MenuScene);
   }

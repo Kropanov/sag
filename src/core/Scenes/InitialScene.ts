@@ -69,10 +69,10 @@ export class InitialScene extends Container implements IScene {
 
   private assetsLoaded(): void {
     const token = this.game.storage.getToken();
-    // FIXME: this logic
+
     if (token) {
       const payload = parseToken(token);
-      console.log(payload);
+      this.game.user.setUserInfo(payload);
     }
 
     const scene = token ? MenuScene : AuthScene;

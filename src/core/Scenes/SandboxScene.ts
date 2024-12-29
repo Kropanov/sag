@@ -29,10 +29,11 @@ export class SandboxScene extends Container implements IScene {
       transports: ['websocket'], // Ensure WebSocket transport
     });
 
+    console.log('Userdata:', this.game.user.userId, this.game.user.username);
+
     socket.on('connect', () => {
       console.log('Connected to server');
-      // socket.emit('joined')
-      socket.emit('findAllPlayers', {}, (value: any) => {
+      socket.emit('joined', {}, (value: any) => {
         console.log(value);
       });
     });

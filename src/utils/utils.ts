@@ -1,4 +1,5 @@
 import { Item } from '@core/Entities';
+import { TokenInfo } from '@interfaces';
 
 const isStackable = (item: Item): boolean => {
   return item.amount != 1;
@@ -12,7 +13,7 @@ const getScreenHeight = (): number => {
   return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 };
 
-const parseToken = (token: string) => {
+const parseToken = (token: string): TokenInfo => {
   const base64Payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
     window
