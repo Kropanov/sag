@@ -1,46 +1,52 @@
 import { Container, Sprite } from 'pixi.js';
 import { IScene } from '@interfaces';
 import { GameManager } from '@core/Managers';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { Backpack, Player } from '@core/Entities';
+import { HUDController } from '@core/Display';
 
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
   private readonly background: Sprite;
-  private players: Player[] = [];
-  private readonly player: Player;
-  private readonly backpack: Backpack;
+  // private readonly player: Player;
+  // private readonly backpack: Backpack;
   private readonly enemies: any = [];
 
+  private players = new Map<string, Player>();
+
+  private hud = new HUDController();
+
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
+
+  private socket: Socket;
 
   constructor() {
     super();
 
-    this.backpack = new Backpack();
-    this.player = new Player('bunny', 100, 100, this.backpack);
-    this.players.push(this.player);
+    // this.backpack = new Backpack();
+    // this.player = new Player('bunny', 100, 100, this.backpack);
+    // this.players.push(this.player);
 
-    this.addChild(this.player.sprite);
+    // this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
     const uri = import.meta.env.VITE_WEBSOCKET_BASE_URL || 'http://localhost:5000';
 
-    const socket = io(uri, {
+    this.socket = io(uri, {
       transports: ['websocket'], // Ensure WebSocket transport
     });
 
     console.log('Userdata:', this.game.user.userId, this.game.user.username);
 
-    socket.on('connect', () => {
+    this.socket.on('connect', () => {
       console.log('Connected to server');
-      socket.emit('joined', { id: this.game.user.userId }, (value: any) => {
+      this.socket.emit('joined', { id: this.game.user.userId }, (value: any) => {
         // this.player
         console.log('!!!', value);
       });
     });
 
-    socket.on('message', (message) => {
+    this.socket.on('message', (message) => {
       console.log('Server message!!!:', message);
 
       switch (message.type) {
@@ -50,12 +56,13 @@ export class SandboxScene extends Container implements IScene {
       }
     });
 
-    socket.on('disconnect', () => {
+    this.socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
 
     this.background = Sprite.from('game_background');
     this.addChild(this.background);
+    this.background.zIndex = 0;
 
     this.game.audio.stop();
   }
@@ -69,7 +76,7 @@ export class SandboxScene extends Container implements IScene {
     const player = new Player('bunny', Math.random() * 100, Math.random() * 100, backpack);
     this.addChild(player.sprite);
 
-    this.players.push(player);
+    this.players.set(_data.player.id, player);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
@@ -84,10 +91,43 @@ export class SandboxScene extends Container implements IScene {
     };
   }
 
+  private handleInput() {
+    if (this.game.keyboard.state.get('KeyW')) {
+      const player = this.players.get(this.game.user.userId ?? '');
+      player?.move(0, -4);
+      this.socket.emit('move', { id: this.game.user.userId, player });
+    }
+    if (this.game.keyboard.state.get('KeyS')) {
+      const player = this.players.get(this.game.user.userId ?? '');
+      player?.move(0, 4);
+
+      this.socket.emit('move', { id: this.game.user.userId, player });
+    }
+    if (this.game.keyboard.state.get('KeyA')) {
+      const player = this.players.get(this.game.user.userId ?? '');
+      player?.move(-4, 0);
+      this.socket.emit('move', { id: this.game.user.userId, player });
+    }
+    if (this.game.keyboard.state.get('KeyD')) {
+      const player = this.players.get(this.game.user.userId ?? '');
+      player?.move(4, 0);
+      this.socket.emit('move', { id: this.game.user.userId, player });
+    }
+    if (this.game.keyboard.state.get('Space')) {
+      const player = this.players.get(this.game.user.userId ?? '');
+      player?.move(0, -4);
+      this.socket.emit('move', { id: this.game.user.userId, player });
+    }
+
+    this.hud.handleInput();
+  }
+
   update(_framesPassed: number): void {
-    for (const player of this.players) {
+    for (const player of this.players.values()) {
       player.update(_framesPassed, this.enemies, this.floorBounds);
     }
+
+    this.handleInput();
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {

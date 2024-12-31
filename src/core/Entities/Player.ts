@@ -1,6 +1,5 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
-import { HUDController } from '@core/Display';
 
 export class Player extends Character {
   private game: GameManager = new GameManager();
@@ -10,7 +9,6 @@ export class Player extends Character {
 
   velocity: number = 4;
 
-  private hud: HUDController;
   hudBackpack;
 
   constructor(texture: string, x: number, y: number, backpack: Backpack) {
@@ -23,7 +21,6 @@ export class Player extends Character {
     this.hudBackpack.entity = backpack;
     this.hudBackpack.inventory = backpack.open();
 
-    this.hud = new HUDController();
     this.game.hud.hideHUD();
   }
 
@@ -32,7 +29,6 @@ export class Player extends Character {
     this.prevY = this.sprite.y;
 
     super.update(delta, enemies, floorBounds);
-    this.handleInput();
 
     enemies.forEach((enemy: any) => {
       if (this.checkCollision(enemy)) {
@@ -42,26 +38,6 @@ export class Player extends Character {
     });
 
     this.checkFloorBounds(floorBounds);
-  }
-
-  handleInput() {
-    if (this.game.keyboard.state.get('KeyW')) {
-      this.move(0, -this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyS')) {
-      this.move(0, this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyA')) {
-      this.move(-this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('KeyD')) {
-      this.move(this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('Space')) {
-      this.move(0, -this.velocity);
-    }
-
-    this.hud.handleInput();
   }
 
   checkFloorBounds(bounds: any) {
