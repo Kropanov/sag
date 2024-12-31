@@ -19,7 +19,8 @@ export class SandboxScene extends Container implements IScene {
 
     this.backpack = new Backpack();
     this.player = new Player('bunny', 100, 100, this.backpack);
-    console.log(this.players);
+    this.players.push(this.player);
+
     this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
@@ -33,13 +34,20 @@ export class SandboxScene extends Container implements IScene {
 
     socket.on('connect', () => {
       console.log('Connected to server');
-      socket.emit('joined', {}, (value: any) => {
-        console.log(value);
+      socket.emit('joined', { id: this.game.user.userId }, (value: any) => {
+        // this.player
+        console.log('!!!', value);
       });
     });
 
-    socket.on('message', (data) => {
-      console.log('Server message:', data);
+    socket.on('message', (message) => {
+      console.log('Server message!!!:', message);
+
+      switch (message.type) {
+        case 'new_player':
+          this.createNewPlayer(message.data);
+          break;
+      }
     });
 
     socket.on('disconnect', () => {
@@ -50,6 +58,18 @@ export class SandboxScene extends Container implements IScene {
     this.addChild(this.background);
 
     this.game.audio.stop();
+  }
+
+  createNewPlayer(_data: any) {
+    // if (this.players.includes(data.playerId)) {
+    //   return;
+    // }
+
+    const backpack = new Backpack();
+    const player = new Player('bunny', Math.random() * 100, Math.random() * 100, backpack);
+    this.addChild(player.sprite);
+
+    this.players.push(player);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
@@ -65,7 +85,9 @@ export class SandboxScene extends Container implements IScene {
   }
 
   update(_framesPassed: number): void {
-    this.player.update(_framesPassed, this.enemies, this.floorBounds);
+    for (const player of this.players) {
+      player.update(_framesPassed, this.enemies, this.floorBounds);
+    }
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {

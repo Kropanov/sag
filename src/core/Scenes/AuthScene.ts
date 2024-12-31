@@ -12,6 +12,7 @@ import { sound } from '@pixi/sound';
 import { AuthService } from '@api';
 import { GameManager, SceneManager } from '@core/Managers';
 import { MenuScene } from '@core/Scenes';
+import { parseToken } from '@utils';
 
 export class AuthScene extends Container implements IScene {
   private authService: AuthService;
@@ -310,7 +311,10 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    this.game.user.setUserInfo(data.authToken);
+    const { authToken } = data;
+    const payload = parseToken(authToken);
+
+    this.game.user.setUserInfo(payload);
     this.game.storage.setItem('authToken', data.authToken);
     this.scene.changeScene(MenuScene);
   }
@@ -333,7 +337,10 @@ export class AuthScene extends Container implements IScene {
       return;
     }
 
-    this.game.user.setUserInfo(data.authToken);
+    const { authToken } = data;
+    const payload = parseToken(authToken);
+
+    this.game.user.setUserInfo(payload);
     this.game.storage.setItem('authToken', data.authToken);
     this.scene.changeScene(MenuScene);
   }
