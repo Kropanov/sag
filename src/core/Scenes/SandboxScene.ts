@@ -47,11 +47,12 @@ export class SandboxScene extends Container implements IScene {
     });
 
     this.socket.on('message', (message) => {
-      console.log('Server message!!!:', message);
-
       switch (message.type) {
         case 'new_player':
           this.createNewPlayer(message.data);
+          break;
+        case 'move':
+          this.movePlayer(message.data);
           break;
       }
     });
@@ -65,6 +66,16 @@ export class SandboxScene extends Container implements IScene {
     this.background.zIndex = 0;
 
     this.game.audio.stop();
+  }
+
+  private movePlayer(data: any) {
+    const player = this.players.get(data.id ?? '');
+    if (player) {
+      console.log(data.id, data.state.position.y);
+
+      player.sprite.x = data.state.position.x;
+      player.sprite.y = data.state.position.y;
+    }
   }
 
   createNewPlayer(_data: any) {
@@ -91,32 +102,27 @@ export class SandboxScene extends Container implements IScene {
     };
   }
 
+  private moveCurrentPlayer(x: number, y: number) {
+    const player = this.players.get(this.game.user.userId ?? '');
+    player?.move(x, y);
+    this.socket.emit('move', { id: this.game.user.userId, x: player?.sprite.x, y: player?.sprite.y });
+  }
+
   private handleInput() {
     if (this.game.keyboard.state.get('KeyW')) {
-      const player = this.players.get(this.game.user.userId ?? '');
-      player?.move(0, -4);
-      this.socket.emit('move', { id: this.game.user.userId, player });
+      this.moveCurrentPlayer(0, -4);
     }
     if (this.game.keyboard.state.get('KeyS')) {
-      const player = this.players.get(this.game.user.userId ?? '');
-      player?.move(0, 4);
-
-      this.socket.emit('move', { id: this.game.user.userId, player });
+      this.moveCurrentPlayer(0, 4);
     }
     if (this.game.keyboard.state.get('KeyA')) {
-      const player = this.players.get(this.game.user.userId ?? '');
-      player?.move(-4, 0);
-      this.socket.emit('move', { id: this.game.user.userId, player });
+      this.moveCurrentPlayer(-4, 0);
     }
     if (this.game.keyboard.state.get('KeyD')) {
-      const player = this.players.get(this.game.user.userId ?? '');
-      player?.move(4, 0);
-      this.socket.emit('move', { id: this.game.user.userId, player });
+      this.moveCurrentPlayer(4, 0);
     }
     if (this.game.keyboard.state.get('Space')) {
-      const player = this.players.get(this.game.user.userId ?? '');
-      player?.move(0, -4);
-      this.socket.emit('move', { id: this.game.user.userId, player });
+      this.moveCurrentPlayer(0, -4);
     }
 
     this.hud.handleInput();
