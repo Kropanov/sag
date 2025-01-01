@@ -1,5 +1,6 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
+import { Socket } from 'socket.io-client';
 
 export class Player extends Character {
   private game: GameManager = new GameManager();
@@ -7,7 +8,7 @@ export class Player extends Character {
   prevY: number;
   prevX: number;
 
-  velocity: number = 4;
+  velocity: number = 3;
 
   hudBackpack;
 
@@ -24,11 +25,34 @@ export class Player extends Character {
     this.game.hud.hideHUD();
   }
 
-  update(delta: number, enemies: any, floorBounds: any) {
+  update(delta: number, enemies: any, floorBounds: any, socket: Socket) {
+    this.vx = 0;
+
     this.prevX = this.sprite.x;
     this.prevY = this.sprite.y;
 
-    super.update(delta, enemies, floorBounds);
+    if (this.game.keyboard.state.get('KeyW')) {
+      this.vy = -this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyS')) {
+      this.vy = this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyA')) {
+      this.vx = -this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyD')) {
+      this.vx = this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.isKeyJustPressed('Space')) {
+      this.vy = -this.velocity * 2;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+
+    super.update(delta, enemies, floorBounds, socket);
 
     enemies.forEach((enemy: any) => {
       if (this.checkCollision(enemy)) {

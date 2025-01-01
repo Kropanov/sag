@@ -1,5 +1,6 @@
 import { g } from '@config';
 import { Sprite } from 'pixi.js';
+import { Socket } from 'socket.io-client';
 
 export class Creature {
   sprite: Sprite;
@@ -15,7 +16,7 @@ export class Creature {
     this.vy = 0;
   }
 
-  update(delta: number, _enemies: any, _floorBounds: any) {
+  update(delta: number, _enemies: any, _floorBounds: any, _socket: Socket) {
     // Add gravity to velocity
     this.vy += g * delta;
 

@@ -8,8 +8,8 @@ import { HUDController } from '@core/Display';
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
   private readonly background: Sprite;
-  // private readonly player: Player;
-  // private readonly backpack: Backpack;
+  private readonly player: Player;
+  private readonly backpack: Backpack;
   private readonly enemies: any = [];
 
   private players = new Map<string, Player>();
@@ -23,9 +23,10 @@ export class SandboxScene extends Container implements IScene {
   constructor() {
     super();
 
-    // this.backpack = new Backpack();
-    // this.player = new Player('bunny', 100, 100, this.backpack);
-    // this.players.push(this.player);
+    this.backpack = new Backpack();
+    this.player = new Player('bunny', 100, 100, this.backpack);
+    this.player.sprite.zIndex = 2;
+    this.addChild(this.player.sprite);
 
     // this.addChild(this.player.sprite);
     this.updateFloorBounds();
@@ -70,7 +71,7 @@ export class SandboxScene extends Container implements IScene {
 
   private movePlayer(data: any) {
     const player = this.players.get(data.id ?? '');
-    if (player) {
+    if (player && data.id !== this.game.user.userId) {
       console.log(data.id, data.state.position.y);
 
       player.sprite.x = data.state.position.x;
@@ -82,9 +83,12 @@ export class SandboxScene extends Container implements IScene {
     // if (this.players.includes(data.playerId)) {
     //   return;
     // }
+    if (this.game.user.userId === _data.player.id) {
+      return;
+    }
 
     const backpack = new Backpack();
-    const player = new Player('bunny', Math.random() * 100, Math.random() * 100, backpack);
+    const player = new Player('bunny', this.player.prevX, this.player.prevY, backpack);
     this.addChild(player.sprite);
 
     this.players.set(_data.player.id, player);
@@ -102,38 +106,40 @@ export class SandboxScene extends Container implements IScene {
     };
   }
 
-  private moveCurrentPlayer(x: number, y: number) {
-    const player = this.players.get(this.game.user.userId ?? '');
-    player?.move(x, y);
-    this.socket.emit('move', { id: this.game.user.userId, x: player?.sprite.x, y: player?.sprite.y });
-  }
+  // private moveCurrentPlayer(x: number, y: number) {
+  //   const player = this.players.get(this.game.user.userId ?? '');
+  //   player?.move(x, y);
+  //   this.socket.emit('move', { id: this.game.user.userId, x: player?.sprite.x, y: player?.sprite.y });
+  // }
 
   private handleInput() {
-    if (this.game.keyboard.state.get('KeyW')) {
-      this.moveCurrentPlayer(0, -4);
-    }
-    if (this.game.keyboard.state.get('KeyS')) {
-      this.moveCurrentPlayer(0, 4);
-    }
-    if (this.game.keyboard.state.get('KeyA')) {
-      this.moveCurrentPlayer(-4, 0);
-    }
-    if (this.game.keyboard.state.get('KeyD')) {
-      this.moveCurrentPlayer(4, 0);
-    }
-    if (this.game.keyboard.state.get('Space')) {
-      this.moveCurrentPlayer(0, -4);
-    }
+    // if (this.game.keyboard.state.get('KeyW')) {
+    //   this.moveCurrentPlayer(0, -4);
+    // }
+    // if (this.game.keyboard.state.get('KeyS')) {
+    //   this.moveCurrentPlayer(0, 4);
+    // }
+    // if (this.game.keyboard.state.get('KeyA')) {
+    //   this.moveCurrentPlayer(-4, 0);
+    // }
+    // if (this.game.keyboard.state.get('KeyD')) {
+    //   this.moveCurrentPlayer(4, 0);
+    // }
+    // if (this.game.keyboard.state.get('Space')) {
+    //   this.moveCurrentPlayer(0, -4);
+    // }
 
     this.hud.handleInput();
   }
 
   update(_framesPassed: number): void {
-    for (const player of this.players.values()) {
-      player.update(_framesPassed, this.enemies, this.floorBounds);
-    }
-
     this.handleInput();
+
+    this.player.update(_framesPassed, this.enemies, this.floorBounds, this.socket);
+
+    // for (const player of this.players.values()) {
+    //   player.update(_framesPassed, this.enemies, this.floorBounds, this.socket);
+    // }
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {
