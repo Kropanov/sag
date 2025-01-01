@@ -1,9 +1,11 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
 import { Socket } from 'socket.io-client';
+import { HUDController } from '@core/Display';
 
 export class Player extends Character {
   private game: GameManager = new GameManager();
+  private hud = new HUDController();
 
   prevY: number;
   prevX: number;
@@ -21,11 +23,9 @@ export class Player extends Character {
 
     this.hudBackpack.entity = backpack;
     this.hudBackpack.inventory = backpack.open();
-
-    this.game.hud.hideHUD();
   }
 
-  update(delta: number, enemies: any, floorBounds: any, socket: Socket) {
+  loop(delta: number, enemies: any, floorBounds: any, socket: Socket) {
     this.vx = 0;
 
     this.prevX = this.sprite.x;
@@ -52,7 +52,7 @@ export class Player extends Character {
       socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
     }
 
-    super.update(delta, enemies, floorBounds, socket);
+    super.update(delta);
 
     enemies.forEach((enemy: any) => {
       if (this.checkCollision(enemy)) {
@@ -62,6 +62,8 @@ export class Player extends Character {
     });
 
     this.checkFloorBounds(floorBounds);
+
+    this.hud.handleInput();
   }
 
   checkFloorBounds(bounds: any) {

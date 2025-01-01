@@ -3,7 +3,6 @@ import { IScene } from '@interfaces';
 import { GameManager } from '@core/Managers';
 import { io, Socket } from 'socket.io-client';
 import { Backpack, Player } from '@core/Entities';
-import { HUDController } from '@core/Display';
 
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -13,8 +12,6 @@ export class SandboxScene extends Container implements IScene {
   private readonly enemies: any = [];
 
   private players = new Map<string, Player>();
-
-  private hud = new HUDController();
 
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
 
@@ -67,6 +64,8 @@ export class SandboxScene extends Container implements IScene {
     this.background.zIndex = 0;
 
     this.game.audio.stop();
+
+    this.game.hud.showHUD();
   }
 
   private movePlayer(data: any) {
@@ -112,34 +111,12 @@ export class SandboxScene extends Container implements IScene {
   //   this.socket.emit('move', { id: this.game.user.userId, x: player?.sprite.x, y: player?.sprite.y });
   // }
 
-  private handleInput() {
-    // if (this.game.keyboard.state.get('KeyW')) {
-    //   this.moveCurrentPlayer(0, -4);
-    // }
-    // if (this.game.keyboard.state.get('KeyS')) {
-    //   this.moveCurrentPlayer(0, 4);
-    // }
-    // if (this.game.keyboard.state.get('KeyA')) {
-    //   this.moveCurrentPlayer(-4, 0);
-    // }
-    // if (this.game.keyboard.state.get('KeyD')) {
-    //   this.moveCurrentPlayer(4, 0);
-    // }
-    // if (this.game.keyboard.state.get('Space')) {
-    //   this.moveCurrentPlayer(0, -4);
-    // }
-
-    this.hud.handleInput();
-  }
+  private handleInput() {}
 
   update(_framesPassed: number): void {
     this.handleInput();
 
-    this.player.update(_framesPassed, this.enemies, this.floorBounds, this.socket);
-
-    // for (const player of this.players.values()) {
-    //   player.update(_framesPassed, this.enemies, this.floorBounds, this.socket);
-    // }
+    this.player.loop(_framesPassed, this.enemies, this.floorBounds, this.socket);
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {

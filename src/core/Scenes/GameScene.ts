@@ -12,9 +12,9 @@ export class GameScene extends Container implements IScene {
   private readonly player: Player;
   private readonly background: Sprite;
   private readonly backpack: Backpack;
-  private readonly enemies: any = [];
+  // private readonly enemies: any = [];
 
-  private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
+  // private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
 
   // private gun: Gun;
   // private readonly cartridge: Cartridge;
@@ -88,21 +88,20 @@ export class GameScene extends Container implements IScene {
     this.updateFloorBounds(_screenWidth, _screenHeight);
   }
 
-  update(delta: number): void {
+  update(_delta: number): void {
     this.handleInput();
     // this.gun.update(delta);
-    this.player.update(delta, this.enemies, this.floorBounds);
+    // this.player.update(delta, this.enemies, this.floorBounds);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
-    const screenWidth = _screenWidth || this.game.size.getWidth();
-    const screenHeight = _screenHeight || this.game.size.getHeight();
-
-    this.floorBounds = {
-      left: 0,
-      right: screenWidth,
-      top: 0,
-      bottom: screenHeight,
-    };
+    // const screenWidth = _screenWidth || this.game.size.getWidth();
+    // const screenHeight = _screenHeight || this.game.size.getHeight();
+    // this.floorBounds = {
+    //   left: 0,
+    //   right: screenWidth,
+    //   top: 0,
+    //   bottom: screenHeight,
+    // };
   }
 }
