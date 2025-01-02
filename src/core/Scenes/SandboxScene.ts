@@ -62,11 +62,14 @@ export class SandboxScene extends Container implements IScene {
 
     this.socket.on('message', (message) => {
       switch (message.type) {
+        case 'move':
+          this.movePlayer(message.data);
+          break;
         case 'new_player':
           this.createNewPlayer(message.data);
           break;
-        case 'move':
-          this.movePlayer(message.data);
+        case 'player_leave':
+          this.onPlayerLeave(message.data);
           break;
       }
     });
@@ -82,6 +85,16 @@ export class SandboxScene extends Container implements IScene {
     this.game.audio.stop();
 
     this.game.hud.showHUD();
+  }
+
+  onPlayerLeave(data: any) {
+    const player = this.players.get(data.clientId);
+
+    if (player) {
+      this.removeChild(player.sprite);
+    }
+
+    this.players.delete(data.clientId);
   }
 
   private movePlayer(data: any) {
