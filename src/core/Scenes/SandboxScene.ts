@@ -38,6 +38,22 @@ export class SandboxScene extends Container implements IScene {
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
+
+      this.socket.emit('findAllPlayers', {}, (value: any) => {
+        console.log('findAllPlayers', value);
+        for (const data of value) {
+          if (this.game.user.userId === data.id) {
+            return;
+          }
+
+          const backpack = new Backpack();
+          const player = new Player('bunny', data.state.position.x, data.state.position.y, backpack);
+          this.addChild(player.sprite);
+
+          this.players.set(data.clientId, player);
+        }
+      });
+
       this.socket.emit('joined', { id: this.game.user.userId }, (value: any) => {
         // this.player
         console.log('!!!', value);
@@ -56,7 +72,7 @@ export class SandboxScene extends Container implements IScene {
     });
 
     this.socket.on('disconnect', () => {
-      console.log('Disconnected from server');
+      this.socket.send('leave', this.game.user.userId);
     });
 
     this.background = Sprite.from('game_background');
@@ -69,12 +85,12 @@ export class SandboxScene extends Container implements IScene {
   }
 
   private movePlayer(data: any) {
-    const player = this.players.get(data.id ?? '');
-    if (player && data.id !== this.game.user.userId) {
-      console.log(data.id, data.state.position.y);
+    const player = this.players.get(data.clientId);
+    if (player && data.player.id !== this.game.user.userId) {
+      console.log(data.player.id, data.player.state.position.y);
 
-      player.sprite.x = data.state.position.x;
-      player.sprite.y = data.state.position.y;
+      player.sprite.x = data.player.state.position.x;
+      player.sprite.y = data.player.state.position.y;
     }
   }
 
@@ -82,6 +98,7 @@ export class SandboxScene extends Container implements IScene {
     // if (this.players.includes(data.playerId)) {
     //   return;
     // }
+
     if (this.game.user.userId === _data.player.id) {
       return;
     }
@@ -90,7 +107,9 @@ export class SandboxScene extends Container implements IScene {
     const player = new Player('bunny', this.player.prevX, this.player.prevY, backpack);
     this.addChild(player.sprite);
 
-    this.players.set(_data.player.id, player);
+    this.players.set(_data.clientId, player);
+
+    console.log('!!!!!!!!!', this.players);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
