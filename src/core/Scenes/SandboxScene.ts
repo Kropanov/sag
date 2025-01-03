@@ -28,6 +28,9 @@ export class SandboxScene extends Container implements IScene {
     // this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
+    this.game.keyboard.onKeyDown(this.handleKeyDown.bind(this));
+    this.game.keyboard.onKeyUp(this.handleKeyUp.bind(this));
+
     const uri = import.meta.env.VITE_WEBSOCKET_BASE_URL || 'http://localhost:5000';
 
     this.socket = io(uri, {
@@ -85,6 +88,25 @@ export class SandboxScene extends Container implements IScene {
     this.game.audio.stop();
 
     this.game.hud.showHUD();
+  }
+
+  private handleKeyDown(keyCode: string): void {
+    // console.log(this.game.keyboard.activeKeys);
+    if (!this.game.keyboard.activeKeys.has(keyCode)) {
+      // console.log(this.game.keyboard.keyDownCallbacks);
+      console.log('down', keyCode);
+      // this.game.keyboard.activeKeys.add(keyCode);
+      // this.socket.emit('playerAction', { action: 'keydown', keyCode });
+    }
+  }
+
+  private handleKeyUp(keyCode: string): void {
+    if (this.game.keyboard.activeKeys.has(keyCode)) {
+      // console.log(this.game.keyboard.keyUpCallbacks);
+      console.log('up', keyCode);
+      // this.game.keyboard.activeKeys.delete(keyCode);
+      // this.socket.emit('playerAction', { action: 'keyup', keyCode });
+    }
   }
 
   onPlayerLeave(data: any) {
