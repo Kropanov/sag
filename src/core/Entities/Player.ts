@@ -1,16 +1,17 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
+import { Socket } from 'socket.io-client';
 import { HUDController } from '@core/Display';
 
 export class Player extends Character {
   private game: GameManager = new GameManager();
+  private hud = new HUDController();
 
   prevY: number;
   prevX: number;
 
-  velocity: number = 4;
+  velocity: number = 3;
 
-  private hud: HUDController;
   hudBackpack;
 
   constructor(texture: string, x: number, y: number, backpack: Backpack) {
@@ -22,17 +23,36 @@ export class Player extends Character {
 
     this.hudBackpack.entity = backpack;
     this.hudBackpack.inventory = backpack.open();
-
-    this.hud = new HUDController();
-    this.game.hud.showHUD();
   }
 
-  update(delta: number, enemies: any, floorBounds: any) {
+  loop(delta: number, enemies: any, floorBounds: any, socket: Socket) {
+    this.vx = 0;
+
     this.prevX = this.sprite.x;
     this.prevY = this.sprite.y;
 
-    super.update(delta, enemies, floorBounds);
-    this.handleInput();
+    if (this.game.keyboard.state.get('KeyW')) {
+      this.vy = -this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyS')) {
+      this.vy = this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyA')) {
+      this.vx = -this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.state.get('KeyD')) {
+      this.vx = this.velocity;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+    if (this.game.keyboard.isKeyJustPressed('Space')) {
+      this.vy = -this.velocity * 2;
+      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
+    }
+
+    super.update(delta);
 
     enemies.forEach((enemy: any) => {
       if (this.checkCollision(enemy)) {
@@ -42,24 +62,6 @@ export class Player extends Character {
     });
 
     this.checkFloorBounds(floorBounds);
-  }
-
-  handleInput() {
-    if (this.game.keyboard.state.get('KeyW')) {
-      this.move(0, -this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyS')) {
-      this.move(0, this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyA')) {
-      this.move(-this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('KeyD')) {
-      this.move(this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('Space')) {
-      this.move(0, -this.velocity);
-    }
 
     this.hud.handleInput();
   }

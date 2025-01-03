@@ -5,6 +5,7 @@ import {
   NotifyManager,
   ResizeManager,
   StorageManager,
+  UserManager,
 } from '@core/Managers';
 import { AxiosInstance } from 'axios';
 import { ApiClient } from '@api';
@@ -88,6 +89,14 @@ export class GameManager {
   public size: ResizeManager;
 
   /**
+   * Instance responsible for managing a data of the current user.
+   * Storages userId, username, etc...
+   *
+   * @type {UserManager}
+   */
+  public user: UserManager;
+
+  /**
    * Creates an instance of `GameManager` and initializes core managers.
    *
    * Each manager is created independently and is ready to use after the `GameManager`
@@ -96,6 +105,7 @@ export class GameManager {
   constructor() {
     this.api = ApiClient;
     this.hud = HUDManager.getInstance(); // FIXME: I guess it's not a good idea to call game inside hud components so it should be removed from here
+    this.user = new UserManager();
     this.size = new ResizeManager();
     this.audio = new AudioManager();
     this.notify = new NotifyManager();
