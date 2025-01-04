@@ -1,6 +1,5 @@
 import { Backpack, Character } from '@core/Entities';
 import { GameManager } from '@core/Managers';
-import { Socket } from 'socket.io-client';
 import { HUDController } from '@core/Display';
 
 export class Player extends Character {
@@ -25,32 +24,27 @@ export class Player extends Character {
     this.hudBackpack.inventory = backpack.open();
   }
 
-  loop(delta: number, enemies: any, floorBounds: any, socket: Socket) {
-    this.vx = 0;
+  updateState(action: string, keyCode: string) {
+    const speed = 4;
 
+    switch (action) {
+      case 'keydown':
+        if (keyCode === 'KeyW') this.vy = -speed;
+        if (keyCode === 'KeyS') this.vy = speed;
+        if (keyCode === 'KeyA') this.vx = -speed;
+        if (keyCode === 'KeyD') this.vx = speed;
+        if (keyCode === 'Space') this.vy = -speed * 2;
+        break;
+      case 'keyup':
+        if (keyCode === 'KeyW' || keyCode === 'KeyS') this.vy = 0;
+        if (keyCode === 'KeyA' || keyCode === 'KeyD') this.vx = 0;
+        break;
+    }
+  }
+
+  loop(delta: number, enemies: any, floorBounds: any) {
     this.prevX = this.sprite.x;
     this.prevY = this.sprite.y;
-
-    if (this.game.keyboard.state.get('KeyW')) {
-      this.vy = -this.velocity;
-      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
-    }
-    if (this.game.keyboard.state.get('KeyS')) {
-      this.vy = this.velocity;
-      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
-    }
-    if (this.game.keyboard.state.get('KeyA')) {
-      this.vx = -this.velocity;
-      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
-    }
-    if (this.game.keyboard.state.get('KeyD')) {
-      this.vx = this.velocity;
-      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
-    }
-    if (this.game.keyboard.isKeyJustPressed('Space')) {
-      this.vy = -this.velocity * 2;
-      socket.emit('move', { id: this.game.user.userId, x: this.sprite.x, y: this.sprite.y });
-    }
 
     super.update(delta);
 

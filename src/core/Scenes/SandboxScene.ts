@@ -15,7 +15,7 @@ export class SandboxScene extends Container implements IScene {
 
   private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
 
-  private socket: Socket;
+  private readonly socket: Socket;
 
   constructor() {
     super();
@@ -66,13 +66,16 @@ export class SandboxScene extends Container implements IScene {
     this.socket.on('message', (message) => {
       switch (message.type) {
         case 'move':
-          this.movePlayer(message.data);
+          // this.movePlayer(message.data);
           break;
         case 'new_player':
           this.createNewPlayer(message.data);
           break;
         case 'player_leave':
           this.onPlayerLeave(message.data);
+          break;
+        case 'player_move':
+          this.updatePlayerState(message.data);
           break;
       }
     });
@@ -90,22 +93,26 @@ export class SandboxScene extends Container implements IScene {
     this.game.hud.showHUD();
   }
 
+  updatePlayerState(data: any) {
+    const player = this.players.get(data.clientId);
+    if (player) {
+      player.updateState(data.action, data.keyCode);
+    } else {
+      this.player.updateState(data.action, data.keyCode);
+    }
+  }
+
   private handleKeyDown(keyCode: string): void {
-    // console.log(this.game.keyboard.activeKeys);
     if (!this.game.keyboard.activeKeys.has(keyCode)) {
-      // console.log(this.game.keyboard.keyDownCallbacks);
       console.log('down', keyCode);
-      // this.game.keyboard.activeKeys.add(keyCode);
-      // this.socket.emit('playerAction', { action: 'keydown', keyCode });
+      this.socket.emit('playerAction', { action: 'keydown', keyCode });
     }
   }
 
   private handleKeyUp(keyCode: string): void {
     if (this.game.keyboard.activeKeys.has(keyCode)) {
-      // console.log(this.game.keyboard.keyUpCallbacks);
       console.log('up', keyCode);
-      // this.game.keyboard.activeKeys.delete(keyCode);
-      // this.socket.emit('playerAction', { action: 'keyup', keyCode });
+      this.socket.emit('playerAction', { action: 'keyup', keyCode });
     }
   }
 
@@ -119,15 +126,15 @@ export class SandboxScene extends Container implements IScene {
     this.players.delete(data.clientId);
   }
 
-  private movePlayer(data: any) {
-    const player = this.players.get(data.clientId);
-    if (player && data.player.id !== this.game.user.userId) {
-      console.log(data.player.id, data.player.state.position.y);
-
-      player.sprite.x = data.player.state.position.x;
-      player.sprite.y = data.player.state.position.y;
-    }
-  }
+  // private movePlayer(data: any) {
+  //   const player = this.players.get(data.clientId);
+  //   if (player && data.player.id !== this.game.user.userId) {
+  //     console.log(data.player.id, data.player.state.position.y);
+  //
+  //     player.sprite.x = data.player.state.position.x;
+  //     player.sprite.y = data.player.state.position.y;
+  //   }
+  // }
 
   createNewPlayer(_data: any) {
     // if (this.players.includes(data.playerId)) {
@@ -159,18 +166,12 @@ export class SandboxScene extends Container implements IScene {
     };
   }
 
-  // private moveCurrentPlayer(x: number, y: number) {
-  //   const player = this.players.get(this.game.user.userId ?? '');
-  //   player?.move(x, y);
-  //   this.socket.emit('move', { id: this.game.user.userId, x: player?.sprite.x, y: player?.sprite.y });
-  // }
-
-  private handleInput() {}
-
   update(_framesPassed: number): void {
-    this.handleInput();
+    this.player.loop(_framesPassed, this.enemies, this.floorBounds);
 
-    this.player.loop(_framesPassed, this.enemies, this.floorBounds, this.socket);
+    for (let player of this.players.values()) {
+      player.loop(_framesPassed, this.enemies, this.floorBounds);
+    }
   }
 
   resize(_screenWidth: number, _screenHeight: number): void {
