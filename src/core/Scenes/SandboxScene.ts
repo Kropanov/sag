@@ -3,6 +3,8 @@ import { IScene } from '@interfaces';
 import { GameManager } from '@core/Managers';
 import { io, Socket } from 'socket.io-client';
 import { Backpack, Player } from '@core/Entities';
+import { PlayerEvents, PlayerResponseEvents } from '@enums';
+import { PlayerJoinRequestDTO } from '@dto';
 
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -34,10 +36,8 @@ export class SandboxScene extends Container implements IScene {
     const uri = import.meta.env.VITE_WEBSOCKET_BASE_URL || 'http://localhost:5000';
 
     this.socket = io(uri, {
-      transports: ['websocket'], // Ensure WebSocket transport
+      transports: ['websocket'],
     });
-
-    console.log('Userdata:', this.game.user.userId, this.game.user.username);
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
@@ -57,24 +57,30 @@ export class SandboxScene extends Container implements IScene {
         }
       });
 
-      this.socket.emit('joined', { id: this.game.user.userId }, (value: any) => {
-        // this.player
-        console.log('!!!', value);
-      });
+      const player: PlayerJoinRequestDTO = {
+        userId: this.game.user.userId ?? '',
+        username: this.game.user.username ?? '',
+        state: {
+          position: {
+            x: this.player.prevX,
+            y: this.player.prevY,
+          },
+          health: 100,
+        },
+      };
+
+      this.socket.emit(PlayerEvents.JOIN, player);
     });
 
     this.socket.on('message', (message) => {
       switch (message.type) {
-        case 'move':
-          // this.movePlayer(message.data);
-          break;
-        case 'new_player':
+        case PlayerResponseEvents.JOINED:
           this.createNewPlayer(message.data);
           break;
-        case 'player_leave':
+        case PlayerResponseEvents.LEFT:
           this.onPlayerLeave(message.data);
           break;
-        case 'player_move':
+        case PlayerResponseEvents.ACTION_PERFORMED:
           this.updatePlayerState(message.data);
           break;
       }
@@ -150,8 +156,6 @@ export class SandboxScene extends Container implements IScene {
     this.addChild(player.sprite);
 
     this.players.set(_data.clientId, player);
-
-    console.log('!!!!!!!!!', this.players);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
