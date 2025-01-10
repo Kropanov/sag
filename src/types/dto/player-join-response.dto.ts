@@ -1,4 +1,6 @@
+import { PlayerDTO } from '@dto';
+
 export type PlayerJoinResponseDTO = {
   clientId: string;
-  // TODO: continue...
+  player: PlayerDTO;
 };

@@ -4,7 +4,7 @@ import { GameManager } from '@core/Managers';
 import { io, Socket } from 'socket.io-client';
 import { Backpack, Player } from '@core/Entities';
 import { PlayerEvents, PlayerResponseEvents } from '@enums';
-import { PlayerJoinRequestDTO } from '@dto';
+import { GetAllPlayersResponseDTO, PlayerJoinRequestDTO, PlayerJoinResponseDTO } from '@dto';
 
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -42,18 +42,20 @@ export class SandboxScene extends Container implements IScene {
     this.socket.on('connect', () => {
       console.log('Connected to server');
 
-      this.socket.emit('findAllPlayers', {}, (value: any) => {
-        console.log('findAllPlayers', value);
-        for (const data of value) {
-          if (this.game.user.userId === data.id) {
+      this.socket.emit(PlayerEvents.GET_ALL, {}, (players: GetAllPlayersResponseDTO) => {
+        for (const data of players) {
+          const { clientId, player } = data;
+
+          if (player.userId === this.game.user.userId) {
             return;
           }
 
           const backpack = new Backpack();
-          const player = new Player('bunny', data.state.position.x, data.state.position.y, backpack);
-          this.addChild(player.sprite);
+          const newPlayer = new Player('bunny', player.state.position.x, player.state.position.y, backpack);
 
-          this.players.set(data.clientId, player);
+          this.addChild(newPlayer.sprite);
+
+          this.players.set(clientId, newPlayer);
         }
       });
 
@@ -73,6 +75,7 @@ export class SandboxScene extends Container implements IScene {
     });
 
     this.socket.on('message', (message) => {
+      console.log('message', message);
       switch (message.type) {
         case PlayerResponseEvents.JOINED:
           this.createNewPlayer(message.data);
@@ -111,14 +114,14 @@ export class SandboxScene extends Container implements IScene {
   private handleKeyDown(keyCode: string): void {
     if (!this.game.keyboard.activeKeys.has(keyCode)) {
       console.log('down', keyCode);
-      this.socket.emit('playerAction', { action: 'keydown', keyCode });
+      this.socket.emit(PlayerEvents.ACTION, { action: 'keydown', keyCode });
     }
   }
 
   private handleKeyUp(keyCode: string): void {
     if (this.game.keyboard.activeKeys.has(keyCode)) {
       console.log('up', keyCode);
-      this.socket.emit('playerAction', { action: 'keyup', keyCode });
+      this.socket.emit(PlayerEvents.ACTION, { action: 'keyup', keyCode });
     }
   }
 
@@ -132,30 +135,18 @@ export class SandboxScene extends Container implements IScene {
     this.players.delete(data.clientId);
   }
 
-  // private movePlayer(data: any) {
-  //   const player = this.players.get(data.clientId);
-  //   if (player && data.player.id !== this.game.user.userId) {
-  //     console.log(data.player.id, data.player.state.position.y);
-  //
-  //     player.sprite.x = data.player.state.position.x;
-  //     player.sprite.y = data.player.state.position.y;
-  //   }
-  // }
+  createNewPlayer(data: PlayerJoinResponseDTO) {
+    const { player, clientId } = data;
 
-  createNewPlayer(_data: any) {
-    // if (this.players.includes(data.playerId)) {
-    //   return;
-    // }
-
-    if (this.game.user.userId === _data.player.id) {
+    if (this.game.user.userId === player.userId) {
       return;
     }
 
     const backpack = new Backpack();
-    const player = new Player('bunny', this.player.prevX, this.player.prevY, backpack);
-    this.addChild(player.sprite);
+    const newPlayer = new Player('bunny', player.state.position.x, player.state.position.y, backpack);
+    this.addChild(newPlayer.sprite);
 
-    this.players.set(_data.clientId, player);
+    this.players.set(clientId, newPlayer);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {

@@ -1,6 +1,6 @@
 import { PlayerStateDTO } from '@dto';
 
-export type PlayerJoinRequestDTO = {
+export type PlayerDTO = {
   userId: string;
   username: string;
   state: PlayerStateDTO;
