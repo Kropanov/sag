@@ -113,15 +113,27 @@ export class SandboxScene extends Container implements IScene {
 
   private handleKeyDown(keyCode: string): void {
     if (!this.game.keyboard.activeKeys.has(keyCode)) {
-      console.log('down', keyCode);
-      this.socket.emit(PlayerEvents.ACTION, { action: 'keydown', keyCode });
+      this.socket.emit(PlayerEvents.ACTION, {
+        action: 'keydown',
+        keyCode,
+        position: {
+          x: this.player.prevX,
+          y: this.player.prevY,
+        },
+      });
     }
   }
 
   private handleKeyUp(keyCode: string): void {
     if (this.game.keyboard.activeKeys.has(keyCode)) {
-      console.log('up', keyCode);
-      this.socket.emit(PlayerEvents.ACTION, { action: 'keyup', keyCode });
+      this.socket.emit(PlayerEvents.ACTION, {
+        action: 'keyup',
+        keyCode,
+        position: {
+          x: this.player.prevX,
+          y: this.player.prevY,
+        },
+      });
     }
   }
 
