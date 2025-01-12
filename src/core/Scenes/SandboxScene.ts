@@ -42,6 +42,18 @@ export class SandboxScene extends Container implements IScene {
     this.socket.on('connect', () => {
       console.log('Connected to server');
 
+      // TODO: create a method for this code
+      if (this.players.size !== 0) {
+        for (let clientId of this.players.keys()) {
+          const player = this.players.get(clientId);
+          if (player) {
+            this.removeChild(player.sprite);
+          }
+
+          this.players.delete(clientId);
+        }
+      }
+
       this.socket.emit(PlayerEvents.GET_ALL, {}, (players: GetAllPlayersResponseDTO) => {
         for (const data of players) {
           const { clientId, player } = data;
@@ -49,6 +61,9 @@ export class SandboxScene extends Container implements IScene {
           if (player.userId === this.game.user.userId) {
             return;
           }
+
+          console.log('this.player', this.game.user.userId);
+          console.log(player, clientId);
 
           const backpack = new Backpack();
           const newPlayer = new Player('bunny', player.state.position.x, player.state.position.y, backpack);
@@ -91,6 +106,8 @@ export class SandboxScene extends Container implements IScene {
 
     this.socket.on('disconnect', () => {
       this.socket.send('leave', this.game.user.userId);
+      // this.players.clear()
+      // this.players.
     });
 
     this.background = Sprite.from('game_background');
