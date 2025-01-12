@@ -7,3 +7,5 @@ export * from './player-join-request.dto.ts';
 export * from './player-join-response.dto.ts';
 export * from './player-state.dto.ts';
 export * from './get-all-players-response.dto.ts';
+export * from './player-leave-response.dto.ts';
+export * from './player-action-performed-response.dto.ts';

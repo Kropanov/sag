@@ -4,7 +4,13 @@ import { GameManager } from '@core/Managers';
 import { io, Socket } from 'socket.io-client';
 import { Backpack, Player } from '@core/Entities';
 import { PlayerEvents, PlayerResponseEvents } from '@enums';
-import { GetAllPlayersResponseDTO, PlayerJoinRequestDTO, PlayerJoinResponseDTO } from '@dto';
+import {
+  GetAllPlayersResponseDTO,
+  PlayerActionPerformedResponseDTO,
+  PlayerJoinRequestDTO,
+  PlayerJoinResponseDTO,
+  PlayerLeaveResponseDTO,
+} from '@dto';
 
 export class SandboxScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -105,9 +111,7 @@ export class SandboxScene extends Container implements IScene {
     });
 
     this.socket.on('disconnect', () => {
-      this.socket.send('leave', this.game.user.userId);
-      // this.players.clear()
-      // this.players.
+      console.log('Player disconnected');
     });
 
     this.background = Sprite.from('game_background');
@@ -119,12 +123,13 @@ export class SandboxScene extends Container implements IScene {
     this.game.hud.showHUD();
   }
 
-  updatePlayerState(data: any) {
-    const player = this.players.get(data.clientId);
+  updatePlayerState(data: PlayerActionPerformedResponseDTO) {
+    const { action, keyCode, clientId } = data;
+    const player = this.players.get(clientId);
     if (player) {
-      player.updateState(data.action, data.keyCode);
+      player.updateState(action, keyCode);
     } else {
-      this.player.updateState(data.action, data.keyCode);
+      this.player.updateState(action, keyCode);
     }
   }
 
@@ -154,7 +159,7 @@ export class SandboxScene extends Container implements IScene {
     }
   }
 
-  onPlayerLeave(data: any) {
+  onPlayerLeave(data: PlayerLeaveResponseDTO) {
     const player = this.players.get(data.clientId);
 
     if (player) {
