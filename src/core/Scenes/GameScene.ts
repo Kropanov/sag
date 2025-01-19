@@ -1,20 +1,20 @@
 import { Container, Sprite } from 'pixi.js';
-import { Player, GameFactory, Backpack } from '@core/Entities';
+// import { Player, GameFactory, Backpack } from '@core/Entities';
 // import { HUDController } from '@core/Display';
 import { GameManager } from '@core/Managers';
 import { IScene } from '@interfaces';
-import { ItemService } from '@api';
+// import { ItemService } from '@api';
 
 export class GameScene extends Container implements IScene {
   private game: GameManager = new GameManager();
   // private readonly display: HUDController;
 
-  private readonly player: Player;
+  // private readonly player: Player;
   private readonly background: Sprite;
-  private readonly backpack: Backpack;
-  private readonly enemies: any = [];
+  // private readonly backpack: Backpack;
+  // private readonly enemies: any = [];
 
-  private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
+  // private floorBounds = { left: 0, right: 0, top: 0, bottom: 0 };
 
   // private gun: Gun;
   // private readonly cartridge: Cartridge;
@@ -27,23 +27,23 @@ export class GameScene extends Container implements IScene {
 
     this.game.audio.stop();
 
-    this.backpack = new Backpack();
-    this.player = new Player('bunny', 100, 100, this.backpack);
+    // this.backpack = new Backpack();
+    // this.player = new Player('bunny', 100, 100, this.backpack);
     // this.display = new HUDController(this.player, this);
 
     // this.cartridge = new Cartridge(70, AMMO_TYPE.ENERGY, 3, this.display);
     // this.gun = new Gun({}, this.player, this.cartridge, this.display);
 
-    this.addChild(this.player.sprite);
+    // this.addChild(this.player.sprite);
     this.updateFloorBounds();
 
-    const game = new GameFactory();
-    const itemService = new ItemService();
+    // const game = new GameFactory();
+    // const itemService = new ItemService();
 
-    itemService.fetchAllItems().then((data) => {
-      game.itemFactory.generateItemsForPlayer('playerId', this.player, data);
-      // this.display.updateUIBackpack();
-    });
+    // itemService.fetchAllItems().then(_data) => {
+    // game.itemFactory.generateItemsForPlayer('playerId', this.player, data);
+    // this.display.updateUIBackpack();
+    // });
   }
 
   handleInput() {
@@ -88,21 +88,20 @@ export class GameScene extends Container implements IScene {
     this.updateFloorBounds(_screenWidth, _screenHeight);
   }
 
-  update(delta: number): void {
+  update(_delta: number): void {
     this.handleInput();
     // this.gun.update(delta);
-    this.player.update(delta, this.enemies, this.floorBounds);
+    // this.player.update(delta, this.enemies, this.floorBounds);
   }
 
   private updateFloorBounds(_screenWidth?: number, _screenHeight?: number): void {
-    const screenWidth = _screenWidth || this.game.size.getWidth();
-    const screenHeight = _screenHeight || this.game.size.getHeight();
-
-    this.floorBounds = {
-      left: 0,
-      right: screenWidth,
-      top: 0,
-      bottom: screenHeight,
-    };
+    // const screenWidth = _screenWidth || this.game.size.getWidth();
+    // const screenHeight = _screenHeight || this.game.size.getHeight();
+    // this.floorBounds = {
+    //   left: 0,
+    //   right: screenWidth,
+    //   top: 0,
+    //   bottom: screenHeight,
+    // };
   }
 }

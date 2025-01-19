@@ -3,7 +3,7 @@ import { IScene } from '@interfaces';
 import { FancyButton, List } from '@pixi/ui';
 import { MenuItemsType } from '@types';
 import { FANCY_BUTTON_BASE_ANIMATION, theme } from '@config';
-import { AuthScene, GameScene } from '@core/Scenes';
+import { AuthScene, SandboxScene } from '@core/Scenes';
 import { GameManager, SceneManager } from '@core/Managers';
 import {
   getProgramVersion,
@@ -59,7 +59,7 @@ export class MenuScene extends Container implements IScene {
   startGame() {
     // TODO: think about the place where the hud should be initialize
     this.game.hud.initializeHUD();
-    this.scene.changeScene(GameScene, this.game.hud.getComponents());
+    this.scene.changeScene(SandboxScene, this.game.hud.getComponents());
   }
 
   fillMenu() {

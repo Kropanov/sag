@@ -15,13 +15,11 @@ export class Creature {
     this.vy = 0;
   }
 
-  update(delta: number, _enemies: any, _floorBounds: any) {
+  update(delta: number) {
     // Add gravity to velocity
     this.vy += g * delta;
 
     this.sprite.x += this.vx * delta;
     this.sprite.y += this.vy * delta;
   }
-
-  draw() {}
 }

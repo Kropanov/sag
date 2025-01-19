@@ -4,13 +4,13 @@ import { HUDController } from '@core/Display';
 
 export class Player extends Character {
   private game: GameManager = new GameManager();
+  private hud = new HUDController();
 
   prevY: number;
   prevX: number;
 
-  velocity: number = 4;
+  velocity: number = 3;
 
-  private hud: HUDController;
   hudBackpack;
 
   constructor(texture: string, x: number, y: number, backpack: Backpack) {
@@ -22,17 +22,31 @@ export class Player extends Character {
 
     this.hudBackpack.entity = backpack;
     this.hudBackpack.inventory = backpack.open();
-
-    this.hud = new HUDController();
-    this.game.hud.showHUD();
   }
 
-  update(delta: number, enemies: any, floorBounds: any) {
+  updateState(action: string, keyCode: string) {
+    const speed = 4;
+
+    switch (action) {
+      case 'keydown':
+        if (keyCode === 'KeyW') this.vy = -speed;
+        if (keyCode === 'KeyS') this.vy = speed;
+        if (keyCode === 'KeyA') this.vx = -speed;
+        if (keyCode === 'KeyD') this.vx = speed;
+        if (keyCode === 'Space') this.vy = -speed * 2;
+        break;
+      case 'keyup':
+        if (keyCode === 'KeyW' || keyCode === 'KeyS') this.vy = 0;
+        if (keyCode === 'KeyA' || keyCode === 'KeyD') this.vx = 0;
+        break;
+    }
+  }
+
+  loop(delta: number, enemies: any, floorBounds: any) {
     this.prevX = this.sprite.x;
     this.prevY = this.sprite.y;
 
-    super.update(delta, enemies, floorBounds);
-    this.handleInput();
+    super.update(delta);
 
     enemies.forEach((enemy: any) => {
       if (this.checkCollision(enemy)) {
@@ -42,24 +56,6 @@ export class Player extends Character {
     });
 
     this.checkFloorBounds(floorBounds);
-  }
-
-  handleInput() {
-    if (this.game.keyboard.state.get('KeyW')) {
-      this.move(0, -this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyS')) {
-      this.move(0, this.velocity);
-    }
-    if (this.game.keyboard.state.get('KeyA')) {
-      this.move(-this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('KeyD')) {
-      this.move(this.velocity, 0);
-    }
-    if (this.game.keyboard.state.get('Space')) {
-      this.move(0, -this.velocity);
-    }
 
     this.hud.handleInput();
   }
