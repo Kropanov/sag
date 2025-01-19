@@ -1,7 +1,13 @@
 export class KeyboardManager {
   private static _instance: KeyboardManager;
+
+  public activeKeys: Set<string> = new Set();
   public readonly state: Map<string, boolean> = new Map();
+
   private justPressedState: Map<string, boolean> = new Map();
+
+  public keyDownCallbacks: Array<(keyCode: string) => void> = [];
+  public keyUpCallbacks: Array<(keyCode: string) => void> = [];
 
   constructor() {
     if (KeyboardManager._instance) {
@@ -27,11 +33,15 @@ export class KeyboardManager {
       this.justPressedState.set(e.code, true);
     }
     this.state.set(e.code, true);
+    this.keyDownCallbacks.forEach((callback) => callback(e.code));
+    this.activeKeys.add(e.code);
   }
 
   private keyUp(e: KeyboardEvent): void {
     this.state.set(e.code, false);
     this.justPressedState.set(e.code, false);
+    this.keyUpCallbacks.forEach((callback) => callback(e.code));
+    this.activeKeys.delete(e.code);
   }
 
   public isKeyJustPressed(keyCode: string): boolean {
@@ -41,5 +51,13 @@ export class KeyboardManager {
     }
 
     return isJustPressed;
+  }
+
+  public onKeyDown(callback: (keyCode: string) => void): void {
+    this.keyDownCallbacks.push(callback);
+  }
+
+  public onKeyUp(callback: (keyCode: string) => void): void {
+    this.keyUpCallbacks.push(callback);
   }
 }

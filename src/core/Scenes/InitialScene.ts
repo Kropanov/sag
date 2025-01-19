@@ -5,6 +5,7 @@ import { AuthScene, MenuScene } from '@core/Scenes';
 import { ResourceLoader } from '@core/Entities';
 import { GameManager, SceneManager } from '@core/Managers';
 import { theme } from '@config';
+import { parseToken } from '@utils';
 
 export class InitialScene extends Container implements IScene {
   private game: GameManager = new GameManager();
@@ -68,6 +69,12 @@ export class InitialScene extends Container implements IScene {
 
   private assetsLoaded(): void {
     const token = this.game.storage.getToken();
+
+    if (token) {
+      const payload = parseToken(token);
+      this.game.user.setUserInfo(payload);
+    }
+
     const scene = token ? MenuScene : AuthScene;
     this.scene.changeScene(scene, this.game.hud.getComponents());
   }
