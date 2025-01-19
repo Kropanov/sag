@@ -66,6 +66,11 @@ export const manifest: AssetsManifest = {
         empty_gasoline_can: './static/assets/images/materials/empty_gasoline_can.png',
         mineral: './static/assets/images/materials/mineral_2.png',
         book: './static/assets/images/materials/book.png',
+        // not sorted
+        bread: './static/assets/images/materials/bread.png',
+        evil_eye_1: './static/assets/images/materials/evil_eye_1.png',
+        evil_eye_2: './static/assets/images/materials/evil_eye_2.png',
+        garbage: './static/assets/images/materials/garbage.png',
       },
     },
     {
