@@ -61,23 +61,9 @@ export class SandboxScene extends Container implements IScene {
       }
 
       this.socket.emit(PlayerEvents.GET_ALL, {}, (players: GetAllPlayersResponseDTO) => {
-        for (const data of players) {
-          const { clientId, player } = data;
-
-          if (player.userId === this.game.user.userId) {
-            return;
-          }
-
-          console.log('this.player', this.game.user.userId);
-          console.log(player, clientId);
-
-          const backpack = new Backpack();
-          const newPlayer = new Player('bunny', player.state.position.x, player.state.position.y, backpack);
-
-          this.addChild(newPlayer.sprite);
-
-          this.players.set(clientId, newPlayer);
-        }
+        players.forEach((player) => {
+          this.onCreatePlayer(player);
+        });
       });
 
       const player: PlayerJoinRequestDTO = {
@@ -99,7 +85,7 @@ export class SandboxScene extends Container implements IScene {
       console.log('message', message);
       switch (message.type) {
         case PlayerResponseEvents.JOINED:
-          this.createNewPlayer(message.data);
+          this.onCreatePlayer(message.data);
           break;
         case PlayerResponseEvents.LEFT:
           this.onPlayerLeave(message.data);
@@ -169,7 +155,7 @@ export class SandboxScene extends Container implements IScene {
     this.players.delete(data.clientId);
   }
 
-  createNewPlayer(data: PlayerJoinResponseDTO) {
+  onCreatePlayer(data: PlayerJoinResponseDTO) {
     const { player, clientId } = data;
 
     if (this.game.user.userId === player.userId) {
