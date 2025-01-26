@@ -1,9 +1,9 @@
 import { Container, Sprite } from 'pixi.js';
-import { IScene } from '@interfaces';
+import { IScene, ItemProps } from '@interfaces';
 import { GameManager } from '@core/Managers';
 import { io, Socket } from 'socket.io-client';
-import { Backpack, Player } from '@core/Entities';
-import { PlayerEvents, PlayerResponseEvents } from '@enums';
+import { Backpack, Material, Player } from '@core/Entities';
+import { ItemRarity, ItemType, PlayerEvents, PlayerResponseEvents } from '@enums';
 import {
   GetAllPlayersResponseDTO,
   PlayerActionPerformedResponseDTO,
@@ -28,7 +28,58 @@ export class SandboxScene extends Container implements IScene {
   constructor() {
     super();
 
+    const itemProps: ItemProps = {
+      name: 'item',
+      amount: 4,
+      asset: 'bread',
+      type: ItemType.Material,
+      cost: 20,
+      description: '',
+      rarity: ItemRarity.Common,
+    };
+
+    const itemProps1: ItemProps = {
+      name: 'item',
+      amount: 2,
+      asset: 'evil_eye_1',
+      type: ItemType.Material,
+      cost: 20,
+      description: '',
+      rarity: ItemRarity.Common,
+    };
+
+    const itemProps2: ItemProps = {
+      name: 'item',
+      amount: 4,
+      asset: 'evil_eye_2',
+      type: ItemType.Material,
+      cost: 20,
+      description: '',
+      rarity: ItemRarity.Common,
+    };
+
+    const itemProps3: ItemProps = {
+      name: 'garbage',
+      amount: 4,
+      asset: 'garbage',
+      type: ItemType.Material,
+      cost: 20,
+      description: '',
+      rarity: ItemRarity.Common,
+    };
+
+    const item = new Material(itemProps);
+    const item1 = new Material(itemProps1);
+    const item2 = new Material(itemProps2);
+
+    const item3 = new Material(itemProps3);
+
     this.backpack = new Backpack();
+    this.backpack.push(item);
+    this.backpack.push(item1);
+    this.backpack.push(item2);
+    this.backpack.push(item3);
+
     this.player = new Player('bunny', 100, 100, this.backpack);
     this.player.sprite.zIndex = 2;
     this.addChild(this.player.sprite);
