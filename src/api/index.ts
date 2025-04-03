@@ -1,3 +1,3 @@
-export * from './ItemService.ts';
-export * from './ApiClient.ts';
-export * from './AuthService.ts';
+export * from './item.service.ts';
+export * from './api.client.ts';
+export * from './auth.service.ts';
